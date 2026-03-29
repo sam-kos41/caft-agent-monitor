@@ -1,0 +1,613 @@
+{
+  "rest_api_clean.jsonl": {
+    "task": "rest_api",
+    "domain": "web_app",
+    "complexity": "simple",
+    "variant": "clean",
+    "n_events": 250
+  },
+  "rest_api_loop.jsonl": {
+    "task": "rest_api",
+    "domain": "web_app",
+    "complexity": "simple",
+    "variant": "loop",
+    "n_events": 310,
+    "inject_step": 162,
+    "inject_end": 222,
+    "expected_signature": "mechanical_repetition"
+  },
+  "rest_api_drift.jsonl": {
+    "task": "rest_api",
+    "domain": "web_app",
+    "complexity": "simple",
+    "variant": "drift",
+    "n_events": 310,
+    "inject_step": 131,
+    "inject_end": 191,
+    "expected_signature": "distributional_shift"
+  },
+  "rest_api_thrash.jsonl": {
+    "task": "rest_api",
+    "domain": "web_app",
+    "complexity": "simple",
+    "variant": "thrash",
+    "n_events": 310,
+    "inject_step": 150,
+    "inject_end": 210,
+    "expected_signature": "context_thrashing"
+  },
+  "rest_api_stall.jsonl": {
+    "task": "rest_api",
+    "domain": "web_app",
+    "complexity": "simple",
+    "variant": "stall",
+    "n_events": 310,
+    "inject_step": 158,
+    "inject_end": 218,
+    "expected_signature": "distributional_anomaly"
+  },
+  "markdown_docs_clean.jsonl": {
+    "task": "markdown_docs",
+    "domain": "docs",
+    "complexity": "simple",
+    "variant": "clean",
+    "n_events": 200
+  },
+  "markdown_docs_loop.jsonl": {
+    "task": "markdown_docs",
+    "domain": "docs",
+    "complexity": "simple",
+    "variant": "loop",
+    "n_events": 260,
+    "inject_step": 121,
+    "inject_end": 181,
+    "expected_signature": "mechanical_repetition"
+  },
+  "markdown_docs_drift.jsonl": {
+    "task": "markdown_docs",
+    "domain": "docs",
+    "complexity": "simple",
+    "variant": "drift",
+    "n_events": 260,
+    "inject_step": 136,
+    "inject_end": 196,
+    "expected_signature": "distributional_shift"
+  },
+  "markdown_docs_thrash.jsonl": {
+    "task": "markdown_docs",
+    "domain": "docs",
+    "complexity": "simple",
+    "variant": "thrash",
+    "n_events": 260,
+    "inject_step": 124,
+    "inject_end": 184,
+    "expected_signature": "context_thrashing"
+  },
+  "markdown_docs_stall.jsonl": {
+    "task": "markdown_docs",
+    "domain": "docs",
+    "complexity": "simple",
+    "variant": "stall",
+    "n_events": 260,
+    "inject_step": 120,
+    "inject_end": 180,
+    "expected_signature": "distributional_anomaly"
+  },
+  "bash_utility_clean.jsonl": {
+    "task": "bash_utility",
+    "domain": "devops",
+    "complexity": "simple",
+    "variant": "clean",
+    "n_events": 180
+  },
+  "bash_utility_loop.jsonl": {
+    "task": "bash_utility",
+    "domain": "devops",
+    "complexity": "simple",
+    "variant": "loop",
+    "n_events": 240,
+    "inject_step": 119,
+    "inject_end": 179,
+    "expected_signature": "mechanical_repetition"
+  },
+  "bash_utility_drift.jsonl": {
+    "task": "bash_utility",
+    "domain": "devops",
+    "complexity": "simple",
+    "variant": "drift",
+    "n_events": 240,
+    "inject_step": 113,
+    "inject_end": 173,
+    "expected_signature": "distributional_shift"
+  },
+  "bash_utility_thrash.jsonl": {
+    "task": "bash_utility",
+    "domain": "devops",
+    "complexity": "simple",
+    "variant": "thrash",
+    "n_events": 240,
+    "inject_step": 123,
+    "inject_end": 183,
+    "expected_signature": "context_thrashing"
+  },
+  "bash_utility_stall.jsonl": {
+    "task": "bash_utility",
+    "domain": "devops",
+    "complexity": "simple",
+    "variant": "stall",
+    "n_events": 240,
+    "inject_step": 111,
+    "inject_end": 171,
+    "expected_signature": "distributional_anomaly"
+  },
+  "unit_test_suite_clean.jsonl": {
+    "task": "unit_test_suite",
+    "domain": "testing",
+    "complexity": "simple",
+    "variant": "clean",
+    "n_events": 220
+  },
+  "unit_test_suite_loop.jsonl": {
+    "task": "unit_test_suite",
+    "domain": "testing",
+    "complexity": "simple",
+    "variant": "loop",
+    "n_events": 280,
+    "inject_step": 151,
+    "inject_end": 211,
+    "expected_signature": "mechanical_repetition"
+  },
+  "unit_test_suite_drift.jsonl": {
+    "task": "unit_test_suite",
+    "domain": "testing",
+    "complexity": "simple",
+    "variant": "drift",
+    "n_events": 280,
+    "inject_step": 138,
+    "inject_end": 198,
+    "expected_signature": "distributional_shift"
+  },
+  "unit_test_suite_thrash.jsonl": {
+    "task": "unit_test_suite",
+    "domain": "testing",
+    "complexity": "simple",
+    "variant": "thrash",
+    "n_events": 280,
+    "inject_step": 110,
+    "inject_end": 170,
+    "expected_signature": "context_thrashing"
+  },
+  "unit_test_suite_stall.jsonl": {
+    "task": "unit_test_suite",
+    "domain": "testing",
+    "complexity": "simple",
+    "variant": "stall",
+    "n_events": 280,
+    "inject_step": 118,
+    "inject_end": 178,
+    "expected_signature": "distributional_anomaly"
+  },
+  "react_dashboard_clean.jsonl": {
+    "task": "react_dashboard",
+    "domain": "web_app",
+    "complexity": "medium",
+    "variant": "clean",
+    "n_events": 349
+  },
+  "react_dashboard_loop.jsonl": {
+    "task": "react_dashboard",
+    "domain": "web_app",
+    "complexity": "medium",
+    "variant": "loop",
+    "n_events": 409,
+    "inject_step": 200,
+    "inject_end": 260,
+    "expected_signature": "mechanical_repetition"
+  },
+  "react_dashboard_drift.jsonl": {
+    "task": "react_dashboard",
+    "domain": "web_app",
+    "complexity": "medium",
+    "variant": "drift",
+    "n_events": 409,
+    "inject_step": 166,
+    "inject_end": 226,
+    "expected_signature": "distributional_shift"
+  },
+  "react_dashboard_thrash.jsonl": {
+    "task": "react_dashboard",
+    "domain": "web_app",
+    "complexity": "medium",
+    "variant": "thrash",
+    "n_events": 409,
+    "inject_step": 204,
+    "inject_end": 264,
+    "expected_signature": "context_thrashing"
+  },
+  "react_dashboard_stall.jsonl": {
+    "task": "react_dashboard",
+    "domain": "web_app",
+    "complexity": "medium",
+    "variant": "stall",
+    "n_events": 409,
+    "inject_step": 118,
+    "inject_end": 178,
+    "expected_signature": "distributional_anomaly"
+  },
+  "cli_data_processor_clean.jsonl": {
+    "task": "cli_data_processor",
+    "domain": "cli_tool",
+    "complexity": "medium",
+    "variant": "clean",
+    "n_events": 279
+  },
+  "cli_data_processor_loop.jsonl": {
+    "task": "cli_data_processor",
+    "domain": "cli_tool",
+    "complexity": "medium",
+    "variant": "loop",
+    "n_events": 339,
+    "inject_step": 133,
+    "inject_end": 193,
+    "expected_signature": "mechanical_repetition"
+  },
+  "cli_data_processor_drift.jsonl": {
+    "task": "cli_data_processor",
+    "domain": "cli_tool",
+    "complexity": "medium",
+    "variant": "drift",
+    "n_events": 339,
+    "inject_step": 116,
+    "inject_end": 176,
+    "expected_signature": "distributional_shift"
+  },
+  "cli_data_processor_thrash.jsonl": {
+    "task": "cli_data_processor",
+    "domain": "cli_tool",
+    "complexity": "medium",
+    "variant": "thrash",
+    "n_events": 339,
+    "inject_step": 115,
+    "inject_end": 175,
+    "expected_signature": "context_thrashing"
+  },
+  "cli_data_processor_stall.jsonl": {
+    "task": "cli_data_processor",
+    "domain": "cli_tool",
+    "complexity": "medium",
+    "variant": "stall",
+    "n_events": 339,
+    "inject_step": 181,
+    "inject_end": 241,
+    "expected_signature": "distributional_anomaly"
+  },
+  "chat_app_clean.jsonl": {
+    "task": "chat_app",
+    "domain": "web_app",
+    "complexity": "medium",
+    "variant": "clean",
+    "n_events": 300
+  },
+  "chat_app_loop.jsonl": {
+    "task": "chat_app",
+    "domain": "web_app",
+    "complexity": "medium",
+    "variant": "loop",
+    "n_events": 360,
+    "inject_step": 197,
+    "inject_end": 257,
+    "expected_signature": "mechanical_repetition"
+  },
+  "chat_app_drift.jsonl": {
+    "task": "chat_app",
+    "domain": "web_app",
+    "complexity": "medium",
+    "variant": "drift",
+    "n_events": 360,
+    "inject_step": 179,
+    "inject_end": 239,
+    "expected_signature": "distributional_shift"
+  },
+  "chat_app_thrash.jsonl": {
+    "task": "chat_app",
+    "domain": "web_app",
+    "complexity": "medium",
+    "variant": "thrash",
+    "n_events": 360,
+    "inject_step": 179,
+    "inject_end": 239,
+    "expected_signature": "context_thrashing"
+  },
+  "chat_app_stall.jsonl": {
+    "task": "chat_app",
+    "domain": "web_app",
+    "complexity": "medium",
+    "variant": "stall",
+    "n_events": 360,
+    "inject_step": 121,
+    "inject_end": 181,
+    "expected_signature": "distributional_anomaly"
+  },
+  "etl_pipeline_clean.jsonl": {
+    "task": "etl_pipeline",
+    "domain": "data_pipeline",
+    "complexity": "medium",
+    "variant": "clean",
+    "n_events": 320
+  },
+  "etl_pipeline_loop.jsonl": {
+    "task": "etl_pipeline",
+    "domain": "data_pipeline",
+    "complexity": "medium",
+    "variant": "loop",
+    "n_events": 380,
+    "inject_step": 113,
+    "inject_end": 173,
+    "expected_signature": "mechanical_repetition"
+  },
+  "etl_pipeline_drift.jsonl": {
+    "task": "etl_pipeline",
+    "domain": "data_pipeline",
+    "complexity": "medium",
+    "variant": "drift",
+    "n_events": 380,
+    "inject_step": 140,
+    "inject_end": 200,
+    "expected_signature": "distributional_shift"
+  },
+  "etl_pipeline_thrash.jsonl": {
+    "task": "etl_pipeline",
+    "domain": "data_pipeline",
+    "complexity": "medium",
+    "variant": "thrash",
+    "n_events": 380,
+    "inject_step": 180,
+    "inject_end": 240,
+    "expected_signature": "context_thrashing"
+  },
+  "etl_pipeline_stall.jsonl": {
+    "task": "etl_pipeline",
+    "domain": "data_pipeline",
+    "complexity": "medium",
+    "variant": "stall",
+    "n_events": 380,
+    "inject_step": 203,
+    "inject_end": 263,
+    "expected_signature": "distributional_anomaly"
+  },
+  "fullstack_auth_clean.jsonl": {
+    "task": "fullstack_auth",
+    "domain": "web_app",
+    "complexity": "complex",
+    "variant": "clean",
+    "n_events": 449
+  },
+  "fullstack_auth_loop.jsonl": {
+    "task": "fullstack_auth",
+    "domain": "web_app",
+    "complexity": "complex",
+    "variant": "loop",
+    "n_events": 509,
+    "inject_step": 175,
+    "inject_end": 235,
+    "expected_signature": "mechanical_repetition"
+  },
+  "fullstack_auth_drift.jsonl": {
+    "task": "fullstack_auth",
+    "domain": "web_app",
+    "complexity": "complex",
+    "variant": "drift",
+    "n_events": 509,
+    "inject_step": 270,
+    "inject_end": 330,
+    "expected_signature": "distributional_shift"
+  },
+  "fullstack_auth_thrash.jsonl": {
+    "task": "fullstack_auth",
+    "domain": "web_app",
+    "complexity": "complex",
+    "variant": "thrash",
+    "n_events": 509,
+    "inject_step": 277,
+    "inject_end": 337,
+    "expected_signature": "context_thrashing"
+  },
+  "fullstack_auth_stall.jsonl": {
+    "task": "fullstack_auth",
+    "domain": "web_app",
+    "complexity": "complex",
+    "variant": "stall",
+    "n_events": 509,
+    "inject_step": 255,
+    "inject_end": 315,
+    "expected_signature": "distributional_anomaly"
+  },
+  "game_physics_clean.jsonl": {
+    "task": "game_physics",
+    "domain": "game",
+    "complexity": "complex",
+    "variant": "clean",
+    "n_events": 400
+  },
+  "game_physics_loop.jsonl": {
+    "task": "game_physics",
+    "domain": "game",
+    "complexity": "complex",
+    "variant": "loop",
+    "n_events": 460,
+    "inject_step": 187,
+    "inject_end": 247,
+    "expected_signature": "mechanical_repetition"
+  },
+  "game_physics_drift.jsonl": {
+    "task": "game_physics",
+    "domain": "game",
+    "complexity": "complex",
+    "variant": "drift",
+    "n_events": 460,
+    "inject_step": 255,
+    "inject_end": 315,
+    "expected_signature": "distributional_shift"
+  },
+  "game_physics_thrash.jsonl": {
+    "task": "game_physics",
+    "domain": "game",
+    "complexity": "complex",
+    "variant": "thrash",
+    "n_events": 460,
+    "inject_step": 256,
+    "inject_end": 316,
+    "expected_signature": "context_thrashing"
+  },
+  "game_physics_stall.jsonl": {
+    "task": "game_physics",
+    "domain": "game",
+    "complexity": "complex",
+    "variant": "stall",
+    "n_events": 460,
+    "inject_step": 177,
+    "inject_end": 237,
+    "expected_signature": "distributional_anomaly"
+  },
+  "ml_pipeline_clean.jsonl": {
+    "task": "ml_pipeline",
+    "domain": "data_pipeline",
+    "complexity": "complex",
+    "variant": "clean",
+    "n_events": 380
+  },
+  "ml_pipeline_loop.jsonl": {
+    "task": "ml_pipeline",
+    "domain": "data_pipeline",
+    "complexity": "complex",
+    "variant": "loop",
+    "n_events": 440,
+    "inject_step": 239,
+    "inject_end": 299,
+    "expected_signature": "mechanical_repetition"
+  },
+  "ml_pipeline_drift.jsonl": {
+    "task": "ml_pipeline",
+    "domain": "data_pipeline",
+    "complexity": "complex",
+    "variant": "drift",
+    "n_events": 440,
+    "inject_step": 215,
+    "inject_end": 275,
+    "expected_signature": "distributional_shift"
+  },
+  "ml_pipeline_thrash.jsonl": {
+    "task": "ml_pipeline",
+    "domain": "data_pipeline",
+    "complexity": "complex",
+    "variant": "thrash",
+    "n_events": 440,
+    "inject_step": 154,
+    "inject_end": 214,
+    "expected_signature": "context_thrashing"
+  },
+  "ml_pipeline_stall.jsonl": {
+    "task": "ml_pipeline",
+    "domain": "data_pipeline",
+    "complexity": "complex",
+    "variant": "stall",
+    "n_events": 440,
+    "inject_step": 259,
+    "inject_end": 319,
+    "expected_signature": "distributional_anomaly"
+  },
+  "ci_cd_setup_clean.jsonl": {
+    "task": "ci_cd_setup",
+    "domain": "devops",
+    "complexity": "complex",
+    "variant": "clean",
+    "n_events": 349
+  },
+  "ci_cd_setup_loop.jsonl": {
+    "task": "ci_cd_setup",
+    "domain": "devops",
+    "complexity": "complex",
+    "variant": "loop",
+    "n_events": 409,
+    "inject_step": 184,
+    "inject_end": 244,
+    "expected_signature": "mechanical_repetition"
+  },
+  "ci_cd_setup_drift.jsonl": {
+    "task": "ci_cd_setup",
+    "domain": "devops",
+    "complexity": "complex",
+    "variant": "drift",
+    "n_events": 409,
+    "inject_step": 206,
+    "inject_end": 266,
+    "expected_signature": "distributional_shift"
+  },
+  "ci_cd_setup_thrash.jsonl": {
+    "task": "ci_cd_setup",
+    "domain": "devops",
+    "complexity": "complex",
+    "variant": "thrash",
+    "n_events": 409,
+    "inject_step": 204,
+    "inject_end": 264,
+    "expected_signature": "context_thrashing"
+  },
+  "ci_cd_setup_stall.jsonl": {
+    "task": "ci_cd_setup",
+    "domain": "devops",
+    "complexity": "complex",
+    "variant": "stall",
+    "n_events": 409,
+    "inject_step": 186,
+    "inject_end": 246,
+    "expected_signature": "distributional_anomaly"
+  },
+  "api_test_harness_clean.jsonl": {
+    "task": "api_test_harness",
+    "domain": "testing",
+    "complexity": "medium",
+    "variant": "clean",
+    "n_events": 300
+  },
+  "api_test_harness_loop.jsonl": {
+    "task": "api_test_harness",
+    "domain": "testing",
+    "complexity": "medium",
+    "variant": "loop",
+    "n_events": 360,
+    "inject_step": 141,
+    "inject_end": 201,
+    "expected_signature": "mechanical_repetition"
+  },
+  "api_test_harness_drift.jsonl": {
+    "task": "api_test_harness",
+    "domain": "testing",
+    "complexity": "medium",
+    "variant": "drift",
+    "n_events": 360,
+    "inject_step": 182,
+    "inject_end": 242,
+    "expected_signature": "distributional_shift"
+  },
+  "api_test_harness_thrash.jsonl": {
+    "task": "api_test_harness",
+    "domain": "testing",
+    "complexity": "medium",
+    "variant": "thrash",
+    "n_events": 360,
+    "inject_step": 191,
+    "inject_end": 251,
+    "expected_signature": "context_thrashing"
+  },
+  "api_test_harness_stall.jsonl": {
+    "task": "api_test_harness",
+    "domain": "testing",
+    "complexity": "medium",
+    "variant": "stall",
+    "n_events": 360,
+    "inject_step": 188,
+    "inject_end": 248,
+    "expected_signature": "distributional_anomaly"
+  }
+}

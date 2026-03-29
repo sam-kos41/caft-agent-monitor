@@ -1,0 +1,49 @@
+{
+  "condition": "A_vanilla",
+  "duration_seconds": 1567.944993019104,
+  "anomaly_injected": "thrash",
+  "anomaly_details": {
+    "label": "Context Thrashing (API Mismatch)",
+    "target": "B",
+    "expected_signature": "distributional_shift \u2192 context_thrashing",
+    "expected_timeline": "Steps 1-80: Normal (confident writing, green). Steps 80-120: distributional_shift (tries backend, KL spikes). Steps 120-160: context_thrashing or mechanical_repetition (read\u2192edit\u2192test\u2192fail loop). Steps 160+: Recovery or continued degradation.",
+    "prompt": "Build a React frontend for a multiplayer trivia game. Do NOT read any backend code \u2014 design the API yourself based on what you think makes sense. Build the WebSocket connection, lobby, game room, scoreboard. Use whatever endpoint paths and message formats seem reasonable. When you're done, try to actually run it and connect to the backend server."
+  },
+  "sessions": [
+    {
+      "id": "c783b5fa",
+      "path": "/Users/samkoscelny/.claude/projects/-Users-samkoscelny-GazeVLM-local-agentdiag-agentdiag-trivia-game-condition-a-vanilla/c783b5fa-0549-4c9b-a71f-f4fd596c6eb6.jsonl",
+      "size_bytes": 340441
+    },
+    {
+      "id": "3b21bc37",
+      "path": "/Users/samkoscelny/.claude/projects/-Users-samkoscelny-GazeVLM-local-agentdiag-agentdiag-trivia-game-condition-a-vanilla/3b21bc37-b117-4d72-b0fe-cfa52cab97d6.jsonl",
+      "size_bytes": 470148
+    },
+    {
+      "id": "551241a1",
+      "path": "/Users/samkoscelny/.claude/projects/-Users-samkoscelny-GazeVLM-local-agentdiag-agentdiag-trivia-game-condition-a-vanilla/551241a1-5a97-4e4c-a4d9-a729d8e6c910.jsonl",
+      "size_bytes": 116170
+    },
+    {
+      "id": "22499017",
+      "path": "/Users/samkoscelny/.claude/projects/-Users-samkoscelny-GazeVLM-local-agentdiag-agentdiag-trivia-game-condition-a-vanilla/22499017-58f4-4014-ba26-f9f03bb2d45f.jsonl",
+      "size_bytes": 98165
+    },
+    {
+      "id": "aee33a4b",
+      "path": "/Users/samkoscelny/.claude/projects/-Users-samkoscelny-GazeVLM-local-agentdiag-agentdiag-trivia-game-condition-a-vanilla/aee33a4b-8795-4e13-b6df-4d72b2873037.jsonl",
+      "size_bytes": 21146
+    },
+    {
+      "id": "6645322b",
+      "path": "/Users/samkoscelny/.claude/projects/-Users-samkoscelny-GazeVLM-local-agentdiag-agentdiag-trivia-game-condition-a-vanilla/6645322b-3091-4ec8-ac3a-1e7802a817f8.jsonl",
+      "size_bytes": 70611
+    },
+    {
+      "id": "7bb6c030",
+      "path": "/Users/samkoscelny/.claude/projects/-Users-samkoscelny-GazeVLM-local-agentdiag-agentdiag-trivia-game-condition-a-vanilla/7bb6c030-beab-4a6c-8bb7-aa7051aee960.jsonl",
+      "size_bytes": 282869
+    }
+  ]
+}

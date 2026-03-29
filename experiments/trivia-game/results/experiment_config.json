@@ -1,0 +1,7 @@
+{
+  "created": "2026-03-29 10:01:41",
+  "task": "Build a real-time multiplayer trivia game with FastAPI backend (WebSocket + REST + SQLite), React frontend (lobby, game room, scoreboard), and comprehensive test suite. Support 2-4 players, 10 questions per game, 15-second timer.",
+  "condition_a": "/Users/samkoscelny/GazeVLM-local/agentdiag/agentdiag/trivia-game/condition_a_vanilla",
+  "condition_b": "/Users/samkoscelny/GazeVLM-local/agentdiag/agentdiag/trivia-game/condition_b_harness",
+  "agentdiag_root": "/Users/samkoscelny/GazeVLM-local/agentdiag"
+}

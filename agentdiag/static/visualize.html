@@ -1,0 +1,5715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>agentdiag - Dashboard</title>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-base: #0f172a;
+  --bg-panel: #1e293b;
+  --bg-surface: #273549;
+  --border: #334155;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  /* Phase colors */
+  --phase-idle: #475569;
+  --phase-gathering: #22d3ee;
+  --phase-planning: #facc15;
+  --phase-executing: #4ade80;
+  --phase-verifying: #c084fc;
+  --phase-delivering: #60a5fa;
+
+  /* Severity */
+  --severity-info: #3b82f6;
+  --severity-warning: #f59e0b;
+  --severity-critical: #ef4444;
+
+  /* Health */
+  --health-healthy: #4ade80;
+  --health-degraded: #f59e0b;
+  --health-failing: #ef4444;
+
+  /* Layout */
+  --left-col: 280px;
+  --right-col: 320px;
+  --header-h: 48px;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ===== App Shell ===== */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+#top-bar {
+  height: var(--header-h);
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+#top-bar .logo {
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.3px;
+  color: var(--text-primary);
+}
+
+#top-bar .logo span {
+  color: var(--phase-gathering);
+}
+
+#connection-status {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+#connection-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: background 0.3s;
+}
+
+#connection-dot.connected { background: var(--health-healthy); }
+#connection-dot.disconnected { background: var(--health-failing); }
+#connection-dot.waiting {
+  background: var(--health-degraded);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+#session-indicator {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.session-project {
+  color: var(--text-secondary);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.session-id {
+  font-family: monospace;
+  color: var(--text-muted);
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* ===== Main Layout ===== */
+#main {
+  display: grid;
+  grid-template-columns: var(--left-col) 1fr var(--right-col);
+  flex: 1;
+  min-height: 0;
+}
+
+/* ===== Left Column: Session Health ===== */
+#left-col {
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-section {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-section:last-child { border-bottom: none; }
+
+.section-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+/* Health Status */
+.health-badge-el {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.health-badge-el.healthy { background: rgba(74,222,128,0.15); color: var(--health-healthy); }
+.health-badge-el.degraded { background: rgba(245,158,11,0.15); color: var(--health-degraded); }
+.health-badge-el.failing { background: rgba(239,68,68,0.15); color: var(--health-failing); }
+
+.health-badge-el .health-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.health-badge-el.healthy .health-dot { background: var(--health-healthy); }
+.health-badge-el.degraded .health-dot { background: var(--health-degraded); }
+.health-badge-el.failing .health-dot { background: var(--health-failing); }
+
+/* Phase indicator */
+.current-phase-text {
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: capitalize;
+  margin-bottom: 4px;
+}
+
+.phase-progress-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.phase-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s ease, background 0.3s;
+}
+
+/* Completion */
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.stat-value {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+
+/* Completion bar */
+.completion-bar-container {
+  margin-top: 8px;
+}
+
+.completion-bar-bg {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.completion-bar-fill-el {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+/* Sparkline */
+.sparkline-container {
+  margin-top: 8px;
+  height: 32px;
+}
+
+.sparkline-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Phase balance */
+.phase-balance {
+  display: flex;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  gap: 1px;
+  margin-top: 8px;
+}
+
+.phase-bar-segment {
+  height: 100%;
+  min-width: 2px;
+  transition: flex 0.4s ease;
+}
+
+.phase-breakdown {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  margin-top: 8px;
+}
+
+.phase-breakdown-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.phase-breakdown-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.phase-breakdown-count {
+  margin-left: auto;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Agent list */
+.agent-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+}
+
+.agent-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.agent-label {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.agent-phase {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: capitalize;
+  margin-left: auto;
+}
+
+/* Decision trace profile */
+.profile-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+  font-size: 12px;
+}
+
+.profile-key {
+  color: var(--text-secondary);
+}
+
+.profile-val {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-weight: 600;
+}
+
+/* ===== Center Column ===== */
+#center-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Tab bar */
+.tab-bar {
+  display: flex;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.tab-btn:hover { color: var(--text-secondary); }
+.tab-btn.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--phase-gathering);
+}
+
+.tab-count {
+  margin-left: 6px;
+  font-size: 11px;
+  background: var(--border);
+  padding: 1px 6px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+}
+
+/* Tab content panels */
+.tab-panel {
+  display: none;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.tab-panel.active { display: flex; flex-direction: column; }
+
+/* ===== Timeline View ===== */
+.timeline-panel {
+  padding: 16px;
+}
+
+.timeline-scroll {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  min-height: 80px;
+  align-items: flex-end;
+}
+
+.timeline-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.timeline-scroll::-webkit-scrollbar-track {
+  background: var(--bg-base);
+  border-radius: 3px;
+}
+
+.timeline-scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.behavior-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 40px;
+  max-width: 120px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: transform 0.15s;
+  position: relative;
+}
+
+.behavior-block:hover { transform: translateY(-2px); }
+
+.behavior-block.selected {
+  transform: translateY(-3px);
+}
+
+.block-bar {
+  width: 100%;
+  min-height: 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(0,0,0,0.7);
+  position: relative;
+}
+
+.block-bar.has-failures {
+  box-shadow: inset 0 -3px 0 rgba(239,68,68,0.6);
+}
+
+.block-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  text-align: center;
+}
+
+.block-step-range {
+  font-size: 9px;
+  color: var(--text-muted);
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+
+/* Transition divider */
+.phase-transition-divider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 20px;
+  flex-shrink: 0;
+  position: relative;
+  padding: 0 2px;
+}
+
+.transition-line {
+  width: 1px;
+  height: 40px;
+  background: var(--border);
+}
+
+.transition-line.regression {
+  background: var(--severity-critical);
+  width: 2px;
+}
+
+.transition-arrow {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.transition-arrow.regression {
+  color: var(--severity-critical);
+}
+
+/* Timeline empty state */
+.timeline-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* ===== Diagnosis Panel ===== */
+.diagnoses-panel {
+  padding: 16px;
+  gap: 12px;
+}
+
+.diagnosis-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+
+.diagnosis-card:hover { border-color: var(--text-muted); }
+
+.diagnosis-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.severity-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.severity-badge.info { background: rgba(59,130,246,0.2); color: var(--severity-info); }
+.severity-badge.warning { background: rgba(245,158,11,0.2); color: var(--severity-warning); }
+.severity-badge.critical { background: rgba(239,68,68,0.2); color: var(--severity-critical); }
+
+.diagnosis-caft-code {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.diagnosis-step-link {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--phase-gathering);
+  cursor: pointer;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+
+.diagnosis-step-link:hover { text-decoration: underline; }
+
+.diagnosis-message {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.diagnosis-remediation {
+  font-size: 12px;
+  color: var(--health-degraded);
+  padding: 8px 10px;
+  background: rgba(245,158,11,0.08);
+  border-radius: 4px;
+  margin-bottom: 8px;
+  border-left: 3px solid var(--health-degraded);
+}
+
+.evidence-toggle {
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 4px 0;
+}
+
+.evidence-toggle:hover { color: var(--text-secondary); }
+
+.evidence-table {
+  margin-top: 8px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.evidence-table td {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.evidence-table td:first-child {
+  color: var(--text-muted);
+  font-weight: 500;
+  width: 40%;
+}
+
+.evidence-table td:last-child {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  color: var(--text-primary);
+  word-break: break-all;
+}
+
+.confidence-bar-container-diag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.confidence-bar-bg {
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.confidence-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+.confidence-label {
+  font-size: 11px;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  color: var(--text-muted);
+  min-width: 36px;
+  text-align: right;
+}
+
+.diagnoses-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.diagnoses-empty .healthy-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* ===== Decision Trace ===== */
+.decision-trace-panel {
+  padding: 16px;
+}
+
+.decision-trace-panel .trace-unavailable {
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.heatmap-container {
+  overflow: auto;
+}
+
+.heatmap-table {
+  border-collapse: collapse;
+  font-size: 11px;
+  min-width: 100%;
+}
+
+.heatmap-table th {
+  position: sticky;
+  top: 0;
+  background: var(--bg-panel);
+  padding: 6px 8px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.heatmap-table td {
+  padding: 4px 8px;
+  text-align: center;
+  border-bottom: 1px solid rgba(51,65,85,0.3);
+  position: relative;
+}
+
+.heatmap-table td:first-child {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  color: var(--text-muted);
+  text-align: right;
+  position: sticky;
+  left: 0;
+  background: var(--bg-panel);
+}
+
+.heatmap-cell {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  display: inline-block;
+  cursor: default;
+  position: relative;
+}
+
+.heatmap-cell.fired { background: var(--health-healthy); }
+.heatmap-cell.gate-failed { background: var(--border); }
+.heatmap-cell.not-checked { background: transparent; }
+
+/* Tooltip */
+.heatmap-tooltip {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.heatmap-cell:hover .heatmap-tooltip { display: block; }
+
+/* ===== Right Column: LLM Decisions ===== */
+#right-col {
+  background: var(--bg-panel);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.llm-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.llm-header .section-title { margin-bottom: 12px; }
+
+.llm-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.llm-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.llm-stat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.llm-stat-dot.total { background: var(--text-muted); }
+.llm-stat-dot.autoconfirmed { background: var(--health-healthy); opacity: 0.6; }
+.llm-stat-dot.confirmed { background: var(--health-healthy); }
+.llm-stat-dot.rejected { background: var(--health-failing); }
+.llm-stat-dot.uncertain { background: var(--health-degraded); }
+
+.llm-stat-label { color: var(--text-secondary); }
+
+.llm-stat-value {
+  margin-left: auto;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-weight: 600;
+}
+
+.llm-log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 16px;
+}
+
+.llm-snapshot-item {
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  background: var(--bg-surface);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  font-size: 12px;
+}
+
+.llm-snapshot-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.detector-name-link {
+  font-weight: 600;
+  color: var(--phase-gathering);
+  cursor: pointer;
+}
+
+.detector-name-link:hover { text-decoration: underline; }
+
+.snapshot-confidence {
+  margin-left: auto;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.snapshot-decision {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.snapshot-fired-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.snapshot-fired-badge.fired {
+  background: rgba(74,222,128,0.15);
+  color: var(--health-healthy);
+}
+
+.snapshot-fired-badge.not-fired {
+  background: rgba(100,116,139,0.15);
+  color: var(--text-muted);
+}
+
+/* Detector detail modal */
+.detector-detail-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,0.8);
+  z-index: 200;
+  justify-content: center;
+  align-items: center;
+}
+
+.detector-detail-overlay.visible {
+  display: flex;
+}
+
+.detector-detail-modal {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  width: 600px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.detector-detail-modal h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.modal-close {
+  float: right;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.modal-close:hover { color: var(--text-primary); }
+
+.detector-detail-content {
+  font-size: 13px;
+}
+
+.detector-timeline-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(51,65,85,0.3);
+  font-size: 12px;
+}
+
+.detector-timeline-step {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  color: var(--text-muted);
+  min-width: 48px;
+}
+
+.detector-timeline-conf {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  min-width: 48px;
+  text-align: right;
+}
+
+.detector-timeline-gate {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.llm-log-empty {
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: center;
+  padding: 20px;
+}
+
+/* ===== Waiting / End States ===== */
+.waiting-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15,23,42,0.85);
+  z-index: 50;
+}
+
+.waiting-overlay.hidden { display: none; }
+
+.waiting-pulse {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--phase-gathering);
+  animation: pulse 1.5s ease-in-out infinite;
+  margin-bottom: 12px;
+}
+
+.waiting-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.session-complete-banner {
+  display: none;
+  background: rgba(96,165,250,0.1);
+  border: 1px solid rgba(96,165,250,0.3);
+  color: var(--phase-delivering);
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.session-complete-banner.visible { display: block; }
+
+/* Session context panel */
+.session-context-section { border-bottom: 1px solid var(--border); }
+.session-goal {
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.4;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.session-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.session-meta-tag {
+  font-size: 10px;
+  color: var(--text-muted);
+  background: var(--bg-surface);
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.session-duration {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1280px) {
+  #main {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
+  #left-col {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex-direction: row;
+    overflow-x: auto;
+    max-height: 200px;
+  }
+  #left-col .panel-section {
+    min-width: 240px;
+    border-bottom: none;
+    border-right: 1px solid var(--border);
+  }
+  #right-col {
+    border-left: none;
+    border-top: 1px solid var(--border);
+    max-height: 300px;
+  }
+}
+
+/* Scrollbar for panels */
+#left-col::-webkit-scrollbar,
+.llm-log::-webkit-scrollbar,
+.tab-panel::-webkit-scrollbar {
+  width: 5px;
+}
+
+#left-col::-webkit-scrollbar-track,
+.llm-log::-webkit-scrollbar-track,
+.tab-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#left-col::-webkit-scrollbar-thumb,
+.llm-log::-webkit-scrollbar-thumb,
+.tab-panel::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+/* ===== Cognitive Load Monitor ===== */
+
+.cognitive-overall {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cognitive-overall-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  min-width: 60px;
+}
+
+.cognitive-overall-bar {
+  flex: 1;
+  min-width: 120px;
+  height: 8px;
+  background: var(--bg-surface);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.cognitive-overall-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease, background 0.3s;
+}
+
+.cognitive-overall-pct {
+  font-size: 12px;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-weight: 600;
+  min-width: 36px;
+  text-align: right;
+}
+
+.cognitive-bottleneck {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Pipeline */
+.cognitive-pipeline {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  padding: 24px 16px 16px;
+  min-height: 200px;
+}
+
+.cognitive-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.15s;
+  flex: 1;
+  max-width: 100px;
+}
+
+.cognitive-stage:hover { transform: translateY(-2px); }
+
+.stage-bar {
+  width: 48px;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.5s ease, background 0.3s;
+  min-height: 8px;
+}
+
+.cognitive-stage.bottleneck .stage-bar {
+  box-shadow: 0 0 12px var(--severity-warning);
+  animation: bottleneck-pulse 2s ease-in-out infinite;
+}
+
+@keyframes bottleneck-pulse {
+  0%, 100% { box-shadow: 0 0 8px var(--severity-warning); }
+  50%      { box-shadow: 0 0 20px var(--severity-warning); }
+}
+
+.stage-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.stage-load-pct {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.stage-status-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-top: 2px;
+}
+
+.stage-flow-arrow {
+  color: var(--text-muted);
+  font-size: 16px;
+  align-self: center;
+  margin-bottom: 32px;
+  flex-shrink: 0;
+}
+
+.stage-flow-arrow.bottleneck-target {
+  color: var(--severity-warning);
+}
+
+/* Stage detail panel */
+.stage-detail-panel {
+  margin: 0 16px 16px;
+  padding: 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  animation: fadeSlideIn 0.2s ease;
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.stage-detail-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stage-detail-status {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.stage-detail-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.stage-metric-card {
+  background: var(--bg-panel);
+  border-radius: 6px;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.stage-metric-value {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+
+.stage-metric-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Memory items */
+.memory-items-section {
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+
+.memory-items-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.memory-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 12px;
+}
+
+.memory-item-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.memory-item-name {
+  flex: 1;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.memory-item-meta {
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.memory-item-retention-bar {
+  width: 40px;
+  height: 4px;
+  background: var(--bg-panel);
+  border-radius: 2px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.memory-item-retention-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+/* Decision points */
+.decisions-list {
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+
+.decision-item {
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(51,65,85,0.3);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.decision-item:last-child { border-bottom: none; }
+
+.decision-step {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  color: var(--text-muted);
+  font-size: 11px;
+  min-width: 48px;
+}
+
+.decision-tool {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.decision-success {
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.decision-success.yes { background: rgba(74,222,128,0.15); color: var(--health-healthy); }
+.decision-success.no { background: rgba(239,68,68,0.15); color: var(--health-failing); }
+
+.decision-delib {
+  color: var(--text-muted);
+  font-size: 11px;
+  margin-left: auto;
+}
+
+/* Decision quality metrics */
+.decision-quality-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.decision-quality-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  padding: 2px 0;
+}
+
+.decision-quality-item .label { color: var(--text-secondary); }
+.decision-quality-item .value {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-weight: 600;
+}
+
+/* IP Stage tag on DiagnosisCard */
+.ip-stage-tag {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--bg-base);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.ip-stage-tag:hover { opacity: 0.8; }
+
+/* Cognitive Load Summary (left column) */
+.cognitive-summary-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.cognitive-summary-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.cognitive-summary-bottleneck {
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+.cognitive-summary-grid {
+  display: grid;
+  grid-template-columns: 14px 1fr 14px 1fr;
+  gap: 3px 6px;
+  align-items: center;
+}
+
+.cognitive-summary-letter {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-align: center;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+
+.cognitive-summary-minibar {
+  height: 4px;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+/* Unavailable state */
+.cognitive-unavailable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  height: 250px;
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+  padding: 24px;
+}
+
+.cognitive-unavailable code {
+  font-size: 12px;
+  background: var(--bg-surface);
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: var(--text-secondary);
+}
+
+/* Loading state for lazy-fetched detail */
+.stage-detail-loading {
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: center;
+  padding: 16px;
+}
+
+/* ===== Wickens IP Pipeline Strip (always-visible, center top) ===== */
+
+.wickens-strip {
+  padding: 12px 16px 8px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel);
+  flex-shrink: 0;
+}
+
+/* Attention resources overlay bar */
+.wickens-attention {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+}
+.wickens-attention-label {
+  font-size: 10px; color: var(--text-muted); text-transform: uppercase;
+  letter-spacing: 0.5px; white-space: nowrap;
+}
+.wickens-attention-bar {
+  flex: 1; height: 6px; background: var(--bg-surface); border-radius: 3px; overflow: hidden;
+}
+.wickens-attention-fill {
+  height: 100%; border-radius: 3px; transition: width 0.5s, background 0.3s;
+}
+.wickens-attention-val {
+  font-size: 11px; font-family: var(--font-mono); font-weight: 600; color: var(--text-primary);
+  min-width: 32px; text-align: right;
+}
+.wickens-attention-lines {
+  height: 6px; border-left: 1px dashed var(--border);
+  margin: 0 auto; width: 1px; opacity: 0.3;
+}
+
+/* Memory row (LTM + WM above main flow) */
+.wickens-memory-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; margin-bottom: 4px;
+}
+.wickens-memory-arrows {
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+  font-size: 14px; color: var(--text-muted);
+}
+.wickens-wm-connect {
+  text-align: center; margin-bottom: 4px; color: var(--text-muted);
+}
+
+/* Main pipeline flow row */
+.wickens-main-flow {
+  display: flex; align-items: center; justify-content: center;
+  gap: 4px; flex-wrap: nowrap;
+}
+
+/* Stage boxes (Wickens-style) */
+.wickens-box {
+  padding: 6px 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+  min-width: 80px;
+  transition: transform 0.15s, border-color 0.3s, box-shadow 0.3s;
+}
+.wickens-box:hover { transform: translateY(-1px); }
+.wickens-box.selected { outline: 2px solid currentColor; outline-offset: 2px; }
+.wickens-box.anomaly {
+  border-color: var(--severity-critical) !important;
+  box-shadow: 0 0 8px rgba(239,68,68,0.3);
+  animation: bottleneck-pulse 2s ease-in-out infinite;
+}
+.wickens-box-label {
+  font-size: 9px; color: var(--text-muted); text-transform: uppercase;
+  letter-spacing: 0.3px; margin-bottom: 2px;
+}
+.wickens-box-metric {
+  font-size: 13px; font-weight: 700; font-family: var(--font-mono);
+}
+.wickens-box-sub {
+  font-size: 9px; color: var(--text-muted); margin-top: 1px;
+  font-family: var(--font-mono);
+}
+
+/* Flow arrows */
+.wickens-arrow {
+  color: var(--text-muted); transition: opacity 0.3s;
+}
+
+/* Feedback loop indicator */
+.wickens-feedback-loop {
+  text-align: right; padding-right: 16px; margin-top: 2px;
+}
+
+/* ===== Working Memory Panel (left column) ===== */
+
+.wm-panel {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.wm-panel .section-title { margin-bottom: 8px; }
+
+.wm-items {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.wm-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 4px;
+  border-radius: 4px;
+  transition: opacity 0.3s, transform 0.3s;
+  font-size: 12px;
+}
+.wm-item.fading { opacity: 0.5; }
+.wm-item.evicted { opacity: 0.25; text-decoration: line-through; }
+
+.wm-tier-badge {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  padding: 1px 4px;
+  border-radius: 3px;
+  min-width: 20px;
+  text-align: center;
+}
+.wm-tier-badge.l2 { background: rgba(192,132,252,0.25); color: #c084fc; }
+.wm-tier-badge.l1 { background: rgba(96,165,250,0.25); color: #60a5fa; }
+.wm-tier-badge.l0 { background: rgba(100,116,139,0.2); color: #94a3b8; }
+
+.wm-item-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: width 0.3s, height 0.3s;
+}
+
+.wm-item-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-primary);
+}
+.wm-item-meta {
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.wm-summary {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.wm-summary span { white-space: nowrap; }
+.wm-summary .wm-stat-value {
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+/* ===== Information Signals Panel (sparklines) ===== */
+
+.signals-panel {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+
+.signals-subtabs {
+  display: flex;
+  gap: 4px;
+}
+.signals-subtab {
+  padding: 4px 10px;
+  font-size: 11px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.signals-subtab.active {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border-color: var(--phase-gathering);
+}
+
+.signal-chart {
+  flex: 1;
+  min-height: 120px;
+  position: relative;
+}
+.signal-chart svg {
+  width: 100%;
+  height: 100%;
+}
+.signal-legend {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+.signal-legend-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.signal-value {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  position: absolute;
+  right: 4px;
+  top: 2px;
+}
+
+/* ===== Memory Ops Timeline ===== */
+
+.memops-panel {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+.memops-empty {
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+  padding: 32px;
+}
+.memops-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--bg-surface);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  font-size: 12px;
+}
+.memops-icon {
+  font-size: 14px;
+  width: 20px;
+  text-align: center;
+}
+.memops-ns {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+.memops-step {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* ===== CAFT Annotations Panel (right column) ===== */
+
+.annotations-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.annotations-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.annotations-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+.annotation-card {
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 12px;
+}
+.annotation-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.annotation-card-desc {
+  color: var(--text-secondary);
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* ===== Simple View (default human-readable dashboard) ===== */
+
+.simple-view {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.simple-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.simple-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.3px;
+}
+.view-toggle {
+  display: flex;
+  background: var(--bg-surface);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.view-toggle-btn {
+  padding: 5px 14px;
+  font-size: 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.view-toggle-btn.active {
+  background: var(--phase-gathering);
+  color: var(--bg-base);
+  font-weight: 600;
+}
+
+/* Status card */
+.status-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin-bottom: 16px;
+  transition: border-color 0.3s;
+}
+.status-card.alert-yellow { border-left: 3px solid #f59e0b; }
+.status-card.alert-red { border-left: 3px solid #ef4444; }
+
+.status-top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.status-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.5s;
+}
+.status-dot.green { background: #4ade80; box-shadow: 0 0 8px rgba(74,222,128,0.3); }
+.status-dot.yellow { background: #f59e0b; box-shadow: 0 0 8px rgba(245,158,11,0.3); animation: pulse-glow 2s ease-in-out infinite; }
+.status-dot.red { background: #ef4444; box-shadow: 0 0 12px rgba(239,68,68,0.4); animation: pulse-glow 1.5s ease-in-out infinite; }
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.status-message {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.status-activity {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+/* Recent actions */
+.recent-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.recent-action {
+  font-size: 12px;
+  padding: 3px 10px;
+  background: var(--bg-surface);
+  border-radius: 4px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.recent-action:last-child {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+.recent-arrow {
+  color: var(--text-muted);
+  font-size: 11px;
+  align-self: center;
+}
+
+/* Alert timeline */
+.alert-timeline {
+  margin-top: 20px;
+}
+.alert-timeline-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.alert-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--bg-surface);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.alert-item:hover {
+  background: var(--bg-surface);
+  margin: 0 -8px;
+  padding: 8px;
+  border-radius: 6px;
+}
+.alert-item:last-child { border-bottom: none; }
+.alert-step {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  min-width: 48px;
+  flex-shrink: 0;
+}
+.alert-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+.alert-dot.green { background: #4ade80; }
+.alert-dot.yellow { background: #f59e0b; }
+.alert-dot.red { background: #ef4444; }
+.alert-message {
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+.alert-expand {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  padding: 6px 8px;
+  background: var(--bg-base);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+}
+
+/* Waiting state */
+.simple-waiting {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text-muted);
+}
+.simple-waiting-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  margin: 0 auto 16px;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+.simple-step-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* ===== Ablation Mode ===== */
+.ablation-layout {
+  display: grid;
+  grid-template-columns: var(--left-col) 1fr var(--right-col);
+  flex: 1;
+  min-height: 0;
+}
+
+.ablation-progress {
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.ablation-center {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.ablation-pipeline {
+  background: var(--bg-panel);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Mode checklist items */
+.mode-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 13px;
+}
+
+.mode-item-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.mode-item-icon.completed {
+  background: rgba(74,222,128,0.2);
+  color: var(--health-healthy);
+}
+
+.mode-item-icon.current {
+  background: rgba(34,211,238,0.2);
+  color: var(--phase-gathering);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.mode-item-icon.pending {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.mode-item-label {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.mode-item-label.pending {
+  color: var(--text-muted);
+}
+
+.mode-item-f1 {
+  margin-left: auto;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--phase-gathering);
+}
+
+/* Event cards in processing view */
+.event-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  transition: border-color 0.2s;
+  animation: fadeSlideIn 0.2s ease;
+}
+
+.event-card:hover {
+  border-color: var(--text-muted);
+}
+
+.event-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.event-card-session {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.event-card-failure {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.event-card-detail {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.event-card-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.event-card-latency {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Color-coded event badges */
+.event-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.event-badge.confirm {
+  background: rgba(74,222,128,0.15);
+  color: var(--health-healthy);
+}
+
+.event-badge.reject {
+  background: rgba(239,68,68,0.15);
+  color: var(--health-failing);
+}
+
+.event-badge.fp-adjust {
+  background: rgba(245,158,11,0.15);
+  color: var(--health-degraded);
+}
+
+.event-badge.llm-call {
+  background: rgba(96,165,250,0.15);
+  color: var(--phase-delivering);
+}
+
+.event-badge.auto-confirm {
+  background: rgba(74,222,128,0.25);
+  color: var(--health-healthy);
+}
+
+.event-badge.processing {
+  background: rgba(34,211,238,0.15);
+  color: var(--phase-gathering);
+}
+
+/* Results table */
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.results-table th {
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--text-muted);
+  border-bottom: 2px solid var(--border);
+}
+
+.results-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.results-table td.mono {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-weight: 600;
+}
+
+.results-table tr:hover {
+  background: var(--bg-surface);
+}
+
+.results-table .best-value {
+  color: var(--health-healthy);
+}
+
+/* Expandable reasoning sections */
+.reasoning-expandable {
+  margin-top: 6px;
+}
+
+.reasoning-toggle {
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 2px 0;
+}
+
+.reasoning-toggle:hover {
+  color: var(--text-secondary);
+}
+
+.reasoning-content {
+  margin-top: 6px;
+  padding: 8px 10px;
+  background: var(--bg-panel);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  border-left: 3px solid var(--phase-delivering);
+}
+
+/* Pipeline log compact items */
+.pipeline-event-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(51,65,85,0.3);
+  font-size: 12px;
+}
+
+.pipeline-event-item:last-child {
+  border-bottom: none;
+}
+
+.pipeline-event-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.pipeline-event-dot.llm-start { background: var(--phase-delivering); }
+.pipeline-event-dot.llm-result-confirmed { background: var(--health-healthy); }
+.pipeline-event-dot.llm-result-rejected { background: var(--health-failing); }
+.pipeline-event-dot.auto-confirm { background: var(--health-healthy); opacity: 0.6; }
+.pipeline-event-dot.fp-adjustment { background: var(--health-degraded); }
+
+.pipeline-event-summary {
+  flex: 1;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.pipeline-event-summary strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.pipeline-event-timestamp {
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+
+/* Ablation waiting/complete states */
+.ablation-waiting-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 300px;
+  color: var(--text-muted);
+  gap: 12px;
+}
+
+.ablation-waiting-state .waiting-pulse {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--phase-gathering);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.ablation-complete-banner {
+  background: rgba(74,222,128,0.1);
+  border: 1px solid rgba(74,222,128,0.3);
+  color: var(--health-healthy);
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.ablation-comparison-pre {
+  padding: 16px;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: pre;
+  overflow-x: auto;
+  background: var(--bg-surface);
+  border-radius: 6px;
+  margin: 12px 16px;
+  border: 1px solid var(--border);
+}
+
+/* Ablation progress spinner animation for current mode */
+@keyframes ablation-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.ablation-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border);
+  border-top-color: var(--phase-gathering);
+  border-radius: 50%;
+  animation: ablation-spin 1s linear infinite;
+  flex-shrink: 0;
+}
+
+/* Ablation responsive */
+@media (max-width: 1280px) {
+  .ablation-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
+  .ablation-progress {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .ablation-pipeline {
+    border-left: none;
+    border-top: 1px solid var(--border);
+    max-height: 300px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel">
+/* ===================================================================
+   agentdiag Dashboard -- React 18
+   =================================================================== */
+
+const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+// ---- Constants ----
+const PHASE_NAMES = ['idle', 'gathering', 'planning', 'executing', 'verifying', 'delivering'];
+const PHASE_COLORS = {
+  idle: '#475569',
+  gathering: '#22d3ee',
+  planning: '#facc15',
+  executing: '#4ade80',
+  verifying: '#c084fc',
+  delivering: '#60a5fa'
+};
+const SEVERITY_COLORS = {
+  info: '#3b82f6',
+  warning: '#f59e0b',
+  critical: '#ef4444'
+};
+const HEALTH_COLORS = {
+  healthy: '#4ade80',
+  degraded: '#f59e0b',
+  failing: '#ef4444'
+};
+
+// IP Stage constants
+const IP_STAGES = ['perception', 'attention', 'working_memory', 'decision_making', 'action', 'feedback'];
+
+const IP_STAGE_LABELS = {
+  perception: 'Perception', attention: 'Attention', working_memory: 'Memory',
+  decision_making: 'Decision', action: 'Action', feedback: 'Feedback',
+};
+
+const IP_STAGE_SHORT = {
+  perception: 'P', attention: 'A', working_memory: 'M',
+  decision_making: 'D', action: 'X', feedback: 'F',
+};
+
+const IP_STAGE_COLORS = {
+  perception: '#22d3ee', attention: '#facc15', working_memory: '#c084fc',
+  decision_making: '#60a5fa', action: '#4ade80', feedback: '#f472b6',
+};
+
+const STATUS_COLORS = {
+  idle: 'var(--text-muted)', normal: 'var(--phase-gathering)',
+  active: 'var(--phase-executing)', at_risk: 'var(--severity-warning)',
+  overloaded: 'var(--severity-critical)',
+};
+
+const STAGE_DETAIL_LABELS = {
+  perception: { breadth: 'Breadth', depth: 'Depth', recency: 'Recency' },
+  attention: { diversity: 'Diversity', focus: 'Focus', tunnel_risk: 'Tunnel Risk' },
+  working_memory: { utilization: 'Utilization', recency_bias: 'Recency Bias', at_risk_items: 'At-Risk Items' },
+  decision_making: { deliberation: 'Deliberation', options_explored: 'Options Explored', latency_trend: 'Latency Trend' },
+  action: { diversity: 'Diversity', success_rate: 'Success Rate', repetition_risk: 'Repetition Risk' },
+  feedback: { verify_ratio: 'Verify Ratio', error_response: 'Error Response', loop_closed: 'Loop Closed' },
+};
+
+const COGNITIVE_MAX_BAR_HEIGHT = 120;
+const COGNITIVE_MAX_MINIBAR_WIDTH = 40;
+
+function cognitiveOverallColor(load) {
+  if (load > 0.75) return 'var(--health-failing)';
+  if (load > 0.5) return 'var(--health-degraded)';
+  return 'var(--health-healthy)';
+}
+
+function retentionColor(retention) {
+  if (retention > 0.7) return 'var(--health-healthy)';
+  if (retention >= 0.4) return 'var(--health-degraded)';
+  return 'var(--health-failing)';
+}
+
+// ---- Utilities ----
+function phaseColor(phaseName) {
+  return PHASE_COLORS[(phaseName || '').toLowerCase()] || PHASE_COLORS.idle;
+}
+
+function formatDuration(seconds) {
+  if (!seconds || seconds < 0) return '';
+  if (seconds < 60) return Math.round(seconds) + 's';
+  if (seconds < 3600) return Math.round(seconds / 60) + 'm ' + Math.round(seconds % 60) + 's';
+  const h = Math.floor(seconds / 3600);
+  const m = Math.round((seconds % 3600) / 60);
+  return h + 'h ' + m + 'm';
+}
+
+function severityColor(severity) {
+  return SEVERITY_COLORS[(severity || '').toLowerCase()] || SEVERITY_COLORS.info;
+}
+
+function formatConfidenceMessage(diagnosis) {
+  const conf = diagnosis.confidence || 0;
+  const name = (diagnosis.failure_name || '').replace(/_/g, ' ');
+  const desc = diagnosis.description || '';
+  const rem = diagnosis.remediation || '';
+
+  if (conf < 0.3) {
+    return 'Watching for ' + name + '... (early signal)';
+  } else if (conf < 0.6) {
+    return name.charAt(0).toUpperCase() + name.slice(1) + ' may be developing. ' + desc;
+  } else if (conf < 0.85) {
+    return name.charAt(0).toUpperCase() + name.slice(1) + ' detected. ' + desc;
+  } else {
+    let msg = 'Strong ' + name + ' detected. ' + desc;
+    if (rem) msg += ' ' + rem;
+    return msg;
+  }
+}
+
+function buildBehaviorBlocks(actions, transitions) {
+  if (!actions || actions.length === 0) return [];
+
+  const sorted = actions.slice().sort((a, b) => a.step - b.step);
+
+  const transitionSteps = {};
+  (transitions || []).forEach(t => {
+    transitionSteps[t.at_step] = t;
+  });
+
+  const blocks = [];
+  let currentBlock = null;
+
+  sorted.forEach(action => {
+    const phase = (action.phase || 'idle').toLowerCase();
+    const tool = action.tool || 'unknown';
+
+    let shouldBreak = false;
+    if (currentBlock) {
+      if (phase !== currentBlock.phase || tool !== currentBlock.tool) {
+        shouldBreak = true;
+      }
+    }
+
+    if (!currentBlock || shouldBreak) {
+      if (currentBlock) {
+        blocks.push(currentBlock);
+      }
+
+      let transHere = null;
+      if (currentBlock) {
+        for (let s = currentBlock.endStep + 1; s <= action.step; s++) {
+          if (transitionSteps[s]) {
+            transHere = transitionSteps[s];
+            break;
+          }
+        }
+        if (!transHere && phase !== currentBlock.phase) {
+          transHere = {
+            from_phase: currentBlock.phase,
+            to_phase: phase,
+            at_step: action.step,
+            is_regression: PHASE_NAMES.indexOf(phase) < PHASE_NAMES.indexOf(currentBlock.phase)
+          };
+        }
+      }
+
+      currentBlock = {
+        phase: phase,
+        tool: tool,
+        startStep: action.step,
+        endStep: action.step,
+        count: 1,
+        failures: 0,
+        transition: transHere
+      };
+
+      if (!action.success) currentBlock.failures++;
+    } else {
+      currentBlock.endStep = action.step;
+      currentBlock.count++;
+      if (!action.success) currentBlock.failures++;
+    }
+  });
+
+  if (currentBlock) blocks.push(currentBlock);
+  return blocks;
+}
+
+
+// ================================================================
+// SessionHealth Component (Left Column)
+// ================================================================
+function SessionHealth({ state, sessionProfile, cognitiveState, workingMemory, infoTheoretic }) {
+  const sparklineRef = useRef(null);
+  const sparklineContainerRef = useRef(null);
+
+  const phaseName = useMemo(() => (state.phase || 'idle').toLowerCase(), [state.phase]);
+  const health = useMemo(() => (state.health || 'healthy').toLowerCase(), [state.health]);
+  const completionRate = state.completion_rate || 0;
+  const progressPct = (state.progress_pct || 0) * 100;
+
+  // Phase balance
+  const phaseEntries = useMemo(() => {
+    const counts = state.phase_event_counts || {};
+    const entries = [];
+    PHASE_NAMES.forEach(p => {
+      const c = counts[p] || 0;
+      if (c > 0) entries.push({ name: p, count: c });
+    });
+    return entries;
+  }, [state.phase_event_counts]);
+
+  // Agents
+  const agents = state.agents || {};
+  const agentKeys = Object.keys(agents);
+  const showAgents = !(agentKeys.length <= 1 && (agentKeys.length === 0 || agentKeys[0] === 'M'));
+
+  // Sparkline
+  useEffect(() => {
+    const history = state.completion_history || [];
+    const canvas = sparklineRef.current;
+    const container = sparklineContainerRef.current;
+    if (!canvas || !container || history.length < 2) return;
+
+    const ctx = canvas.getContext('2d');
+    const rect = container.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    canvas.style.width = rect.width + 'px';
+    canvas.style.height = rect.height + 'px';
+    ctx.scale(dpr, dpr);
+
+    const w = rect.width;
+    const h = rect.height;
+    const maxVal = Math.max(...history, 100);
+    const minVal = Math.min(...history, 0);
+    const range = maxVal - minVal || 1;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Fill
+    ctx.beginPath();
+    history.forEach((v, i) => {
+      const x = (i / (history.length - 1)) * w;
+      const y = h - ((v - minVal) / range) * (h - 4) - 2;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.lineTo(w, h);
+    ctx.lineTo(0, h);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(74,222,128,0.1)';
+    ctx.fill();
+
+    // Line
+    ctx.beginPath();
+    history.forEach((v, i) => {
+      const x = (i / (history.length - 1)) * w;
+      const y = h - ((v - minVal) / range) * (h - 4) - 2;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = '#4ade80';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }, [state.completion_history]);
+
+  const completionBarColor = health === 'failing'
+    ? HEALTH_COLORS.failing
+    : health === 'degraded'
+      ? HEALTH_COLORS.degraded
+      : PHASE_COLORS.executing;
+
+  return (
+    <div id="left-col">
+      {/* Session Context */}
+      {state.session_context?.user_goal && (
+        <div className="panel-section session-context-section">
+          <div className="section-title">Session</div>
+          <div className="session-goal">{state.session_context.user_goal}</div>
+          <div className="session-meta-row">
+            {state.session_context.project_dir && (
+              <span className="session-meta-tag">{state.session_context.project_dir}</span>
+            )}
+            {state.total_events > 0 && (
+              <span className="session-meta-tag">{state.total_events} events</span>
+            )}
+            {state.session_context.source_events > 0 && state.session_context.source_events !== state.total_events && (
+              <span className="session-meta-tag">{state.total_events}/{state.session_context.source_events} processed</span>
+            )}
+          </div>
+          {state.start_time && state.last_event_time && (
+            <div className="session-duration">
+              {formatDuration(state.last_event_time - state.start_time)}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Phase */}
+      <div className="panel-section">
+        <div className="section-title">Current Phase</div>
+        <div className="current-phase-text" style={{ color: phaseColor(phaseName) }}>
+          {phaseName}
+        </div>
+        <div className="phase-progress-bar">
+          <div
+            className="phase-progress-fill"
+            style={{ width: progressPct + '%', background: phaseColor(phaseName) }}
+          />
+        </div>
+      </div>
+
+      {/* Health Status */}
+      <div className="panel-section">
+        <div className="section-title">Session Health</div>
+        <div className={`health-badge-el ${health}`}>
+          <div className="health-dot" />
+          <span>{health}</span>
+        </div>
+        <div style={{ marginTop: 12 }}>
+          <div className="stat-row">
+            <span className="stat-label">Completion Rate</span>
+            <span className="stat-value">{completionRate.toFixed(0)}%</span>
+          </div>
+          <div className="completion-bar-container">
+            <div className="completion-bar-bg">
+              <div
+                className="completion-bar-fill-el"
+                style={{ width: completionRate + '%', background: completionBarColor }}
+              />
+            </div>
+          </div>
+          <div className="sparkline-container" ref={sparklineContainerRef}>
+            <canvas className="sparkline-canvas" ref={sparklineRef} />
+          </div>
+        </div>
+      </div>
+
+      {/* Metrics */}
+      <div className="panel-section">
+        <div className="section-title">Metrics</div>
+        <div className="stat-row">
+          <span className="stat-label">Failure Density</span>
+          <span className="stat-value">{(state.failure_density || 0).toFixed(1)} / 100 events</span>
+        </div>
+        <div className="stat-row">
+          <span className="stat-label">Total Events</span>
+          <span className="stat-value">{state.total_events || 0}</span>
+        </div>
+        <div className="stat-row">
+          <span className="stat-label">Total Errors</span>
+          <span className="stat-value">{state.total_errors || 0}</span>
+        </div>
+        <div className="stat-row">
+          <span className="stat-label">Events / min</span>
+          <span className="stat-value">{(state.events_per_minute || 0).toFixed(1)}</span>
+        </div>
+        <div className="stat-row">
+          <span className="stat-label">Phase Regressions</span>
+          <span
+            className="stat-value"
+            style={{ color: (state.regression_count || 0) > 0 ? SEVERITY_COLORS.critical : undefined }}
+          >
+            {state.regression_count || 0}
+          </span>
+        </div>
+      </div>
+
+      {/* Phase Balance */}
+      <div className="panel-section">
+        <div className="section-title">Phase Balance</div>
+        <div className="phase-balance">
+          {phaseEntries.map(e => (
+            <div
+              key={e.name}
+              className="phase-bar-segment"
+              style={{ flex: e.count, background: phaseColor(e.name) }}
+              title={e.name + ': ' + e.count}
+            />
+          ))}
+        </div>
+        <div className="phase-breakdown">
+          {phaseEntries.map(e => (
+            <div key={e.name} className="phase-breakdown-item">
+              <div className="phase-breakdown-dot" style={{ background: phaseColor(e.name) }} />
+              <span>{e.name}</span>
+              <span className="phase-breakdown-count">{e.count}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Agents (conditional) */}
+      {showAgents && (
+        <div className="panel-section">
+          <div className="section-title">Agents</div>
+          <div>
+            {agentKeys.map(k => {
+              const agent = agents[k];
+              const agentPhase = (agent.phase || 'idle').toLowerCase();
+              const color = agent.active ? phaseColor(agentPhase) : '#475569';
+              return (
+                <div key={k} className="agent-item">
+                  <div className="agent-dot" style={{ background: color }} />
+                  <span className="agent-label">{agent.label || k}</span>
+                  <span className="agent-phase">{agentPhase}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Session Profile (conditional) */}
+      {sessionProfile && Object.keys(sessionProfile).length > 0 && (
+        <div className="panel-section">
+          <div className="section-title">Session Profile</div>
+          <div>
+            {Object.keys(sessionProfile).map(key => {
+              let val = sessionProfile[key];
+              if (typeof val === 'number') {
+                val = val % 1 === 0 ? val : val.toFixed(3);
+              }
+              return (
+                <div key={key} className="profile-item">
+                  <span className="profile-key">{key.replace(/_/g, ' ')}</span>
+                  <span className="profile-val">{String(val)}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Cognitive Load Summary (conditional) */}
+      {cognitiveState && (
+        <CognitiveLoadSummary cognitiveState={cognitiveState} />
+      )}
+
+      {/* Working Memory Panel (new, shows OpenViking tiers or heuristic retention) */}
+      {(workingMemory || infoTheoretic) && (
+        <WorkingMemoryPanel workingMemory={workingMemory} infoTheoretic={infoTheoretic} />
+      )}
+    </div>
+  );
+}
+
+
+// ================================================================
+// CognitiveLoadSummary Component (Left Column compact view)
+// ================================================================
+function CognitiveLoadSummary({ cognitiveState }) {
+  const overall = cognitiveState.overall_cognitive_load || 0;
+  const bottleneck = cognitiveState.bottleneck_stage;
+
+  return (
+    <div className="panel-section">
+      <div className="section-title">Cognitive Load</div>
+      <div className="cognitive-summary-bar">
+        <div
+          className="cognitive-summary-bar-fill"
+          style={{
+            width: (overall * 100) + '%',
+            background: cognitiveOverallColor(overall)
+          }}
+        />
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+        <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{(overall * 100).toFixed(0)}%</span>
+        {bottleneck && (
+          <span className="cognitive-summary-bottleneck" style={{ color: 'var(--severity-warning)' }}>
+            Bottleneck: {IP_STAGE_LABELS[bottleneck] || bottleneck}
+          </span>
+        )}
+      </div>
+      <div className="cognitive-summary-grid">
+        {IP_STAGES.map(stage => {
+          const data = cognitiveState[stage] || { load: 0, status: 'idle' };
+          const color = STATUS_COLORS[data.status] || STATUS_COLORS.idle;
+          const width = (data.load || 0) * COGNITIVE_MAX_MINIBAR_WIDTH;
+          return (
+            <React.Fragment key={stage}>
+              <span className="cognitive-summary-letter">{IP_STAGE_SHORT[stage]}</span>
+              <div
+                className="cognitive-summary-minibar"
+                style={{ width: Math.max(2, width) + 'px', background: color }}
+                title={IP_STAGE_LABELS[stage] + ': ' + ((data.load || 0) * 100).toFixed(0) + '%'}
+              />
+            </React.Fragment>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+
+// ================================================================
+// IPPipelineStrip Component (always-visible, center top)
+// ================================================================
+function IPPipelineStrip({ cognitiveState, infoTheoretic, anomalies, selectedStage, onStageClick, flowRates }) {
+  const it = infoTheoretic || {};
+  const w = (it.wickens) || {};
+  const fr = flowRates || {};
+  const anoms = anomalies || [];
+
+  // Which stages have active anomalies?
+  const anomalyStages = new Set(anoms.map(a => a.wickens_stage).filter(Boolean));
+
+  // Attention resource (top overlay)
+  const attention = (w.attention || {}).resource || 0;
+  const attColor = attention > 0.7 ? '#f59e0b' : attention > 0.4 ? '#4ade80' : '#60a5fa';
+
+  // Stage box helper
+  const StageBox = ({ id, label, metric, unit, sublabel, color }) => {
+    const isAnomaly = anomalyStages.has(id);
+    const isSelected = selectedStage === id;
+    return (
+      <div className={'wickens-box' + (isAnomaly ? ' anomaly' : '') + (isSelected ? ' selected' : '')}
+           onClick={() => onStageClick && onStageClick(id)}
+           style={{ borderColor: isAnomaly ? '#ef4444' : color }}>
+        <div className="wickens-box-label">{label}</div>
+        <div className="wickens-box-metric" style={{ color }}>{metric}{unit}</div>
+        {sublabel && <div className="wickens-box-sub">{sublabel}</div>}
+      </div>
+    );
+  };
+
+  // Arrow helper with flow-rate thickness
+  const Arrow = ({ from, to, direction, style: extraStyle }) => {
+    const key = from + '\u2192' + to;
+    const rate = fr[key] || 0;
+    const thickness = Math.max(1, Math.min(rate * 8, 4));
+    const arrows = { down: '\u2193', up: '\u2191', right: '\u2192', left: '\u2190' };
+    return (
+      <span className="wickens-arrow" style={{
+        fontSize: 12 + thickness * 2, opacity: 0.3 + rate * 2,
+        ...extraStyle,
+      }}>{arrows[direction] || '\u2192'}</span>
+    );
+  };
+
+  const sensory = w.sensory || {};
+  const percep = w.perceptual || {};
+  const wm = w.working_memory || {};
+  const ltm = w.ltm || {};
+  const rsel = w.response_selection || {};
+  const rexec = w.response_execution || {};
+  const fb = w.feedback || {};
+
+  return (
+    <div className="wickens-strip">
+      {/* Attention resources overlay */}
+      <div className="wickens-attention">
+        <span className="wickens-attention-label">Attention resources</span>
+        <div className="wickens-attention-bar">
+          <div className="wickens-attention-fill" style={{
+            width: (attention * 100) + '%', background: attColor,
+          }} />
+        </div>
+        <span className="wickens-attention-val">{(attention * 100).toFixed(0)}%</span>
+      </div>
+      <div className="wickens-attention-lines" />
+
+      {/* Memory row (LTM + WM above main flow) */}
+      <div className="wickens-memory-row">
+        <StageBox id="ltm" label="Long-term memory"
+          metric={ltm.stored_items || 0} unit=" items"
+          sublabel={ltm.retrieval_rate > 0 ? 'retr: ' + (ltm.retrieval_rate * 100).toFixed(0) + '%' : null}
+          color="#c084fc" />
+        <div className="wickens-memory-arrows">
+          <Arrow from="working_memory" to="ltm" direction="up" style={{ color: '#c084fc' }} />
+          <Arrow from="ltm" to="working_memory" direction="down" style={{ color: '#60a5fa' }} />
+        </div>
+        <StageBox id="working_memory" label="Working memory"
+          metric={(wm.memory_entropy || 0).toFixed(1)} unit="b"
+          sublabel={'cons: ' + ((wm.consolidation_rate || 0) * 100).toFixed(0) + '% retr: ' + ((wm.retrieval_rate || 0) * 100).toFixed(0) + '%'}
+          color="#60a5fa" />
+      </div>
+
+      {/* Connection from WM down to main pipeline */}
+      <div className="wickens-wm-connect">
+        <Arrow from="working_memory" to="response_selection" direction="down" />
+      </div>
+
+      {/* Main pipeline flow: sensory → perceptual → response selection → execution → feedback */}
+      <div className="wickens-main-flow">
+        <StageBox id="sensory" label="Sensory"
+          metric={(sensory.input_entropy || 0).toFixed(1)} unit="b"
+          sublabel={sensory.input_rate > 0 ? (sensory.input_rate).toFixed(0) + ' tok/evt' : null}
+          color="#22d3ee" />
+
+        <Arrow from="sensory" to="perceptual" direction="right" />
+
+        <StageBox id="perceptual" label="Perceptual"
+          metric={(percep.read_entropy || 0).toFixed(1)} unit="b"
+          sublabel={'focus: ' + ((percep.focus || 0) * 100).toFixed(0) + '%'}
+          color="#facc15" />
+
+        <Arrow from="perceptual" to="response_selection" direction="right" />
+
+        <StageBox id="response_selection" label="Response sel."
+          metric={'MI: ' + (rsel.action_mi || 0).toFixed(2)} unit="b"
+          sublabel={'coher: ' + ((rsel.coherence || 0) * 100).toFixed(0) + '%'}
+          color="#4ade80" />
+
+        <Arrow from="response_selection" to="response_execution" direction="right" />
+
+        <StageBox id="response_execution" label="Execution"
+          metric={'LZ: ' + (rexec.compression || 0).toFixed(2)} unit=""
+          sublabel={'eff: ' + ((rexec.efficiency || 0) * 100).toFixed(0) + '%'}
+          color="#f472b6" />
+
+        <span className="wickens-arrow" style={{ fontSize: 14, opacity: 0.4 }}>{'\u2192'}</span>
+
+        <StageBox id="feedback" label="Feedback"
+          metric={'MI: ' + (fb.feedback_action_mi || 0).toFixed(2)} unit="b"
+          sublabel={'adapt: ' + ((fb.adaptation || 0) * 100).toFixed(0) + '%'}
+          color="#ef4444" />
+      </div>
+
+      {/* Feedback loop arrow back to sensory */}
+      <div className="wickens-feedback-loop">
+        <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>{'\u21A9'} feedback loop</span>
+      </div>
+    </div>
+  );
+}
+
+
+// ================================================================
+// WorkingMemoryPanel Component (left column)
+// ================================================================
+function WorkingMemoryPanel({ workingMemory, infoTheoretic }) {
+  const wm = workingMemory || {};
+  const activeItems = wm.active_items || [];
+  const atRiskItems = wm.at_risk_items || [];
+  const allItems = [...activeItems, ...atRiskItems];
+  const memEvents = (infoTheoretic || {}).memory_events || [];
+
+  // Determine if we have OpenViking tier data
+  const hasTiers = allItems.some(item => item.tier);
+
+  const getTierClass = (item) => {
+    if (item.tier === 'l2') return 'l2';
+    if (item.tier === 'l1') return 'l1';
+    if (item.tier === 'l0') return 'l0';
+    // Fallback: estimate from retention
+    const ret = item.retention != null ? item.retention : 1;
+    if (ret > 0.7) return 'l2';
+    if (ret > 0.4) return 'l1';
+    return 'l0';
+  };
+
+  const getDotColor = (item, isAtRisk) => {
+    if (isAtRisk) return 'var(--severity-warning)';
+    const ret = item.retention != null ? item.retention : 1;
+    if (ret > 0.7) return 'var(--health-healthy)';
+    if (ret >= 0.4) return 'var(--health-degraded)';
+    return 'var(--health-failing)';
+  };
+
+  const tierCounts = { l2: 0, l1: 0, l0: 0 };
+  allItems.forEach(item => { tierCounts[getTierClass(item)]++; });
+
+  return (
+    <div className="wm-panel">
+      <div className="section-title">Working Memory</div>
+      <div className="wm-items">
+        {activeItems.slice(0, 15).map((item, i) => (
+          <div key={'a' + i} className="wm-item">
+            <span className={'wm-tier-badge ' + getTierClass(item)}>
+              {hasTiers ? (item.tier || '?').toUpperCase() : (getTierClass(item).toUpperCase())}
+            </span>
+            <div className="wm-item-dot" style={{ background: getDotColor(item, false) }} />
+            <span className="wm-item-name">{item.name || item.hash || 'unknown'}</span>
+            <span className="wm-item-meta">{item.accesses || 1}x</span>
+          </div>
+        ))}
+        {atRiskItems.slice(0, 5).map((item, i) => (
+          <div key={'r' + i} className="wm-item fading">
+            <span className={'wm-tier-badge ' + getTierClass(item)}>
+              {hasTiers ? (item.tier || '?').toUpperCase() : getTierClass(item).toUpperCase()}
+            </span>
+            <div className="wm-item-dot" style={{ background: 'var(--severity-warning)' }} />
+            <span className="wm-item-name">{item.name || item.hash || 'unknown'}</span>
+            <span className="wm-item-meta">{item.accesses || 1}x</span>
+          </div>
+        ))}
+        {allItems.length === 0 && (
+          <div style={{ color: 'var(--text-muted)', fontSize: 11, padding: '8px 0' }}>No items loaded</div>
+        )}
+      </div>
+      <div className="wm-summary">
+        <span>L2: <span className="wm-stat-value">{tierCounts.l2}</span></span>
+        <span>L1: <span className="wm-stat-value">{tierCounts.l1}</span></span>
+        <span>L0: <span className="wm-stat-value">{tierCounts.l0}</span></span>
+        <span>{wm.utilization != null ? (
+          <>Util: <span className="wm-stat-value">{(wm.utilization * 100).toFixed(0)}%</span></>
+        ) : null}</span>
+      </div>
+    </div>
+  );
+}
+
+
+// ================================================================
+// Sparkline SVG Component (reusable, with phase markers)
+// ================================================================
+function SparklineSVG({ data, width, height, color, phaseMarkers, evaluationEvents, anomalies, maxStep, label, currentValue, rangeStart, rangeEnd }) {
+  if (!data || data.length < 2) {
+    return (
+      <div style={{ width, height, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <span style={{ color: 'var(--text-muted)', fontSize: 11 }}>Collecting data...</span>
+      </div>
+    );
+  }
+
+  // Apply range selection for zoomed view
+  const rStart = rangeStart != null ? rangeStart : 0;
+  const rEnd = rangeEnd != null ? rangeEnd : data.length - 1;
+  const sliced = data.slice(rStart, rEnd + 1);
+  const sliceMaxVal = Math.max(...sliced, 0.01);
+
+  const points = sliced.map((v, i) => {
+    const x = (i / Math.max(sliced.length - 1, 1)) * width;
+    const y = height - 4 - ((v / sliceMaxVal) * (height - 8));
+    return x.toFixed(1) + ',' + y.toFixed(1);
+  }).join(' ');
+
+  const effectiveMaxStep = maxStep || data.length;
+  const markers = (phaseMarkers || []).filter(([step]) => step >= rStart && step <= rEnd);
+  const evals = (evaluationEvents || []).filter(ev => (ev.step || 0) >= rStart && (ev.step || 0) <= rEnd);
+  const anoms = (anomalies || []).filter(a => (a.step || 0) >= rStart && (a.step || 0) <= rEnd);
+
+  const stepToX = (step) => ((step - rStart) / Math.max(rEnd - rStart, 1)) * width;
+
+  // Severity colors for anomaly bands
+  const sevColor = (sev) => {
+    if (sev === 'critical') return 'rgba(239,68,68,0.15)';
+    if (sev === 'warning') return 'rgba(245,158,11,0.12)';
+    return 'rgba(59,130,246,0.08)';
+  };
+  const sevBorder = (sev) => {
+    if (sev === 'critical') return '#ef4444';
+    if (sev === 'warning') return '#f59e0b';
+    return '#3b82f6';
+  };
+
+  return (
+    <div style={{ position: 'relative' }}>
+      {label && <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginBottom: 2 }}>{label}</div>}
+      {currentValue != null && (
+        <span className="signal-value">{currentValue}</span>
+      )}
+      <svg width={width} height={height} style={{ display: 'block' }}>
+        {/* Anomaly highlight bands */}
+        {anoms.map((a, idx) => {
+          const x = stepToX(a.step);
+          const bandW = Math.max(width / Math.max(rEnd - rStart, 1) * 3, 6);
+          return (
+            <g key={'a' + idx}>
+              <rect x={x - bandW/2} y={0} width={bandW} height={height}
+                    fill={sevColor(a.severity)} rx="2" />
+              <line x1={x} y1={0} x2={x} y2={height}
+                    stroke={sevBorder(a.severity)} strokeWidth="1" opacity="0.6" />
+              <title>{a.signature}: {a.interpretation ? a.interpretation.slice(0, 80) : ''}</title>
+            </g>
+          );
+        })}
+        {/* Data line */}
+        <polyline points={points} fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round" />
+        {/* Phase boundary vertical lines */}
+        {markers.map(([step, sym], idx) => {
+          const x = stepToX(step);
+          return (
+            <line key={'p' + idx} x1={x} y1={0} x2={x} y2={height}
+                  stroke="var(--text-muted)" strokeDasharray="3,3" strokeWidth="1" opacity="0.5">
+              <title>{sym}</title>
+            </line>
+          );
+        })}
+        {/* Evaluation markers */}
+        {evals.map((ev, idx) => {
+          const step = ev.step || 0;
+          const score = ev.evaluation_score != null ? ev.evaluation_score : 0.5;
+          const x = stepToX(step);
+          const evColor = score >= 0.7 ? 'var(--health-healthy)' : score >= 0.4 ? 'var(--health-degraded)' : 'var(--health-failing)';
+          // Step range band if available
+          const sr = ev.step_range || (ev.metadata || {}).step_range;
+          return (
+            <g key={'e' + idx}>
+              {sr && (
+                <rect x={stepToX(sr[0])} y={0} width={stepToX(sr[1]) - stepToX(sr[0])} height={height}
+                      fill={score >= 0.7 ? 'rgba(74,222,128,0.06)' : 'rgba(239,68,68,0.06)'} />
+              )}
+              <line x1={x} y1={0} x2={x} y2={height} stroke={evColor} strokeWidth="1.5" opacity="0.6" />
+              <circle cx={x} cy={4} r={4} fill={evColor} opacity="0.9">
+                <title>Eval: {ev.evaluation_criterion || 'overall'} = {(score * 100).toFixed(0)}%{ev.sprint_number ? ' (sprint ' + ev.sprint_number + ')' : ''}</title>
+              </circle>
+            </g>
+          );
+        })}
+      </svg>
+      {/* Anomaly badges below sparkline */}
+      {anoms.length > 0 && (
+        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 2 }}>
+          {anoms.slice(0, 5).map((a, i) => (
+            <span key={i} style={{
+              fontSize: 9, padding: '1px 5px', borderRadius: 3,
+              background: sevColor(a.severity), border: '1px solid ' + sevBorder(a.severity),
+              color: sevBorder(a.severity), fontWeight: 600,
+            }}>{a.signature === 'unclassified_anomaly' ? 'NOVEL' : a.signature.replace(/_/g, ' ')}</span>
+          ))}
+          {anoms.length > 5 && <span style={{ fontSize: 9, color: 'var(--text-muted)' }}>+{anoms.length - 5} more</span>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Overview sparkline with brush selection for zoom control
+function SparklineOverview({ data, width, height, color, rangeStart, rangeEnd, onBrush }) {
+  if (!data || data.length < 2) return null;
+  const maxVal = Math.max(...data, 0.01);
+  const points = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * width;
+    const y = height - 1 - ((v / maxVal) * (height - 2));
+    return x.toFixed(1) + ',' + y.toFixed(1);
+  }).join(' ');
+
+  const rs = rangeStart != null ? rangeStart : 0;
+  const re = rangeEnd != null ? rangeEnd : data.length - 1;
+  const selX = (rs / (data.length - 1)) * width;
+  const selW = ((re - rs) / (data.length - 1)) * width;
+
+  const handleClick = (e) => {
+    if (!onBrush) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const clickIdx = Math.round((clickX / width) * (data.length - 1));
+    // Center a 50-point window on click
+    const halfWin = 25;
+    const newStart = Math.max(0, clickIdx - halfWin);
+    const newEnd = Math.min(data.length - 1, clickIdx + halfWin);
+    onBrush(newStart, newEnd);
+  };
+
+  return (
+    <svg width={width} height={height} style={{ display: 'block', cursor: onBrush ? 'crosshair' : 'default' }}
+         onClick={handleClick}>
+      <polyline points={points} fill="none" stroke={color} strokeWidth="1" opacity="0.4" />
+      {/* Selection highlight */}
+      <rect x={selX} y={0} width={Math.max(selW, 2)} height={height}
+            fill={color} opacity="0.15" rx="1" />
+      <line x1={selX} y1={0} x2={selX} y2={height} stroke={color} strokeWidth="0.5" opacity="0.5" />
+      <line x1={selX + selW} y1={0} x2={selX + selW} y2={height} stroke={color} strokeWidth="0.5" opacity="0.5" />
+    </svg>
+  );
+}
+
+
+// ================================================================
+// InformationSignalsPanel Component (center "Signals" tab)
+// ================================================================
+function InformationSignalsPanel({ infoTheoretic, anomalies, containerWidth }) {
+  const [subTab, setSubTab] = useState('decision');
+  const [zoomRange, setZoomRange] = useState(null);  // {start, end} or null for full view
+  const it = infoTheoretic || {};
+  const anoms = anomalies || [];
+  const w = containerWidth || 600;
+  const h = 120;
+  const overviewH = 24;
+  const markers = it.phase_markers || [];
+  const evals = it.evaluation_events || [];
+  const maxStep = (it.surprisal_history || []).length > 0
+    ? Math.max(...(it.surprisal_history || []).map(s => s[0]))
+    : (it.tool_entropy_history || []).length;
+
+  // Wickens-aligned stage data
+  const wkns = it.wickens || {};
+  const zr = zoomRange ? zoomRange.start : null;
+  const zrEnd = zoomRange ? zoomRange.end : null;
+
+  // Per-stream data when available
+  const streams = it.streams || {};
+  const memStream = streams.memory || {};
+  const hasMemory = (memStream.event_count || 0) > 0;
+
+  if (!it.tool_entropy_history || it.tool_entropy_history.length < 2) {
+    return (
+      <div className="signals-panel">
+        <div className="cognitive-unavailable">
+          <div>Collecting information signals...<br />
+          <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+            Entropy and mutual information will appear after a few events.
+          </span></div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="signals-panel">
+      <div className="signals-subtabs">
+        {[
+          { id: 'sensory', label: 'Sensory' },
+          { id: 'perceptual', label: 'Perceptual' },
+          { id: 'memory', label: 'Memory' },
+          { id: 'decision', label: 'Decision' },
+          { id: 'execution', label: 'Execution' },
+          { id: 'feedback', label: 'Feedback' },
+        ].map(t => (
+          <button key={t.id}
+            className={'signals-subtab' + (subTab === t.id ? ' active' : '')}
+            onClick={() => setSubTab(t.id)}
+          >{t.label}</button>
+        ))}
+      </div>
+
+      {/* Overview strip with brush zoom — click to select detail range */}
+      <div style={{ marginBottom: 4 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 1 }}>
+          <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>
+            Full Session Overview {zoomRange ? `(viewing ${zoomRange.start}-${zoomRange.end})` : '(click to zoom)'}
+          </span>
+          {zoomRange && (
+            <button style={{ fontSize: 9, padding: '1px 6px', border: '1px solid var(--border)',
+                             borderRadius: 3, background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer' }}
+                    onClick={() => setZoomRange(null)}>Reset Zoom</button>
+          )}
+        </div>
+        <SparklineOverview data={it.tool_entropy_history} width={w - 48} height={overviewH} color="#4ade80"
+          rangeStart={zoomRange ? zoomRange.start : null}
+          rangeEnd={zoomRange ? zoomRange.end : null}
+          onBrush={(start, end) => setZoomRange({ start, end })} />
+      </div>
+
+      <div className="signal-chart">
+        {/* SENSORY: input entropy + input rate */}
+        {subTab === 'sensory' && (
+          <>
+            <SparklineSVG data={(wkns.sensory || {}).input_entropy_history || []} width={w - 48} height={h * 2}
+              color="#22d3ee" phaseMarkers={markers} evaluationEvents={evals} anomalies={anoms} maxStep={maxStep}
+              label="Input Entropy (source diversity)" currentValue={((wkns.sensory || {}).input_entropy || 0).toFixed(2) + 'b'}
+              rangeStart={zr} rangeEnd={zrEnd} />
+            <div className="signal-legend">
+              <span><span className="signal-legend-dot" style={{ background: '#22d3ee' }} />Input source entropy</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>
+                {(wkns.sensory || {}).input_rate || 0} tok/evt | {(wkns.sensory || {}).input_tokens_total || 0} total tokens
+              </span>
+            </div>
+          </>
+        )}
+
+        {/* PERCEPTUAL: read entropy + focus indicator */}
+        {subTab === 'perceptual' && (
+          <>
+            <SparklineSVG data={(wkns.perceptual || {}).read_entropy_history || it.read_entropy_history || []} width={w - 48} height={h * 2}
+              color="#facc15" phaseMarkers={markers} evaluationEvents={evals} anomalies={anoms} maxStep={maxStep}
+              label="Read Entropy (selective attention)" currentValue={((wkns.perceptual || {}).read_entropy || 0).toFixed(2) + 'b'}
+              rangeStart={zr} rangeEnd={zrEnd} />
+            <div className="signal-legend">
+              <span><span className="signal-legend-dot" style={{ background: '#facc15' }} />Read entropy</span>
+              <span>Focus: <strong>{(((wkns.perceptual || {}).focus || 0) * 100).toFixed(0)}%</strong>
+                {' '}({(wkns.perceptual || {}).read_events || 0} reads)</span>
+            </div>
+          </>
+        )}
+
+        {/* MEMORY: WM utilization + LTM retrieval + consolidation rates */}
+        {subTab === 'memory' && (
+          <>
+            <SparklineSVG data={(wkns.working_memory || {}).consolidation_history || []} width={w - 48} height={h}
+              color="#c084fc" phaseMarkers={markers} anomalies={anoms} maxStep={maxStep}
+              label="Consolidation rate (WM \u2192 LTM)" currentValue={((wkns.working_memory || {}).consolidation_rate || 0).toFixed(3)}
+              rangeStart={zr} rangeEnd={zrEnd} />
+            <div style={{ marginTop: 8 }} />
+            <SparklineSVG data={(wkns.working_memory || {}).retrieval_history || []} width={w - 48} height={h}
+              color="#60a5fa" phaseMarkers={markers} anomalies={anoms} maxStep={maxStep}
+              label="Retrieval rate (LTM \u2192 WM)" currentValue={((wkns.working_memory || {}).retrieval_rate || 0).toFixed(3)}
+              rangeStart={zr} rangeEnd={zrEnd} />
+            <div className="signal-legend">
+              <span><span className="signal-legend-dot" style={{ background: '#c084fc' }} />Consolidation (writes)</span>
+              <span><span className="signal-legend-dot" style={{ background: '#60a5fa' }} />Retrieval (reads of prior writes)</span>
+              <span>LTM items: <strong>{(wkns.ltm || {}).stored_items || 0}</strong></span>
+            </div>
+          </>
+        )}
+
+        {/* DECISION: action MI + coherence */}
+        {subTab === 'decision' && (
+          <>
+            <SparklineSVG data={it.action_mi_history || []} width={w - 48} height={h}
+              color="#4ade80" phaseMarkers={markers} evaluationEvents={evals} anomalies={anoms} maxStep={maxStep}
+              label="Action MI (response selection coherence)" currentValue={(it.action_mi || 0).toFixed(2) + 'b'}
+              rangeStart={zr} rangeEnd={zrEnd} />
+            <div style={{ marginTop: 8 }} />
+            <SparklineSVG data={(it.surprisal_history || []).map(s => s[1])} width={w - 48} height={h}
+              color="#f472b6" phaseMarkers={markers} anomalies={anoms} maxStep={maxStep}
+              label="Surprisal (action unexpectedness)" currentValue={(it.last_surprisal || 0).toFixed(2) + 'b'}
+              rangeStart={zr} rangeEnd={zrEnd} />
+            <div className="signal-legend">
+              <span><span className="signal-legend-dot" style={{ background: '#4ade80' }} />Action MI</span>
+              <span><span className="signal-legend-dot" style={{ background: '#f472b6' }} />Surprisal</span>
+              <span>Coherence: <strong>{(((wkns.response_selection || {}).coherence || 0) * 100).toFixed(0)}%</strong></span>
+            </div>
+          </>
+        )}
+
+        {/* EXECUTION: compression + efficiency */}
+        {subTab === 'execution' && (
+          <>
+            <SparklineSVG data={it.compression_history || []} width={w - 48} height={h}
+              color="#f472b6" phaseMarkers={markers} anomalies={anoms} maxStep={maxStep}
+              label="Compression ratio (low = repetitive, high = diverse)" currentValue={(it.compression_ratio || 0).toFixed(3)}
+              rangeStart={zr} rangeEnd={zrEnd} />
+            <div style={{ marginTop: 8 }} />
+            <SparklineSVG data={(wkns.response_execution || {}).tool_entropy_history || []} width={w - 48} height={h}
+              color="#4ade80" phaseMarkers={markers} anomalies={anoms} maxStep={maxStep}
+              label="Tool entropy (execution diversity)" currentValue={((wkns.response_execution || {}).tool_entropy || 0).toFixed(2) + 'b'}
+              rangeStart={zr} rangeEnd={zrEnd} />
+            <div className="signal-legend">
+              <span><span className="signal-legend-dot" style={{ background: '#f472b6' }} />Compression</span>
+              <span><span className="signal-legend-dot" style={{ background: '#4ade80' }} />Tool entropy</span>
+              <span>Efficiency: <strong>{(((wkns.response_execution || {}).efficiency || 0) * 100).toFixed(0)}%</strong></span>
+            </div>
+          </>
+        )}
+
+        {/* FEEDBACK: feedback-action MI + adaptation */}
+        {subTab === 'feedback' && (
+          <>
+            <SparklineSVG data={(wkns.feedback || {}).feedback_action_mi_history || []} width={w - 48} height={h * 2}
+              color="#ef4444" phaseMarkers={markers} evaluationEvents={evals} anomalies={anoms} maxStep={maxStep}
+              label="Feedback\u2192Action MI (does agent adapt to feedback?)"
+              currentValue={((wkns.feedback || {}).feedback_action_mi || 0).toFixed(2) + 'b'}
+              rangeStart={zr} rangeEnd={zrEnd} />
+            <div className="signal-legend">
+              <span><span className="signal-legend-dot" style={{ background: '#ef4444' }} />Feedback-Action MI</span>
+              <span>Adaptation: <strong>{(((wkns.feedback || {}).adaptation || 0) * 100).toFixed(0)}%</strong></span>
+              <span>{(wkns.feedback || {}).feedback_events || 0} feedback events</span>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Evaluation Results section */}
+      {evals.length > 0 && (
+        <div style={{ marginTop: 8, padding: '8px 0', borderTop: '1px solid var(--border)' }}>
+          <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginBottom: 4 }}>Evaluation Results</div>
+          {evals.slice(-5).map((ev, i) => {
+            const score = ev.evaluation_score != null ? ev.evaluation_score : 0.5;
+            const scoreColor = score >= 0.7 ? 'var(--health-healthy)' : score >= 0.4 ? 'var(--health-degraded)' : 'var(--health-failing)';
+            return (
+              <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 11, padding: '2px 0' }}>
+                <span style={{ color: scoreColor, fontWeight: 600, fontFamily: 'var(--font-mono)', minWidth: 36 }}>
+                  {(score * 100).toFixed(0)}%
+                </span>
+                <span style={{ color: 'var(--text-secondary)' }}>{ev.evaluation_criterion || 'overall'}</span>
+                <span style={{ color: 'var(--text-muted)', marginLeft: 'auto', fontFamily: 'var(--font-mono)' }}>
+                  step {ev.step}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+// ================================================================
+// MemoryOpsTimeline Component (center "Memory Ops" tab)
+// ================================================================
+function MemoryOpsTimeline({ infoTheoretic }) {
+  const events = ((infoTheoretic || {}).memory_events || []).slice().reverse();
+
+  const ICONS = {
+    memory_load: '\u2193',    // down arrow
+    memory_store: '\u2191',   // up arrow
+    memory_evict: '\u2717',   // X mark
+    memory_tier_escalation: '\u21E7',  // double up arrow
+  };
+
+  const TIER_COLORS = {
+    l0: '#94a3b8', l1: '#60a5fa', l2: '#c084fc',
+  };
+
+  if (events.length === 0) {
+    return (
+      <div className="memops-panel">
+        <div className="memops-empty">
+          No memory operations recorded.<br />
+          <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+            Memory operations appear when OpenViking is connected.
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="memops-panel">
+      {events.map((evt, i) => {
+        const tier = evt.memory_tier || '';
+        const tierColor = TIER_COLORS[tier] || '#888';
+        return (
+          <div key={i} className="memops-item">
+            <span className="memops-icon">{ICONS[evt.event_type] || '?'}</span>
+            <span className={'wm-tier-badge ' + tier}>{tier.toUpperCase() || '?'}</span>
+            <span className="memops-ns">{evt.namespace || evt.symbol || '?'}</span>
+            <span className="memops-step">step {evt.step}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+
+// ================================================================
+// CAFTAnnotationsPanel Component (right column)
+// ================================================================
+function CAFTAnnotationsPanel({ state, onStepClick, ipStageMap }) {
+  const diagnoses = (state || {}).diagnoses || [];
+  const stageMap = ipStageMap || {};
+
+  // Group by IP stage
+  const grouped = {};
+  diagnoses.forEach(d => {
+    const ip = (stageMap[d.caft_code] || {}).ip_stage || 'unknown';
+    if (!grouped[ip]) grouped[ip] = [];
+    grouped[ip].push(d);
+  });
+
+  const severityColor = (sev) => {
+    if (sev === 'critical') return 'var(--severity-critical)';
+    if (sev === 'warning') return 'var(--severity-warning)';
+    return 'var(--severity-info)';
+  };
+
+  return (
+    <div id="right-col" className="annotations-panel">
+      <div className="annotations-header">
+        <div className="section-title">Annotations</div>
+        <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
+          {diagnoses.length} detection{diagnoses.length !== 1 ? 's' : ''}
+        </div>
+      </div>
+      <div className="annotations-list">
+        {diagnoses.length === 0 && (
+          <div style={{ color: 'var(--text-muted)', fontSize: 12, textAlign: 'center', padding: 24 }}>
+            <span style={{ color: 'var(--health-healthy)', fontSize: 16 }}>&#10003;</span>
+            <div style={{ marginTop: 4 }}>No issues detected</div>
+          </div>
+        )}
+        {Object.entries(grouped).map(([stage, diags]) => (
+          <div key={stage} style={{ marginBottom: 8 }}>
+            <div style={{ fontSize: 10, color: IP_STAGE_COLORS[stage] || 'var(--text-muted)',
+                          textTransform: 'uppercase', fontWeight: 600, marginBottom: 4, letterSpacing: '0.5px' }}>
+              {IP_STAGE_LABELS[stage] || stage}
+            </div>
+            {diags.map((d, i) => (
+              <div key={i} className="annotation-card">
+                <div className="annotation-card-header">
+                  <span style={{ fontSize: 10, fontWeight: 700, color: severityColor(d.severity) }}>
+                    {(d.severity || 'info').toUpperCase()}
+                  </span>
+                  <span style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>
+                    {d.caft_code}
+                  </span>
+                  <span style={{ fontSize: 11, fontWeight: 500 }}>{d.failure_name}</span>
+                  <span style={{ marginLeft: 'auto', fontSize: 10, color: 'var(--phase-gathering)', cursor: 'pointer' }}
+                        onClick={() => onStepClick && onStepClick(d.at_step)}>
+                    @{d.at_step}
+                  </span>
+                </div>
+                <div className="annotation-card-desc">
+                  {(d.description || '').slice(0, 80)}{(d.description || '').length > 80 ? '...' : ''}
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+// ================================================================
+// BehaviorTimeline Component
+// ================================================================
+function BehaviorTimeline({ state, onBlockClick }) {
+  const scrollRef = useRef(null);
+  const [selectedBlock, setSelectedBlock] = useState(null);
+
+  const actions = state.actions || [];
+  const blocks = useMemo(
+    () => buildBehaviorBlocks(actions, state.transitions),
+    [actions, state.transitions]
+  );
+
+  // Auto-scroll to end when blocks change
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+    }
+  }, [blocks]);
+
+  const handleBlockClick = useCallback((block, idx) => {
+    setSelectedBlock(idx);
+    if (onBlockClick) {
+      onBlockClick(block.startStep, block.endStep);
+    }
+  }, [onBlockClick]);
+
+  if (actions.length === 0) {
+    return (
+      <div className="timeline-panel">
+        <div className="timeline-scroll">
+          <div className="timeline-empty">No events yet</div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="timeline-panel">
+      <div className="timeline-scroll" ref={scrollRef}>
+        {blocks.map((block, idx) => {
+          const elements = [];
+
+          // Transition divider
+          if (block.transition) {
+            const isReg = block.transition.is_regression;
+            elements.push(
+              <div key={`trans-${idx}`} className="phase-transition-divider">
+                <div className={`transition-line${isReg ? ' regression' : ''}`} />
+                <div
+                  className={`transition-arrow${isReg ? ' regression' : ''}`}
+                  dangerouslySetInnerHTML={{ __html: isReg ? '&#9664;' : '&#9654;' }}
+                />
+              </div>
+            );
+          }
+
+          const barHeight = Math.max(24, Math.min(64, 24 + block.count * 2));
+          const isSelected = selectedBlock === idx;
+
+          elements.push(
+            <div
+              key={`block-${idx}`}
+              className={`behavior-block${isSelected ? ' selected' : ''}`}
+              data-start={block.startStep}
+              data-end={block.endStep}
+              onClick={() => handleBlockClick(block, idx)}
+            >
+              <div
+                className={`block-bar${block.failures > 0 ? ' has-failures' : ''}`}
+                style={{ height: barHeight + 'px', background: phaseColor(block.phase) }}
+              >
+                {block.count}
+              </div>
+              <div className="block-label">{block.tool}</div>
+              <div className="block-step-range">
+                {block.startStep === block.endStep
+                  ? '#' + block.startStep
+                  : '#' + block.startStep + '-' + block.endStep}
+              </div>
+            </div>
+          );
+
+          return elements;
+        })}
+      </div>
+    </div>
+  );
+}
+
+
+// ================================================================
+// DiagnosisCard Component
+// ================================================================
+function DiagnosisCard({ diagnosis, onStepClick, ipStage, onIPStageClick }) {
+  const [evidenceVisible, setEvidenceVisible] = useState(false);
+
+  const severity = (diagnosis.severity || 'info').toLowerCase();
+  const severityLabel = severity.charAt(0).toUpperCase() + severity.slice(1);
+  const confPct = ((diagnosis.confidence || 0) * 100).toFixed(0);
+  const confColor = severityColor(severity);
+  const evidence = diagnosis.evidence || {};
+  const evidenceKeys = Object.keys(evidence);
+
+  const cardRef = useRef(null);
+
+  return (
+    <div
+      className="diagnosis-card"
+      data-step={diagnosis.at_step || 0}
+      ref={cardRef}
+    >
+      {/* Header */}
+      <div className="diagnosis-header">
+        <span className={`severity-badge ${severity}`}>{severityLabel}</span>
+        <span className="diagnosis-caft-code">CAFT {diagnosis.caft_code || ''}</span>
+        {ipStage && (
+          <span
+            className="ip-stage-tag"
+            style={{ background: IP_STAGE_COLORS[ipStage] || 'var(--text-muted)' }}
+            onClick={(e) => { e.stopPropagation(); onIPStageClick && onIPStageClick(ipStage); }}
+            title={'IP Stage: ' + (IP_STAGE_LABELS[ipStage] || ipStage)}
+          >
+            {IP_STAGE_LABELS[ipStage] || ipStage}
+          </span>
+        )}
+        <span
+          className="diagnosis-step-link"
+          onClick={() => onStepClick && onStepClick(diagnosis.at_step || 0)}
+        >
+          at step {diagnosis.at_step || 0}
+        </span>
+      </div>
+
+      {/* Confidence bar */}
+      <div className="confidence-bar-container-diag">
+        <div className="confidence-bar-bg">
+          <div
+            className="confidence-bar-fill"
+            style={{ width: confPct + '%', background: confColor }}
+          />
+        </div>
+        <span className="confidence-label">{confPct}%</span>
+      </div>
+
+      {/* Message */}
+      <div className="diagnosis-message">{formatConfidenceMessage(diagnosis)}</div>
+
+      {/* Remediation (only conf > 0.6) */}
+      {(diagnosis.confidence || 0) > 0.6 && diagnosis.remediation && (
+        <div className="diagnosis-remediation">{diagnosis.remediation}</div>
+      )}
+
+      {/* Evidence (expandable) */}
+      {evidenceKeys.length > 0 && (
+        <>
+          <button
+            className="evidence-toggle"
+            onClick={() => setEvidenceVisible(!evidenceVisible)}
+          >
+            <span dangerouslySetInnerHTML={{ __html: evidenceVisible ? '&#9660;' : '&#9654;' }} />
+            {' '}Evidence ({evidenceKeys.length} fields)
+          </button>
+          {evidenceVisible && (
+            <table className="evidence-table">
+              <tbody>
+                {evidenceKeys.map(key => (
+                  <tr key={key}>
+                    <td>{key}</td>
+                    <td>{String(evidence[key])}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+
+// ================================================================
+// DiagnosisPanel Component
+// ================================================================
+function DiagnosisPanel({ state, onStepClick, highlightRange, ipStageMap, onIPStageClick }) {
+  const diagnoses = state.diagnoses || [];
+  const listRef = useRef(null);
+
+  // Scroll to matching diagnosis when highlightRange changes
+  useEffect(() => {
+    if (!highlightRange || !listRef.current) return;
+    const cards = listRef.current.querySelectorAll('.diagnosis-card');
+    for (let i = 0; i < cards.length; i++) {
+      const step = parseInt(cards[i].getAttribute('data-step'), 10);
+      if (step >= highlightRange.start && step <= highlightRange.end) {
+        cards[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        cards[i].style.borderColor = '#22d3ee';
+        const card = cards[i];
+        setTimeout(() => { card.style.borderColor = ''; }, 2000);
+        return;
+      }
+    }
+  }, [highlightRange]);
+
+  if (diagnoses.length === 0) {
+    return (
+      <div className="diagnoses-panel">
+        <div className="diagnoses-empty">
+          <div>
+            <span className="healthy-icon">&#10003;</span>
+            Session healthy -- no issues detected
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="diagnoses-panel">
+      <div ref={listRef}>
+        {diagnoses.map((d, i) => (
+          <DiagnosisCard
+            key={`${d.caft_code}-${d.at_step}-${i}`}
+            diagnosis={d}
+            onStepClick={onStepClick}
+            ipStage={ipStageMap ? ipStageMap[d.caft_code] : null}
+            onIPStageClick={onIPStageClick}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+// ================================================================
+// LLMDecisionsLog Component (Right Column)
+// ================================================================
+function LLMDecisionsLog({ state, onDetectorClick }) {
+  const snapshots = state.detector_snapshots || [];
+
+  const sorted = useMemo(() => {
+    return snapshots.slice().sort((a, b) => {
+      if (a.fired !== b.fired) return a.fired ? -1 : 1;
+      return (b.confidence || 0) - (a.confidence || 0);
+    });
+  }, [snapshots]);
+
+  return (
+    <div id="right-col">
+      <div className="llm-header">
+        <div className="section-title">LLM Decisions</div>
+        <div className="llm-stats">
+          <div className="llm-stat">
+            <div className="llm-stat-dot total" />
+            <span className="llm-stat-label">Total</span>
+            <span className="llm-stat-value">{state.candidates_total || 0}</span>
+          </div>
+          <div className="llm-stat">
+            <div className="llm-stat-dot autoconfirmed" />
+            <span className="llm-stat-label">Auto</span>
+            <span className="llm-stat-value">{state.candidates_autoconfirmed || 0}</span>
+          </div>
+          <div className="llm-stat">
+            <div className="llm-stat-dot confirmed" />
+            <span className="llm-stat-label">Confirmed</span>
+            <span className="llm-stat-value">{state.candidates_confirmed || 0}</span>
+          </div>
+          <div className="llm-stat">
+            <div className="llm-stat-dot rejected" />
+            <span className="llm-stat-label">Rejected</span>
+            <span className="llm-stat-value">{state.candidates_rejected || 0}</span>
+          </div>
+          <div className="llm-stat">
+            <div className="llm-stat-dot uncertain" />
+            <span className="llm-stat-label">Uncertain</span>
+            <span className="llm-stat-value">{state.candidates_uncertain || 0}</span>
+          </div>
+        </div>
+      </div>
+      <div className="llm-log">
+        {sorted.length === 0 ? (
+          <div className="llm-log-empty">No detector snapshots yet</div>
+        ) : (
+          sorted.map((snap, i) => {
+            const detectorName = snap.detector || 'unknown';
+            const conf = snap.confidence || 0;
+            const fired = snap.fired;
+            const gateFailed = snap.gate_failed || '';
+
+            return (
+              <div key={`${detectorName}-${i}`} className="llm-snapshot-item">
+                <div className="llm-snapshot-header">
+                  <span className={`snapshot-fired-badge ${fired ? 'fired' : 'not-fired'}`}>
+                    {fired ? 'FIRED' : 'QUIET'}
+                  </span>
+                  <span
+                    className="detector-name-link"
+                    onClick={() => onDetectorClick && onDetectorClick(detectorName)}
+                  >
+                    {detectorName}
+                  </span>
+                  <span className="snapshot-confidence">{(conf * 100).toFixed(0)}%</span>
+                </div>
+                {!fired && gateFailed && (
+                  <div className="snapshot-decision">Gate: {gateFailed}</div>
+                )}
+                {snap.step !== undefined && (
+                  <div className="snapshot-decision">Step {snap.step}</div>
+                )}
+              </div>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
+}
+
+
+// ================================================================
+// DecisionTrace Component (Heatmap)
+// ================================================================
+function DecisionTrace({ traceData }) {
+  if (!traceData) {
+    return (
+      <div className="decision-trace-panel">
+        <div className="trace-unavailable">
+          Decision trace not available for this session.
+        </div>
+      </div>
+    );
+  }
+
+  const snapshots = traceData.detector_snapshots || [];
+  if (snapshots.length === 0) {
+    return (
+      <div className="decision-trace-panel">
+        <div className="trace-unavailable">
+          Decision trace not available for this session.
+        </div>
+      </div>
+    );
+  }
+
+  // Collect detectors and steps
+  const { detectors, displaySteps, lookup } = useMemo(() => {
+    const detectorSet = {};
+    const stepSet = {};
+    snapshots.forEach(snap => {
+      detectorSet[snap.detector] = true;
+      stepSet[snap.step] = true;
+    });
+
+    const dets = Object.keys(detectorSet).sort();
+    const allSteps = Object.keys(stepSet).map(Number).sort((a, b) => a - b);
+
+    let ds = allSteps;
+    if (allSteps.length > 100) {
+      const interval = Math.ceil(allSteps.length / 100);
+      ds = allSteps.filter((_, i) => i % interval === 0);
+    }
+
+    const lk = {};
+    snapshots.forEach(snap => {
+      lk[snap.step + ':' + snap.detector] = snap;
+    });
+
+    return { detectors: dets, displaySteps: ds, lookup: lk };
+  }, [snapshots]);
+
+  return (
+    <div className="decision-trace-panel">
+      <div className="heatmap-container">
+        <table className="heatmap-table">
+          <thead>
+            <tr>
+              <th>Step</th>
+              {detectors.map(d => (
+                <th key={d}>{d.replace(/_/g, ' ')}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {displaySteps.map(step => (
+              <tr key={step}>
+                <td>{step}</td>
+                {detectors.map(d => {
+                  const key = step + ':' + d;
+                  const snap = lookup[key];
+                  if (!snap) {
+                    return (
+                      <td key={d}><span className="heatmap-cell not-checked" /></td>
+                    );
+                  } else if (snap.fired) {
+                    return (
+                      <td key={d}>
+                        <span className="heatmap-cell fired">
+                          <span className="heatmap-tooltip">
+                            FIRED conf={(((snap.confidence || 0) * 100).toFixed(0))}%
+                          </span>
+                        </span>
+                      </td>
+                    );
+                  } else {
+                    const reason = snap.gate_failed || 'not fired';
+                    return (
+                      <td key={d}>
+                        <span className="heatmap-cell gate-failed">
+                          <span className="heatmap-tooltip">{reason}</span>
+                        </span>
+                      </td>
+                    );
+                  }
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+
+// ================================================================
+// DetectorDetailModal Component
+// ================================================================
+function DetectorDetailModal({ detectorName, visible, onClose }) {
+  const [content, setContent] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!visible || !detectorName) return;
+
+    setLoading(true);
+    setContent(null);
+
+    fetch('/api/decision-trace?detector=' + encodeURIComponent(detectorName))
+      .then(r => {
+        if (!r.ok) throw new Error('Not found');
+        return r.json();
+      })
+      .then(data => {
+        const items = Array.isArray(data) ? data : (data.snapshots || data.timeline || [data]);
+        setContent(items);
+        setLoading(false);
+      })
+      .catch(() => {
+        setContent([]);
+        setLoading(false);
+      });
+  }, [visible, detectorName]);
+
+  // Escape key
+  useEffect(() => {
+    if (!visible) return;
+    const handler = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [visible, onClose]);
+
+  const handleOverlayClick = useCallback((e) => {
+    if (e.target === e.currentTarget) onClose();
+  }, [onClose]);
+
+  return (
+    <div
+      className={`detector-detail-overlay${visible ? ' visible' : ''}`}
+      onClick={handleOverlayClick}
+    >
+      <div className="detector-detail-modal">
+        <button className="modal-close" onClick={onClose}>&times;</button>
+        <h3>{(detectorName || '').replace(/_/g, ' ')}</h3>
+        <div className="detector-detail-content">
+          {loading && (
+            <div style={{ color: 'var(--text-muted)', padding: 20, textAlign: 'center' }}>
+              Loading...
+            </div>
+          )}
+          {!loading && content && content.length === 0 && (
+            <div style={{ color: 'var(--text-muted)', padding: 20, textAlign: 'center' }}>
+              No detailed timeline available for this detector.
+            </div>
+          )}
+          {!loading && content && content.length > 0 && content.map((snap, i) => {
+            const fired = snap.fired;
+            const conf = snap.confidence || 0;
+            const step = snap.step !== undefined ? snap.step : '?';
+            const gate = snap.gate_failed || '';
+            const preview = snap.evidence_preview || '';
+
+            return (
+              <div key={i} className="detector-timeline-item">
+                <span className="detector-timeline-step">Step {step}</span>
+                <span className={`snapshot-fired-badge ${fired ? 'fired' : 'not-fired'}`}>
+                  {fired ? 'FIRED' : 'QUIET'}
+                </span>
+                <span
+                  className="detector-timeline-conf"
+                  style={{ color: conf > 0.6 ? SEVERITY_COLORS.warning : 'var(--text-muted)' }}
+                >
+                  {(conf * 100).toFixed(0)}%
+                </span>
+                {gate && <span className="detector-timeline-gate">{gate}</span>}
+                {preview && <span className="detector-timeline-gate">{preview}</span>}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+// ================================================================
+// CognitiveLoadMonitor Component (Center Tab)
+// ================================================================
+function CognitiveLoadMonitor({
+  cognitiveState, selectedStage, onStageClick,
+  memoryDetail, decisionsDetail, onFetchMemory, onFetchDecisions
+}) {
+  // Unavailable state
+  if (!cognitiveState) {
+    return (
+      <div className="cognitive-unavailable">
+        <div>
+          Cognitive Load Monitor not available.<br />
+          <code>Enable with: agentdiag visualize --cognitive</code>
+        </div>
+      </div>
+    );
+  }
+
+  const overall = cognitiveState.overall_cognitive_load || 0;
+  const bottleneck = cognitiveState.bottleneck_stage;
+
+  // Trigger lazy fetches when detail stage opens
+  const prevDetailRef = useRef(null);
+  useEffect(() => {
+    if (selectedStage === prevDetailRef.current) return;
+    prevDetailRef.current = selectedStage;
+    if (selectedStage === 'working_memory' && !memoryDetail) {
+      onFetchMemory && onFetchMemory();
+    }
+    if (selectedStage === 'decision_making' && !decisionsDetail) {
+      onFetchDecisions && onFetchDecisions();
+    }
+  }, [selectedStage, memoryDetail, decisionsDetail, onFetchMemory, onFetchDecisions]);
+
+  function formatMetricValue(key, value) {
+    if (value == null) return '-';
+    if (typeof value === 'number' && key !== 'at_risk_items') return (value * 100).toFixed(0) + '%';
+    return String(value);
+  }
+
+  function renderStageDetail(stage) {
+    const data = cognitiveState[stage] || {};
+    const statusLabel = (data.status || 'idle').replace(/_/g, ' ');
+    const statusColor = STATUS_COLORS[data.status] || STATUS_COLORS.idle;
+    const labels = STAGE_DETAIL_LABELS[stage] || {};
+
+    return (
+      <div className="stage-detail-panel">
+        <div className="stage-detail-title">
+          <span>{IP_STAGE_LABELS[stage]}</span>
+          <span className="stage-detail-status" style={{ background: statusColor, color: 'var(--bg-base)' }}>
+            {statusLabel}
+          </span>
+        </div>
+
+        {/* Sub-metric cards */}
+        <div className="stage-detail-metrics">
+          {Object.entries(labels).map(([key, label]) => (
+            <div key={key} className="stage-metric-card">
+              <div className="stage-metric-value">{formatMetricValue(key, data[key])}</div>
+              <div className="stage-metric-label">{label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Working Memory: memory items */}
+        {stage === 'working_memory' && (
+          <div>
+            {memoryDetail && memoryDetail.active_items && memoryDetail.active_items.length > 0 && (
+              <div className="memory-items-section">
+                <div className="memory-items-title">Active Items</div>
+                {memoryDetail.active_items.map((item, i) => {
+                  const ret = item.retention != null ? item.retention : 1;
+                  const retCol = retentionColor(ret);
+                  return (
+                    <div key={i} className="memory-item">
+                      <div className="memory-item-dot" style={{ background: retCol }} />
+                      <span className="memory-item-name">{item.name || item.hash || 'unknown'}</span>
+                      <span className="memory-item-meta">step {item.step}, {item.accesses}x</span>
+                      <div className="memory-item-retention-bar">
+                        <div className="memory-item-retention-fill" style={{ width: (ret * 100) + '%', background: retCol }} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            {memoryDetail && memoryDetail.at_risk_items && memoryDetail.at_risk_items.length > 0 && (
+              <div className="memory-items-section">
+                <div className="memory-items-title" style={{ color: 'var(--severity-warning)' }}>At-Risk Items</div>
+                {memoryDetail.at_risk_items.map((item, i) => (
+                  <div key={i} className="memory-item">
+                    <div className="memory-item-dot" style={{ background: 'var(--severity-warning)' }} />
+                    <span className="memory-item-name">{item.name || item.hash || 'unknown'}</span>
+                    <span className="memory-item-meta">step {item.step}, {item.accesses}x</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            {!memoryDetail && (
+              <div className="stage-detail-loading">Loading memory items...</div>
+            )}
+          </div>
+        )}
+
+        {/* Decision Making: decisions list + quality metrics */}
+        {stage === 'decision_making' && (
+          <div>
+            {decisionsDetail && decisionsDetail.metrics && (
+              <div className="decision-quality-grid">
+                {decisionsDetail.metrics.success_rate != null && (
+                  <div className="decision-quality-item">
+                    <span className="label">Success Rate</span>
+                    <span className="value">{(decisionsDetail.metrics.success_rate * 100).toFixed(0)}%</span>
+                  </div>
+                )}
+                {decisionsDetail.metrics.avg_deliberation_ms != null && (
+                  <div className="decision-quality-item">
+                    <span className="label">Avg Deliberation</span>
+                    <span className="value">{decisionsDetail.metrics.avg_deliberation_ms.toFixed(0)}ms</span>
+                  </div>
+                )}
+                {decisionsDetail.metrics.verification_rate != null && (
+                  <div className="decision-quality-item">
+                    <span className="label">Verification Rate</span>
+                    <span className="value">{(decisionsDetail.metrics.verification_rate * 100).toFixed(0)}%</span>
+                  </div>
+                )}
+                {decisionsDetail.metrics.strategy_change_rate != null && (
+                  <div className="decision-quality-item">
+                    <span className="label">Strategy Changes</span>
+                    <span className="value">{(decisionsDetail.metrics.strategy_change_rate * 100).toFixed(0)}%</span>
+                  </div>
+                )}
+              </div>
+            )}
+            {decisionsDetail && decisionsDetail.decisions && decisionsDetail.decisions.length > 0 && (
+              <div className="decisions-list">
+                <div className="memory-items-title">Recent Decisions</div>
+                {decisionsDetail.decisions.slice(-10).map((dec, i) => (
+                  <div key={i} className="decision-item">
+                    <span className="decision-step">#{dec.action_step}</span>
+                    <span className="decision-tool">{dec.action_tool || ''}</span>
+                    <span className={'decision-success ' + (dec.action_success ? 'yes' : 'no')}>
+                      {dec.action_success ? 'OK' : 'FAIL'}
+                    </span>
+                    <span className="decision-delib">
+                      {dec.reasoning_duration_ms != null ? dec.reasoning_duration_ms.toFixed(0) + 'ms' : ''}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+            {!decisionsDetail && (
+              <div className="stage-detail-loading">Loading decision points...</div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      {/* Overall cognitive load bar */}
+      <div className="cognitive-overall">
+        <span className="cognitive-overall-label">Overall Cognitive Load</span>
+        <div className="cognitive-overall-bar">
+          <div
+            className="cognitive-overall-fill"
+            style={{
+              width: (overall * 100) + '%',
+              background: cognitiveOverallColor(overall)
+            }}
+          />
+        </div>
+        <span className="cognitive-overall-pct">{(overall * 100).toFixed(0)}%</span>
+        {bottleneck && (
+          <span className="cognitive-bottleneck" style={{ color: 'var(--severity-warning)' }}>
+            Bottleneck: {IP_STAGE_LABELS[bottleneck] || bottleneck}
+          </span>
+        )}
+      </div>
+
+      {/* Pipeline visualization */}
+      <div className="cognitive-pipeline">
+        {IP_STAGES.map((stage, idx) => {
+          const data = cognitiveState[stage] || { load: 0, status: 'idle' };
+          const load = data.load || 0;
+          const barHeight = Math.max(8, load * COGNITIVE_MAX_BAR_HEIGHT);
+          const barColor = STATUS_COLORS[data.status] || STATUS_COLORS.idle;
+          const isBottleneck = stage === bottleneck;
+          const isSelected = selectedStage === stage;
+          const nextStage = IP_STAGES[idx + 1];
+          const nextIsBottleneck = nextStage === bottleneck;
+
+          return (
+            <React.Fragment key={stage}>
+              <div
+                className={'cognitive-stage' + (isBottleneck ? ' bottleneck' : '')}
+                onClick={() => onStageClick(stage)}
+              >
+                <div
+                  className="stage-bar"
+                  style={{
+                    height: barHeight + 'px',
+                    background: barColor,
+                    outline: isSelected ? '2px solid ' + barColor : 'none',
+                    outlineOffset: '2px'
+                  }}
+                />
+                <div className="stage-label">{IP_STAGE_LABELS[stage]}</div>
+                <div className="stage-load-pct">{(load * 100).toFixed(0)}%</div>
+                <div className="stage-status-label" style={{ color: barColor }}>{(data.status || 'idle').replace(/_/g, ' ')}</div>
+              </div>
+              {idx < IP_STAGES.length - 1 && (
+                <span className={'stage-flow-arrow' + (nextIsBottleneck ? ' bottleneck-target' : '')}>
+                  &rarr;
+                </span>
+              )}
+            </React.Fragment>
+          );
+        })}
+      </div>
+
+      {/* Stage detail panel */}
+      {selectedStage && cognitiveState[selectedStage] && renderStageDetail(selectedStage)}
+    </div>
+  );
+}
+
+
+// ================================================================
+// AblationProgress Component (Left Column)
+// ================================================================
+const ABLATION_MODES = ['strict', 'loose', 'loose+llm', 'oracle'];
+
+function AblationProgress({ phase, currentMode, modesCompleted, totalSessions, reports, sessionsProcessed, currentSession, currentSessionDetections }) {
+  const completed = modesCompleted || [];
+  const reps = reports || {};
+  const sessDone = sessionsProcessed || 0;
+  const sessTotal = totalSessions || 0;
+  const sessPct = sessTotal > 0 ? Math.round((sessDone / sessTotal) * 100) : 0;
+
+  return (
+    <div className="ablation-progress">
+      {/* Phase status */}
+      <div className="panel-section">
+        <div className="section-title">Ablation Status</div>
+        <div className="current-phase-text" style={{ color: phase === 'complete' ? 'var(--health-healthy)' : (phase === 'running' || phase === 'setup') ? 'var(--phase-gathering)' : 'var(--text-muted)' }}>
+          {phase === 'complete' ? 'Complete' : phase === 'setup' ? 'Setting Up' : phase === 'running' ? 'Running' : 'Idle'}
+        </div>
+        {phase === 'setup' && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 8 }}>
+            <div className="ablation-spinner" />
+            <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Loading annotations and traces...</span>
+          </div>
+        )}
+        {currentMode && phase === 'running' && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 8 }}>
+            <div className="ablation-spinner" />
+            <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Processing: <strong style={{ color: 'var(--text-primary)' }}>{currentMode}</strong></span>
+          </div>
+        )}
+      </div>
+
+      {/* Session scanning progress */}
+      {phase === 'running' && sessTotal > 0 && (
+        <div className="panel-section">
+          <div className="section-title">Session Progress</div>
+          <div className="stat-row">
+            <span className="stat-label">Scanning</span>
+            <span className="stat-value">{sessDone} / {sessTotal}</span>
+          </div>
+          <div className="completion-bar-container" style={{ marginTop: 4 }}>
+            <div className="completion-bar-bg">
+              <div
+                className="completion-bar-fill-el"
+                style={{ width: sessPct + '%', background: 'var(--phase-executing)' }}
+              />
+            </div>
+          </div>
+          {currentSession && (
+            <div style={{ marginTop: 8, fontSize: 12 }}>
+              <span style={{ color: 'var(--text-muted)' }}>Current: </span>
+              <span style={{ fontFamily: 'monospace', color: 'var(--text-secondary)' }}>{currentSession}</span>
+              {currentSessionDetections && currentSessionDetections.length > 0 && (
+                <div style={{ marginTop: 4 }}>
+                  {currentSessionDetections.map((d, i) => (
+                    <span key={i} style={{
+                      display: 'inline-block', padding: '1px 6px', marginRight: 4, marginTop: 2,
+                      borderRadius: 4, fontSize: 11, fontWeight: 600,
+                      background: 'rgba(239,68,68,0.15)', color: 'var(--severity-critical)'
+                    }}>{d}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Mode progress */}
+      <div className="panel-section">
+        <div className="section-title">Modes</div>
+        <div className="stat-row">
+          <span className="stat-label">Completed</span>
+          <span className="stat-value">{completed.length} / {ABLATION_MODES.length}</span>
+        </div>
+        <div className="completion-bar-container" style={{ marginTop: 8 }}>
+          <div className="completion-bar-bg">
+            <div
+              className="completion-bar-fill-el"
+              style={{ width: ((completed.length / ABLATION_MODES.length) * 100) + '%', background: 'var(--phase-gathering)' }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Mode checklist */}
+      <div className="panel-section">
+        <div className="section-title">Mode Checklist</div>
+        {ABLATION_MODES.map(mode => {
+          const isCompleted = completed.includes(mode);
+          const isCurrent = currentMode === mode && phase === 'running';
+          const isPending = !isCompleted && !isCurrent;
+          const report = reps[mode];
+          const f1 = report ? report.macro_f1 : null;
+
+          let iconClass = 'pending';
+          let iconContent = '';
+          if (isCompleted) {
+            iconClass = 'completed';
+            iconContent = '\u2713';
+          } else if (isCurrent) {
+            iconClass = 'current';
+            iconContent = '\u2022';
+          }
+
+          return (
+            <div key={mode} className="mode-item">
+              <div className={'mode-item-icon ' + iconClass}>{iconContent}</div>
+              <span className={'mode-item-label' + (isPending ? ' pending' : '')}>{mode}</span>
+              {f1 !== null && f1 !== undefined && (
+                <span className="mode-item-f1">F1: {(f1 || 0).toFixed(3)}</span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Per-mode F1 summary (when we have results) */}
+      {completed.length > 0 && (
+        <div className="panel-section">
+          <div className="section-title">F1 Scores</div>
+          {completed.map(mode => {
+            const report = reps[mode];
+            if (!report) return null;
+            return (
+              <div key={mode} className="stat-row">
+                <span className="stat-label">{mode}</span>
+                <span className="stat-value" style={{ color: 'var(--phase-gathering)' }}>{(report.macro_f1 || 0).toFixed(3)}</span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+// ================================================================
+// AblationEventCard Component
+// ================================================================
+function GtBadge({ gt }) {
+  if (!gt) return null;
+  const colors = {
+    TP: { bg: 'rgba(74,222,128,0.2)', color: '#4ade80' },
+    FP: { bg: 'rgba(239,68,68,0.2)', color: '#ef4444' },
+    TN: { bg: 'rgba(96,165,250,0.2)', color: '#60a5fa' },
+    FN: { bg: 'rgba(245,158,11,0.2)', color: '#f59e0b' },
+  };
+  const c = colors[gt] || colors.TN;
+  return (
+    <span style={{
+      display: 'inline-block', padding: '1px 5px', borderRadius: 3,
+      fontSize: 10, fontWeight: 700, letterSpacing: '0.5px',
+      background: c.bg, color: c.color, marginLeft: 6,
+    }}>{gt}</span>
+  );
+}
+
+function AblationEventCard({ event }) {
+  const [reasoningOpen, setReasoningOpen] = useState(false);
+
+  const sessionShort = (event.session_id || '').slice(0, 8);
+  const failureName = (event.failure_name || '').replace(/_/g, ' ');
+
+  if (event.type === 'llm_start') {
+    return (
+      <div className="event-card">
+        <div className="event-card-header">
+          <span className="event-badge processing">Processing</span>
+          <span className="event-card-failure">{failureName}</span>
+          <span className="event-card-session">{sessionShort}</span>
+        </div>
+        <div className="event-card-detail">
+          <div className="event-card-detail-row">
+            <span className="event-badge llm-call">{event.call_type || 'llm'}</span>
+            <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+              {event.context_cases_count != null ? event.context_cases_count + ' context cases' : ''}
+            </span>
+            <div className="ablation-spinner" style={{ width: 12, height: 12 }} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (event.type === 'llm_result') {
+    const confirmed = event.confirmed;
+    return (
+      <div className="event-card">
+        <div className="event-card-header">
+          <span className={'event-badge ' + (confirmed ? 'confirm' : 'reject')}>
+            {confirmed ? 'Confirmed' : 'Rejected'}
+          </span>
+          <GtBadge gt={event.gt_match} />
+          <span className="event-card-failure">{failureName}</span>
+          <span className="event-card-session">{sessionShort}</span>
+        </div>
+        <div className="event-card-detail">
+          <div className="event-card-detail-row">
+            <span className="event-badge llm-call">{event.call_type || 'llm'}</span>
+            <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+              Confidence: <strong>{((event.confidence || 0) * 100).toFixed(0)}%</strong>
+            </span>
+            <span className="event-card-latency">{event.latency_ms != null ? event.latency_ms.toFixed(0) + 'ms' : ''}</span>
+          </div>
+          {event.reasoning && (
+            <div className="reasoning-expandable">
+              <button className="reasoning-toggle" onClick={() => setReasoningOpen(!reasoningOpen)}>
+                <span dangerouslySetInnerHTML={{ __html: reasoningOpen ? '&#9660;' : '&#9654;' }} />
+                {' '}Reasoning
+              </button>
+              {reasoningOpen && (
+                <div className="reasoning-content">{event.reasoning}</div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (event.type === 'auto_confirm') {
+    return (
+      <div className="event-card">
+        <div className="event-card-header">
+          <span className="event-badge auto-confirm">Auto-Confirm</span>
+          <GtBadge gt={event.gt_match} />
+          <span className="event-card-failure">{failureName}</span>
+          <span className="event-card-session">{sessionShort}</span>
+        </div>
+        <div className="event-card-detail">
+          <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+            Confidence: <strong>{((event.confidence || 0) * 100).toFixed(0)}%</strong>
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  if (event.type === 'fp_adjustment') {
+    return (
+      <div className="event-card">
+        <div className="event-card-header">
+          <span className="event-badge fp-adjust">FP Adjust</span>
+          <span className="event-card-failure">{failureName}</span>
+          <span className="event-card-session">{sessionShort}</span>
+        </div>
+        <div className="event-card-detail">
+          <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+            {(event.original || 0).toFixed(2)} &rarr; {(event.adjusted || 0).toFixed(2)}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // Fallback for unknown event types
+  return (
+    <div className="event-card">
+      <div className="event-card-header">
+        <span className="event-badge llm-call">{event.type || 'unknown'}</span>
+        <span className="event-card-failure">{failureName}</span>
+        <span className="event-card-session">{sessionShort}</span>
+      </div>
+    </div>
+  );
+}
+
+
+// ================================================================
+// AblationProcessingTab Component
+// ================================================================
+function AblationProcessingTab({ events }) {
+  const scrollRef = useRef(null);
+
+  // Auto-scroll to top when new events arrive (newest first)
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [events.length]);
+
+  if (!events || events.length === 0) {
+    return (
+      <div className="ablation-waiting-state">
+        <div className="waiting-pulse" />
+        <div style={{ fontSize: 14, color: 'var(--text-secondary)' }}>Waiting for LLM events...</div>
+      </div>
+    );
+  }
+
+  // Show newest events first
+  const reversed = events.slice().reverse();
+
+  return (
+    <div ref={scrollRef} style={{ padding: 16, overflow: 'auto', flex: 1 }}>
+      {reversed.map((evt, i) => (
+        <AblationEventCard key={events.length - i} event={evt} />
+      ))}
+    </div>
+  );
+}
+
+
+// ================================================================
+// AblationResultsTab Component
+// ================================================================
+function AblationResultsTab({ reports, modesCompleted, comparisonTable, phase }) {
+  const completed = modesCompleted || [];
+  const reps = reports || {};
+
+  if (completed.length === 0) {
+    return (
+      <div className="ablation-waiting-state">
+        <div className="waiting-pulse" />
+        <div style={{ fontSize: 14, color: 'var(--text-secondary)' }}>Waiting for results...</div>
+      </div>
+    );
+  }
+
+  // Find the best F1 across all modes for highlighting
+  let bestF1 = -1;
+  let bestMode = null;
+  completed.forEach(mode => {
+    const report = reps[mode];
+    if (report && report.macro_f1 > bestF1) {
+      bestF1 = report.macro_f1;
+      bestMode = mode;
+    }
+  });
+
+  return (
+    <div style={{ padding: 16, overflow: 'auto', flex: 1 }}>
+      <table className="results-table">
+        <thead>
+          <tr>
+            <th>Mode</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>F1 (macro)</th>
+            <th>F1 (micro)</th>
+            <th>Detections</th>
+          </tr>
+        </thead>
+        <tbody>
+          {completed.map(mode => {
+            const report = reps[mode];
+            if (!report) return null;
+            const isBest = mode === bestMode;
+            return (
+              <tr key={mode}>
+                <td style={{ fontWeight: 600 }}>{mode}</td>
+                <td className="mono">{(report.macro_p || 0).toFixed(3)}</td>
+                <td className="mono">{(report.macro_r || 0).toFixed(3)}</td>
+                <td className={'mono' + (isBest ? ' best-value' : '')}>{(report.macro_f1 || 0).toFixed(3)}</td>
+                <td className="mono">{(report.micro_f1 || 0).toFixed(3)}</td>
+                <td className="mono">{report.n_candidates || 0}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      {/* Per-detector breakdown for each mode */}
+      {completed.map(mode => {
+        const report = reps[mode];
+        if (!report || !report.per_detector || report.per_detector.length === 0) return null;
+        return (
+          <div key={mode + '-detail'} style={{ marginTop: 24 }}>
+            <div className="section-title" style={{ marginBottom: 8 }}>{mode} -- Per Detector</div>
+            <table className="results-table">
+              <thead>
+                <tr>
+                  <th>Detector</th>
+                  <th>Precision</th>
+                  <th>Recall</th>
+                  <th>F1</th>
+                  <th>TP</th>
+                  <th>FP</th>
+                  <th>FN</th>
+                </tr>
+              </thead>
+              <tbody>
+                {report.per_detector.map(det => (
+                  <tr key={det.detector || det.name || ''}>
+                    <td style={{ fontWeight: 500 }}>{(det.detector || det.name || '').replace(/_/g, ' ')}</td>
+                    <td className="mono">{(det.precision || 0).toFixed(3)}</td>
+                    <td className="mono">{(det.recall || 0).toFixed(3)}</td>
+                    <td className="mono">{(det.f1 || 0).toFixed(3)}</td>
+                    <td className="mono">{det.tp || 0}</td>
+                    <td className="mono">{det.fp || 0}</td>
+                    <td className="mono">{det.fn || 0}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      })}
+
+      {/* Full comparison table text when ablation is complete */}
+      {phase === 'complete' && comparisonTable && (
+        <div style={{ marginTop: 24 }}>
+          <div className="section-title" style={{ marginBottom: 8 }}>Comparison Summary</div>
+          <pre className="ablation-comparison-pre">{comparisonTable}</pre>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+// ================================================================
+// AblationCenterPanel Component (Center Column with Tabs)
+// ================================================================
+function AblationCenterPanel({ events, reports, modesCompleted, comparisonTable, phase }) {
+  const [activeTab, setActiveTab] = useState('processing');
+
+  const eventCount = (events || []).length;
+
+  return (
+    <div className="ablation-center">
+      <div className="tab-bar">
+        <button
+          className={'tab-btn' + (activeTab === 'processing' ? ' active' : '')}
+          onClick={() => setActiveTab('processing')}
+        >
+          Processing<span className="tab-count">{eventCount}</span>
+        </button>
+        <button
+          className={'tab-btn' + (activeTab === 'results' ? ' active' : '')}
+          onClick={() => setActiveTab('results')}
+        >
+          Results<span className="tab-count">{(modesCompleted || []).length}</span>
+        </button>
+      </div>
+
+      <div className={'tab-panel' + (activeTab === 'processing' ? ' active' : '')}>
+        <AblationProcessingTab events={events} />
+      </div>
+
+      <div className={'tab-panel' + (activeTab === 'results' ? ' active' : '')}>
+        <AblationResultsTab
+          reports={reports}
+          modesCompleted={modesCompleted}
+          comparisonTable={comparisonTable}
+          phase={phase}
+        />
+      </div>
+    </div>
+  );
+}
+
+
+// ================================================================
+// AblationPipelineLog Component (Right Column)
+// ================================================================
+function AblationPipelineLog({ events }) {
+  const evts = events || [];
+
+  // Compute counters including GT accuracy
+  const counts = useMemo(() => {
+    let total = 0, llmCalls = 0, autoConfirms = 0, fpAdjustments = 0;
+    let gtTP = 0, gtFP = 0, gtTN = 0, gtFN = 0;
+    evts.forEach(evt => {
+      total++;
+      if (evt.type === 'llm_start' || evt.type === 'llm_result') llmCalls++;
+      if (evt.type === 'auto_confirm') autoConfirms++;
+      if (evt.type === 'fp_adjustment') fpAdjustments++;
+      if (evt.gt_match === 'TP') gtTP++;
+      if (evt.gt_match === 'FP') gtFP++;
+      if (evt.gt_match === 'TN') gtTN++;
+      if (evt.gt_match === 'FN') gtFN++;
+    });
+    const gtTotal = gtTP + gtFP + gtTN + gtFN;
+    const gtAccuracy = gtTotal > 0 ? ((gtTP + gtTN) / gtTotal * 100).toFixed(0) : null;
+    return { total, llmCalls, autoConfirms, fpAdjustments, gtTP, gtFP, gtTN, gtFN, gtAccuracy };
+  }, [evts]);
+
+  function eventDotClass(evt) {
+    if (evt.type === 'llm_start') return 'llm-start';
+    if (evt.type === 'llm_result') return evt.confirmed ? 'llm-result-confirmed' : 'llm-result-rejected';
+    if (evt.type === 'auto_confirm') return 'auto-confirm';
+    if (evt.type === 'fp_adjustment') return 'fp-adjustment';
+    return 'llm-start';
+  }
+
+  function eventSummary(evt) {
+    const name = (evt.failure_name || '').replace(/_/g, ' ');
+    const sid = (evt.session_id || '').slice(0, 8);
+
+    if (evt.type === 'llm_start') {
+      return React.createElement('span', null,
+        React.createElement('strong', null, name),
+        ' -- LLM ', evt.call_type || 'call', ' (', sid, ')'
+      );
+    }
+    if (evt.type === 'llm_result') {
+      const verdict = evt.confirmed ? 'confirmed' : 'rejected';
+      const gt = evt.gt_match;
+      return React.createElement('span', null,
+        React.createElement('strong', null, name),
+        ' -- ', verdict, ' ', ((evt.confidence || 0) * 100).toFixed(0), '%',
+        gt ? React.createElement(GtBadge, { gt }) : null,
+        ' (', sid, ')'
+      );
+    }
+    if (evt.type === 'auto_confirm') {
+      const gt = evt.gt_match;
+      return React.createElement('span', null,
+        React.createElement('strong', null, name),
+        ' -- auto ', ((evt.confidence || 0) * 100).toFixed(0), '%',
+        gt ? React.createElement(GtBadge, { gt }) : null,
+        ' (', sid, ')'
+      );
+    }
+    if (evt.type === 'fp_adjustment') {
+      return React.createElement('span', null,
+        React.createElement('strong', null, name),
+        ' -- FP ', (evt.original || 0).toFixed(2), ' \u2192 ', (evt.adjusted || 0).toFixed(2), ' (', sid, ')'
+      );
+    }
+    return React.createElement('span', null, evt.type || 'unknown');
+  }
+
+  // Show newest first
+  const reversed = evts.slice().reverse();
+
+  return (
+    <div className="ablation-pipeline">
+      <div className="llm-header">
+        <div className="section-title">LLM Pipeline</div>
+        <div className="llm-stats">
+          <div className="llm-stat">
+            <div className="llm-stat-dot total" />
+            <span className="llm-stat-label">Total</span>
+            <span className="llm-stat-value">{counts.total}</span>
+          </div>
+          <div className="llm-stat">
+            <div className="llm-stat-dot confirmed" />
+            <span className="llm-stat-label">LLM Calls</span>
+            <span className="llm-stat-value">{counts.llmCalls}</span>
+          </div>
+          <div className="llm-stat">
+            <div className="llm-stat-dot autoconfirmed" />
+            <span className="llm-stat-label">Auto</span>
+            <span className="llm-stat-value">{counts.autoConfirms}</span>
+          </div>
+          <div className="llm-stat">
+            <div className="llm-stat-dot uncertain" />
+            <span className="llm-stat-label">FP Adjust</span>
+            <span className="llm-stat-value">{counts.fpAdjustments}</span>
+          </div>
+        </div>
+        {counts.gtAccuracy !== null && (
+          <div style={{ marginTop: 8, padding: '6px 8px', background: 'var(--bg-surface)', borderRadius: 6 }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 4 }}>vs Ground Truth</div>
+            <div style={{ display: 'flex', gap: 10, fontSize: 12, flexWrap: 'wrap' }}>
+              <span style={{ color: '#4ade80' }}>TP: <strong>{counts.gtTP}</strong></span>
+              <span style={{ color: '#60a5fa' }}>TN: <strong>{counts.gtTN}</strong></span>
+              <span style={{ color: '#ef4444' }}>FP: <strong>{counts.gtFP}</strong></span>
+              <span style={{ color: '#f59e0b' }}>FN: <strong>{counts.gtFN}</strong></span>
+              <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>Acc: {counts.gtAccuracy}%</span>
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="llm-log">
+        {reversed.length === 0 ? (
+          <div className="llm-log-empty">No pipeline events yet</div>
+        ) : (
+          reversed.map((evt, i) => (
+            <div key={evts.length - i} className="pipeline-event-item">
+              <div className={'pipeline-event-dot ' + eventDotClass(evt)} />
+              <div className="pipeline-event-summary">
+                {eventSummary(evt)}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+
+// ================================================================
+// AblationView Component (Root for ablation mode)
+// ================================================================
+function AblationView() {
+  const [phase, setPhase] = useState('idle');
+  const [currentMode, setCurrentMode] = useState(null);
+  const [totalSessions, setTotalSessions] = useState(0);
+  const [modesCompleted, setModesCompleted] = useState([]);
+  const [reports, setReports] = useState({});
+  const [recentEvents, setRecentEvents] = useState([]);
+  const [comparisonTable, setComparisonTable] = useState('');
+  const [sessionsProcessed, setSessionsProcessed] = useState(0);
+  const [currentSession, setCurrentSession] = useState('');
+  const [currentSessionDetections, setCurrentSessionDetections] = useState([]);
+  const [connectionStatus, setConnectionStatus] = useState('connecting');
+  const [connectionLabel, setConnectionLabel] = useState('Connecting...');
+
+  const streamEndedRef = useRef(false);
+
+  // WebSocket connection for ablation mode
+  useEffect(() => {
+    let ws = null;
+    let reconnectTimer = null;
+
+    function connect() {
+      const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+      ws = new WebSocket(protocol + '//' + location.host + '/ws');
+
+      ws.onopen = () => {
+        setConnectionStatus('connected');
+        setConnectionLabel('Connected');
+        if (reconnectTimer) {
+          clearTimeout(reconnectTimer);
+          reconnectTimer = null;
+        }
+      };
+
+      ws.onclose = () => {
+        if (streamEndedRef.current) {
+          setConnectionStatus('connected');
+          setConnectionLabel('Ablation complete');
+          return;
+        }
+        setConnectionStatus('disconnected');
+        setConnectionLabel('Disconnected');
+        reconnectTimer = setTimeout(connect, 3000);
+      };
+
+      ws.onerror = () => {
+        setConnectionStatus('disconnected');
+        setConnectionLabel('Error');
+      };
+
+      ws.onmessage = (evt) => {
+        let data;
+        try {
+          data = JSON.parse(evt.data);
+        } catch (e) {
+          return;
+        }
+
+        if (data.type === 'ablation_waiting') {
+          setPhase(data.phase || 'idle');
+          setConnectionStatus('waiting');
+          setConnectionLabel('Waiting for ablation...');
+          return;
+        }
+
+        if (data.type === 'ablation_update') {
+          setPhase(data.phase || 'running');
+          setCurrentMode(data.current_mode || null);
+          setTotalSessions(data.total_sessions || 0);
+          setModesCompleted(data.modes_completed || []);
+          setReports(data.reports || {});
+          if (data.sessions_processed !== undefined) {
+            setSessionsProcessed(data.sessions_processed);
+          }
+          if (data.current_session !== undefined) {
+            setCurrentSession(data.current_session);
+          }
+          if (data.current_session_detections !== undefined) {
+            setCurrentSessionDetections(data.current_session_detections);
+          }
+          if (data.recent_events) {
+            setRecentEvents(data.recent_events);
+          }
+          setConnectionStatus('connected');
+          setConnectionLabel(data.phase === 'setup' ? 'Setting up...' : 'Running');
+          return;
+        }
+
+        if (data.type === 'ablation_complete') {
+          streamEndedRef.current = true;
+          setPhase('complete');
+          setModesCompleted(data.modes_completed || []);
+          setReports(data.reports || {});
+          setComparisonTable(data.comparison_table || '');
+          if (data.recent_events) {
+            setRecentEvents(data.recent_events);
+          }
+          setConnectionStatus('connected');
+          setConnectionLabel('Ablation complete');
+          return;
+        }
+
+        // Also handle generic stream_end / waiting for compatibility
+        if (data.type === 'stream_end') {
+          streamEndedRef.current = true;
+          setConnectionStatus('connected');
+          setConnectionLabel('Ablation complete');
+          return;
+        }
+
+        if (data.type === 'waiting') {
+          if (!streamEndedRef.current) {
+            setConnectionStatus('waiting');
+            setConnectionLabel('Waiting...');
+          }
+          return;
+        }
+      };
+    }
+
+    connect();
+
+    return () => {
+      if (ws) ws.close();
+      if (reconnectTimer) clearTimeout(reconnectTimer);
+    };
+  }, []);
+
+  // Also fetch initial status on mount
+  useEffect(() => {
+    fetch('/api/ablation/status')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (!data) return;
+        if (data.phase) setPhase(data.phase);
+        if (data.current_mode) setCurrentMode(data.current_mode);
+        if (data.total_sessions) setTotalSessions(data.total_sessions);
+        if (data.modes_completed) setModesCompleted(data.modes_completed);
+        if (data.reports) setReports(data.reports);
+        if (data.comparison_table) setComparisonTable(data.comparison_table);
+      })
+      .catch(() => {});
+
+    fetch('/api/ablation/events?last=50')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (data && Array.isArray(data)) {
+          setRecentEvents(data);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const connectionDotClass = connectionStatus === 'connected' ? 'connected'
+    : connectionStatus === 'waiting' ? 'waiting'
+    : 'disconnected';
+
+  return (
+    <div id="app">
+      {/* Top Bar */}
+      <div id="top-bar">
+        <div className="logo">agent<span>diag</span></div>
+        <div id="session-indicator">
+          <span className="session-project" style={{ color: 'var(--phase-gathering)' }}>Ablation Study</span>
+          {currentMode && phase === 'running' && (
+            <span className="session-id">mode: {currentMode}</span>
+          )}
+        </div>
+        <div id="connection-status">
+          <div id="connection-dot" className={connectionDotClass} />
+          <span>{connectionLabel}</span>
+        </div>
+      </div>
+
+      {/* Complete banner */}
+      {phase === 'complete' && (
+        <div className="ablation-complete-banner">
+          Ablation complete -- {modesCompleted.length} modes evaluated across {totalSessions} sessions
+        </div>
+      )}
+
+      {/* Main 3-column ablation layout */}
+      <div className="ablation-layout">
+        {/* LEFT: Progress */}
+        <AblationProgress
+          phase={phase}
+          currentMode={currentMode}
+          modesCompleted={modesCompleted}
+          totalSessions={totalSessions}
+          reports={reports}
+          sessionsProcessed={sessionsProcessed}
+          currentSession={currentSession}
+          currentSessionDetections={currentSessionDetections}
+        />
+
+        {/* CENTER: Processing/Results tabs */}
+        <AblationCenterPanel
+          events={recentEvents}
+          reports={reports}
+          modesCompleted={modesCompleted}
+          comparisonTable={comparisonTable}
+          phase={phase}
+        />
+
+        {/* RIGHT: Pipeline log */}
+        <AblationPipelineLog events={recentEvents} />
+      </div>
+    </div>
+  );
+}
+
+
+// ================================================================
+// App Component (Root)
+// ================================================================
+function App() {
+  const [dashboardMode, setDashboardMode] = useState(null); // null = loading
+
+  // Fetch mode on mount — don't render anything until we know the mode
+  useEffect(() => {
+    fetch('/api/mode')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (data && data.mode) {
+          setDashboardMode(data.mode);
+        } else {
+          setDashboardMode('normal');
+        }
+      })
+      .catch(() => setDashboardMode('normal'));
+  }, []);
+
+  // Show loading screen until mode is determined
+  if (dashboardMode === null) {
+    return (
+      <div id="app">
+        <div id="top-bar">
+          <div className="logo">agent<span>diag</span></div>
+          <div id="connection-status">
+            <div id="connection-dot" className="waiting" />
+            <span>Loading...</span>
+          </div>
+        </div>
+        <div style={{
+          flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: 'var(--bg-base)', color: 'var(--text-muted)', fontSize: 16
+        }}>
+          Initializing dashboard...
+        </div>
+      </div>
+    );
+  }
+
+  if (dashboardMode === 'ablation') {
+    return React.createElement(AblationView, null);
+  }
+
+  return React.createElement(NormalDashboard, null);
+}
+
+// ================================================================
+// NormalDashboard Component (original App body)
+// ================================================================
+// ================================================================
+// SimpleView — human-readable default dashboard
+// ================================================================
+function SimpleView({ state }) {
+  const [expandedAlert, setExpandedAlert] = useState(null);
+
+  const ss = (state || {}).status_summary || {};
+  const color = ss.color || 'green';
+  const message = ss.message || 'Waiting for events...';
+  const activity = ss.activity || '';
+  const actions = ss.recent_actions || [];
+  const alerts = ss.alerts || [];
+  const step = ss.current_step || 0;
+
+  if (!state) {
+    return (
+      <div className="simple-view">
+        <div className="simple-waiting">
+          <div className="simple-waiting-dot" />
+          <div style={{ fontSize: 15, marginBottom: 4 }}>Waiting for agent activity...</div>
+          <div style={{ fontSize: 12 }}>Events will appear here as the agent works</div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="simple-view">
+      {/* Status card */}
+      <div className={'status-card' + (color === 'yellow' ? ' alert-yellow' : color === 'red' ? ' alert-red' : '')}>
+        <div className="status-top">
+          <div className={'status-dot ' + color} />
+          <div>
+            <div className="status-message">{message}</div>
+            {activity && <div className="status-activity">{activity}</div>}
+          </div>
+        </div>
+
+        {/* Recent actions as pill chain */}
+        {actions.length > 0 && (
+          <div className="recent-actions">
+            {actions.map((a, i) => (
+              <React.Fragment key={i}>
+                {i > 0 && <span className="recent-arrow">{'\u2192'}</span>}
+                <span className="recent-action">{a}</span>
+              </React.Fragment>
+            ))}
+          </div>
+        )}
+
+        <div className="simple-step-count">Step {step}</div>
+      </div>
+
+      {/* Alert timeline */}
+      {alerts.length > 0 && (
+        <div className="alert-timeline">
+          <div className="alert-timeline-title">Timeline</div>
+          {alerts.slice().reverse().map((alert, i) => (
+            <div key={i} className="alert-item"
+                 onClick={() => setExpandedAlert(expandedAlert === i ? null : i)}>
+              <span className="alert-step">#{alert.step}</span>
+              <div className={'alert-dot ' + (alert.severity || 'yellow')} />
+              <div style={{ flex: 1 }}>
+                <div className="alert-message">{alert.message}</div>
+                {expandedAlert === i && alert.metrics && Object.keys(alert.metrics).length > 0 && (
+                  <div className="alert-expand">
+                    {Object.entries(alert.metrics).map(([k, v]) => (
+                      <div key={k}>{k}: {typeof v === 'object' ? JSON.stringify(v) : String(v)}</div>
+                    ))}
+                    {alert.wickens_stage && <div>Stage: {alert.wickens_stage}</div>}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+function NormalDashboard() {
+  const [viewMode, setViewMode] = useState('simple');  // 'simple' or 'technical'
+  const [state, setState] = useState(null);
+  const [connectionStatus, setConnectionStatus] = useState('connecting');
+  const [connectionLabel, setConnectionLabel] = useState('Connecting...');
+  const [streamEnded, setStreamEnded] = useState(false);
+  const [activeTab, setActiveTab] = useState('signals');
+  const [decisionTraceData, setDecisionTraceData] = useState(null);
+  const [decisionTraceLoaded, setDecisionTraceLoaded] = useState(false);
+  const [sessionProfile, setSessionProfile] = useState(null);
+  const [modalDetector, setModalDetector] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [highlightRange, setHighlightRange] = useState(null);
+
+  // Cognitive Load state
+  const [ipStageMap, setIpStageMap] = useState(null);
+  const [cognitiveSelectedStage, setCognitiveSelectedStage] = useState(null);
+  const [cognitiveMemoryDetail, setCognitiveMemoryDetail] = useState(null);
+  const [cognitiveDecisionsDetail, setCognitiveDecisionsDetail] = useState(null);
+
+  const timelineBlocksRef = useRef(null);
+  const streamEndedRef = useRef(false);
+
+  // WebSocket connection
+  useEffect(() => {
+    let ws = null;
+    let reconnectTimer = null;
+
+    function connect() {
+      const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+      ws = new WebSocket(protocol + '//' + location.host + '/ws');
+
+      ws.onopen = () => {
+        setConnectionStatus('connected');
+        setConnectionLabel('Connected');
+        if (reconnectTimer) {
+          clearTimeout(reconnectTimer);
+          reconnectTimer = null;
+        }
+      };
+
+      ws.onclose = () => {
+        // Don't reconnect if stream already ended — preserve final state
+        if (streamEndedRef.current) {
+          setConnectionStatus('connected');
+          setConnectionLabel('Session complete');
+          return;
+        }
+        setConnectionStatus('disconnected');
+        setConnectionLabel('Disconnected');
+        reconnectTimer = setTimeout(connect, 3000);
+      };
+
+      ws.onerror = () => {
+        setConnectionStatus('disconnected');
+        setConnectionLabel('Error');
+      };
+
+      ws.onmessage = (evt) => {
+        let data;
+        try {
+          data = JSON.parse(evt.data);
+        } catch (e) {
+          return;
+        }
+
+        if (data.type === 'waiting') {
+          // Don't wipe state after stream ended — keep final snapshot
+          if (!streamEndedRef.current) {
+            setState(null);
+            setConnectionStatus('waiting');
+            setConnectionLabel('Waiting...');
+          }
+          return;
+        }
+
+        if (data.type === 'stream_end') {
+          streamEndedRef.current = true;
+          setStreamEnded(true);
+          setConnectionStatus('connected');
+          setConnectionLabel('Session complete');
+          return;
+        }
+
+        if (data.type === 'state_update') {
+          setState(data);
+        }
+      };
+    }
+
+    connect();
+
+    return () => {
+      if (ws) ws.close();
+      if (reconnectTimer) clearTimeout(reconnectTimer);
+    };
+  }, []);
+
+  // Lazy-load decision trace when tab is selected
+  useEffect(() => {
+    if (activeTab === 'decision-trace' && !decisionTraceLoaded) {
+      setDecisionTraceLoaded(true);
+      fetch('/api/decision-trace')
+        .then(r => {
+          if (!r.ok) throw new Error('Not found');
+          return r.json();
+        })
+        .then(data => {
+          setDecisionTraceData(data);
+          if (data.current_profile) {
+            setSessionProfile(data.current_profile);
+          }
+        })
+        .catch(() => {
+          setDecisionTraceData(null);
+        });
+    }
+  }, [activeTab, decisionTraceLoaded]);
+
+  // Fetch IP stage map once on mount — normalize to { caftCode: stageName }
+  useEffect(() => {
+    fetch('/api/cognitive/ip-stage-map')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (!data) return;
+        // API may return { "4.4": { ip_stage: "action" } } or { "4.4": "action" }
+        const normalized = {};
+        Object.keys(data).forEach(code => {
+          const val = data[code];
+          normalized[code] = typeof val === 'string' ? val : (val && val.ip_stage) || null;
+        });
+        setIpStageMap(normalized);
+      })
+      .catch(() => {});
+  }, []);
+
+  // Tab switch handler
+  const handleTabChange = useCallback((tab) => {
+    setActiveTab(tab);
+  }, []);
+
+  // Block click in timeline: switch to diagnoses and highlight
+  const handleTimelineBlockClick = useCallback((startStep, endStep) => {
+    setActiveTab('diagnoses');
+    setHighlightRange({ start: startStep, end: endStep });
+  }, []);
+
+  // Step link click in diagnosis: switch to timeline and highlight block
+  const handleStepClick = useCallback((step) => {
+    setActiveTab('timeline');
+    // After switching to timeline, find and highlight the block containing this step
+    // We use a small delay to ensure the DOM has updated
+    setTimeout(() => {
+      const blocks = document.querySelectorAll('.behavior-block');
+      for (let i = 0; i < blocks.length; i++) {
+        const start = parseInt(blocks[i].getAttribute('data-start'), 10);
+        const end = parseInt(blocks[i].getAttribute('data-end'), 10);
+        if (step >= start && step <= end) {
+          blocks[i].scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+          blocks[i].classList.add('selected');
+          const b = blocks[i];
+          setTimeout(() => { b.classList.remove('selected'); }, 2000);
+          return;
+        }
+      }
+    }, 50);
+  }, []);
+
+  // Detector detail modal
+  const handleDetectorClick = useCallback((name) => {
+    setModalDetector(name);
+    setModalVisible(true);
+  }, []);
+
+  const handleModalClose = useCallback(() => {
+    setModalVisible(false);
+    setModalDetector(null);
+  }, []);
+
+  // IP stage tag click: navigate to Cognitive tab with that stage expanded
+  const handleIPStageClick = useCallback((stage) => {
+    setActiveTab('cognitive');
+    setCognitiveSelectedStage(stage);
+  }, []);
+
+  // Cognitive stage click: toggle detail panel
+  const handleCognitiveStageClick = useCallback((stage) => {
+    setCognitiveSelectedStage(prev => prev === stage ? null : stage);
+  }, []);
+
+  // Cognitive lazy-fetch handlers
+  const handleFetchCognitiveMemory = useCallback(() => {
+    fetch('/api/cognitive/memory')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => setCognitiveMemoryDetail(data))
+      .catch(() => {});
+  }, []);
+
+  const handleFetchCognitiveDecisions = useCallback(() => {
+    fetch('/api/cognitive/decisions')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => setCognitiveDecisionsDetail(data))
+      .catch(() => {});
+  }, []);
+
+  const diagnosesCount = state ? (state.diagnoses || []).length : 0;
+
+  const connectionDotClass = connectionStatus === 'connected' ? 'connected'
+    : connectionStatus === 'waiting' ? 'waiting'
+    : 'disconnected';
+
+  return (
+    <div id="app">
+      {/* Top Bar */}
+      <div id="top-bar">
+        <div className="logo">agent<span>diag</span></div>
+        <div id="session-indicator">
+          {state?.session_context?.session_id && (
+            <>
+              {state.session_context.project_dir && (
+                <span className="session-project">{state.session_context.project_dir}</span>
+              )}
+              <span className="session-id">{state.session_context.session_id.slice(0, 8)}</span>
+            </>
+          )}
+        </div>
+        {/* View toggle */}
+        <div className="view-toggle">
+          <button className={'view-toggle-btn' + (viewMode === 'simple' ? ' active' : '')}
+                  onClick={() => setViewMode('simple')}>Simple</button>
+          <button className={'view-toggle-btn' + (viewMode === 'technical' ? ' active' : '')}
+                  onClick={() => setViewMode('technical')}>Technical</button>
+        </div>
+
+        <div id="connection-status">
+          <div id="connection-dot" className={connectionDotClass} />
+          <span>{connectionLabel}</span>
+        </div>
+      </div>
+
+      {/* Session complete banner */}
+      <div className={`session-complete-banner${streamEnded ? ' visible' : ''}`}>
+        {state?.session_context?.user_goal ? (
+          <>
+            Session complete
+            {state.total_events > 0 && ` \u2014 ${state.total_events} events`}
+            {state.diagnoses?.length > 0 && ` \u2014 ${state.diagnoses.length} diagnosis${state.diagnoses.length !== 1 ? 'es' : ''}`}
+          </>
+        ) : (
+          'Session complete \u2014 final snapshot displayed'
+        )}
+      </div>
+
+      {/* Simple view (default) */}
+      {viewMode === 'simple' && (
+        <div id="main" style={{ display: 'flex', flex: 1, minHeight: 0 }}>
+          <SimpleView state={state} />
+        </div>
+      )}
+
+      {/* Technical view (3-column layout) */}
+      <div id="main" style={{ display: viewMode === 'technical' ? '' : 'none' }}>
+        {/* LEFT: Session Health */}
+        {state ? (
+          <SessionHealth state={state} sessionProfile={sessionProfile} cognitiveState={state?.cognitive_state}
+            workingMemory={state?.working_memory} infoTheoretic={state?.info_theoretic} />
+        ) : (
+          <div id="left-col">
+            <div className="panel-section">
+              <div className="section-title">Current Phase</div>
+              <div className="current-phase-text" style={{ color: phaseColor('idle') }}>idle</div>
+              <div className="phase-progress-bar">
+                <div className="phase-progress-fill" style={{ width: '0%' }} />
+              </div>
+            </div>
+            <div className="panel-section">
+              <div className="section-title">Session Health</div>
+              <div className="health-badge-el healthy">
+                <div className="health-dot" />
+                <span>healthy</span>
+              </div>
+              <div style={{ marginTop: 12 }}>
+                <div className="stat-row">
+                  <span className="stat-label">Completion Rate</span>
+                  <span className="stat-value">0%</span>
+                </div>
+                <div className="completion-bar-container">
+                  <div className="completion-bar-bg">
+                    <div className="completion-bar-fill-el" style={{ width: '0%', background: PHASE_COLORS.executing }} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="panel-section">
+              <div className="section-title">Metrics</div>
+              <div className="stat-row">
+                <span className="stat-label">Failure Density</span>
+                <span className="stat-value">0 / 100 events</span>
+              </div>
+              <div className="stat-row">
+                <span className="stat-label">Total Events</span>
+                <span className="stat-value">0</span>
+              </div>
+              <div className="stat-row">
+                <span className="stat-label">Total Errors</span>
+                <span className="stat-value">0</span>
+              </div>
+              <div className="stat-row">
+                <span className="stat-label">Events / min</span>
+                <span className="stat-value">0</span>
+              </div>
+              <div className="stat-row">
+                <span className="stat-label">Phase Regressions</span>
+                <span className="stat-value">0</span>
+              </div>
+            </div>
+            <div className="panel-section">
+              <div className="section-title">Phase Balance</div>
+              <div className="phase-balance" />
+              <div className="phase-breakdown" />
+            </div>
+          </div>
+        )}
+
+        {/* CENTER: IP Pipeline + Tabs */}
+        <div id="center-col" style={{ position: 'relative', display: 'flex', flexDirection: 'column' }}>
+          {/* Waiting overlay */}
+          <div className={`waiting-overlay${state ? ' hidden' : ''}`}>
+            <div className="waiting-pulse" />
+            <div className="waiting-text">Waiting for events...</div>
+          </div>
+
+          {/* IP Pipeline Strip (always visible when cognitive enabled) */}
+          {state && state.cognitive_state && (
+            <IPPipelineStrip
+              cognitiveState={state.cognitive_state}
+              infoTheoretic={state.info_theoretic}
+              anomalies={state.anomalies}
+              selectedStage={cognitiveSelectedStage}
+              onStageClick={handleCognitiveStageClick}
+              flowRates={state.flow_rates}
+            />
+          )}
+
+          <div className="tab-bar">
+            <button
+              className={`tab-btn${activeTab === 'signals' ? ' active' : ''}`}
+              onClick={() => handleTabChange('signals')}
+            >
+              Signals
+            </button>
+            <button
+              className={`tab-btn${activeTab === 'timeline' ? ' active' : ''}`}
+              onClick={() => handleTabChange('timeline')}
+            >
+              Timeline
+            </button>
+            <button
+              className={`tab-btn${activeTab === 'memory-ops' ? ' active' : ''}`}
+              onClick={() => handleTabChange('memory-ops')}
+            >
+              Memory Ops
+            </button>
+            <button
+              className={`tab-btn${activeTab === 'diagnoses' ? ' active' : ''}`}
+              onClick={() => handleTabChange('diagnoses')}
+            >
+              Diagnoses<span className="tab-count">{diagnosesCount}</span>
+            </button>
+            <button
+              className={`tab-btn${activeTab === 'decision-trace' ? ' active' : ''}`}
+              onClick={() => handleTabChange('decision-trace')}
+            >
+              Decision Trace
+            </button>
+            <button
+              className={`tab-btn${activeTab === 'cognitive' ? ' active' : ''}`}
+              onClick={() => handleTabChange('cognitive')}
+            >
+              Cognitive
+            </button>
+          </div>
+
+          {/* Signals tab (NEW default) */}
+          <div className={`tab-panel${activeTab === 'signals' ? ' active' : ''}`}>
+            <InformationSignalsPanel
+              infoTheoretic={state ? state.info_theoretic : null}
+              anomalies={state ? state.anomalies : null}
+              containerWidth={800}
+            />
+          </div>
+
+          {/* Timeline tab */}
+          <div className={`tab-panel${activeTab === 'timeline' ? ' active' : ''}`}>
+            {state ? (
+              <BehaviorTimeline
+                state={state}
+                onBlockClick={handleTimelineBlockClick}
+              />
+            ) : (
+              <div className="timeline-panel">
+                <div className="timeline-scroll">
+                  <div className="timeline-empty">No events yet</div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Memory Ops tab (NEW) */}
+          <div className={`tab-panel${activeTab === 'memory-ops' ? ' active' : ''}`}>
+            <MemoryOpsTimeline infoTheoretic={state ? state.info_theoretic : null} />
+          </div>
+
+          {/* Diagnoses tab */}
+          <div className={`tab-panel${activeTab === 'diagnoses' ? ' active' : ''}`}>
+            {state ? (
+              <DiagnosisPanel
+                state={state}
+                onStepClick={handleStepClick}
+                highlightRange={highlightRange}
+                ipStageMap={ipStageMap}
+                onIPStageClick={handleIPStageClick}
+              />
+            ) : (
+              <div className="diagnoses-panel">
+                <div className="diagnoses-empty">
+                  <div>
+                    <span className="healthy-icon">&#10003;</span>
+                    Session healthy -- no issues detected
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Decision Trace tab */}
+          <div className={`tab-panel${activeTab === 'decision-trace' ? ' active' : ''}`}>
+            <DecisionTrace traceData={decisionTraceData} />
+          </div>
+
+          {/* Cognitive tab (legacy, kept for backward compat) */}
+          <div className={`tab-panel${activeTab === 'cognitive' ? ' active' : ''}`}>
+            <CognitiveLoadMonitor
+              cognitiveState={state ? state.cognitive_state : null}
+              selectedStage={cognitiveSelectedStage}
+              onStageClick={handleCognitiveStageClick}
+              memoryDetail={cognitiveMemoryDetail}
+              decisionsDetail={cognitiveDecisionsDetail}
+              onFetchMemory={handleFetchCognitiveMemory}
+              onFetchDecisions={handleFetchCognitiveDecisions}
+            />
+          </div>
+        </div>
+
+        {/* RIGHT: Annotations (was LLM Decisions) */}
+        {state ? (
+          <CAFTAnnotationsPanel state={state} onStepClick={handleStepClick} ipStageMap={ipStageMap} />
+        ) : (
+          <div id="right-col" className="annotations-panel">
+            <div className="annotations-header">
+              <div className="section-title">Annotations</div>
+              <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>0 detections</div>
+            </div>
+            <div className="annotations-list">
+              <div style={{ color: 'var(--text-muted)', fontSize: 12, textAlign: 'center', padding: 24 }}>
+                Waiting for events...
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Detector Detail Modal */}
+      <DetectorDetailModal
+        detectorName={modalDetector}
+        visible={modalVisible}
+        onClose={handleModalClose}
+      />
+    </div>
+  );
+}
+
+// ---- Mount ----
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+
+</body>
+</html>

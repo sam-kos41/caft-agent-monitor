@@ -1,0 +1,210 @@
+==============================================================================
+COMBINED EXPERIMENT RESULTS: 4-Condition Comparison
+==============================================================================
+
+Conditions:
+  A-Normal:    Vanilla Claude, healthy prompts (original build)
+  B-Normal:    Harness-orchestrated, healthy prompts
+  A-BadPrompt: Vanilla Claude, Agent B given thrash anomaly
+  B-BadPrompt: Harness-orchestrated, generator given thrash anomaly
+
+------------------------------------------------------------------------------
+SUMMARY TABLE
+------------------------------------------------------------------------------
+  Metric                         A-Normal   B-Normal      A-Bad      B-Bad
+  ---------------------------- ---------- ---------- ---------- ----------
+  Sessions                              4          0          7         10
+  Total size (KB)                    1119          0       1369       1841
+  Avg events/session                  119         --         56         39
+  Avg sensory entropy (b)            2.26         --       2.03       1.69
+  Avg perceptual entropy (b)         2.19         --       1.24       1.49
+  Avg action MI (b)                  1.67         --       1.18       1.07
+  Avg coherence (%)                  81.5         --       58.6       53.3
+  Avg compression                    1.00         --       1.00       1.00
+  Avg consolidation (%)              61.1         --       64.9       16.0
+  Avg feedback MI (b)                0.16         --       0.21       0.08
+  Avg KL divergence                 0.248         --      0.091      0.067
+  Avg anomalies/session               0.0         --        5.7        0.0
+  Avg named anomalies                 0.0         --        5.7        0.0
+
+==============================================================================
+Condition A: Vanilla (healthy prompts)
+  Original trivia game build. Single Claude agent, no anomaly injection.
+  Sessions: 4, Total: 1119KB
+==============================================================================
+  Session 66c1349e (97 events, 207KB)
+    Sensory: 1.96b  Perceptual: 1.00b
+    Action MI: 1.31b  Coherence: 65.6%
+    Compression: 1.00  Consolidation: 87.5%
+    Feedback MI: 0.00b  KL div: 0.000
+    Anomalies: 0 total, 0 named
+  Session b7212465 (113 events, 301KB)
+    Sensory: 2.50b  Perceptual: 2.66b
+    Action MI: 2.13b  Coherence: 100.0%
+    Compression: 1.00  Consolidation: 47.4%
+    Feedback MI: 0.00b  KL div: 0.297
+    Anomalies: 0 total, 0 named
+  Session 178adcd3 (148 events, 609KB)
+    Sensory: 2.32b  Perceptual: 2.90b
+    Action MI: 1.58b  Coherence: 78.9%
+    Compression: 1.00  Consolidation: 48.4%
+    Feedback MI: 0.47b  KL div: 0.447
+    Anomalies: 0 total, 0 named
+
+==============================================================================
+Condition B: Harness (healthy prompts)
+  Harness-orchestrated sessions via condition_b_harness directory.
+  Sessions: 0, Total: 0KB
+==============================================================================
+  No sessions analyzed (not yet run or no data)
+
+==============================================================================
+Condition A: Vanilla (thrash anomaly injected)
+  3 agents with Agent B given bad prompt (build frontend blind).
+  Anomaly injected: thrash
+  Sessions: 7, Total: 1369KB
+==============================================================================
+  Session 7bb6c030 (60 events, 276KB)
+    Sensory: 2.83b  Perceptual: 2.21b
+    Action MI: 2.02b  Coherence: 100.0%
+    Compression: 1.00  Consolidation: 55.0%
+    Feedback MI: 0.45b  KL div: 0.000
+    Anomalies: 0 total, 0 named
+  Session 6645322b (21 events, 68KB)
+    Sensory: 2.12b  Perceptual: 1.00b
+    Action MI: 2.02b  Coherence: 100.0%
+    Compression: 1.00  Consolidation: 83.3%
+    Feedback MI: 0.00b  KL div: 0.000
+    Anomalies: 0 total, 0 named
+  Session aee33a4b (4 events, 20KB)
+    Sensory: 1.50b  Perceptual: 0.00b
+    Action MI: 0.25b  Coherence: 12.6%
+    Compression: 1.00  Consolidation: 0.0%
+    Feedback MI: 0.00b  KL div: 0.000
+    Anomalies: 0 total, 0 named
+  Session 22499017 (7 events, 95KB)
+    Sensory: 1.92b  Perceptual: 0.00b
+    Action MI: 1.25b  Coherence: 62.6%
+    Compression: 1.00  Consolidation: 100.0%
+    Feedback MI: 0.00b  KL div: 0.000
+    Anomalies: 0 total, 0 named
+  Session c783b5fa (167 events, 334KB)
+    Sensory: 1.01b  Perceptual: 2.16b
+    Action MI: 0.28b  Coherence: 13.9%
+    Compression: 1.00  Consolidation: 65.5%
+    Feedback MI: 0.56b  KL div: 0.636
+    Anomalies: 40 total, 40 named
+    Signatures: mechanical_repetition(40)
+  Session 551241a1 (63 events, 113KB)
+    Sensory: 2.48b  Perceptual: 1.00b
+    Action MI: 1.53b  Coherence: 76.5%
+    Compression: 1.00  Consolidation: 88.9%
+    Feedback MI: 0.00b  KL div: 0.000
+    Anomalies: 0 total, 0 named
+  Session 3b21bc37 (73 events, 459KB)
+    Sensory: 2.35b  Perceptual: 2.29b
+    Action MI: 0.90b  Coherence: 44.8%
+    Compression: 1.00  Consolidation: 61.3%
+    Feedback MI: 0.48b  KL div: 0.000
+    Anomalies: 0 total, 0 named
+
+==============================================================================
+Condition B: Harness (thrash anomaly injected)
+  Harness-orchestrated with generator given same bad prompt (build blind).
+  Anomaly injected: thrash
+  Sessions: 10, Total: 1841KB
+==============================================================================
+  Session e59ccb42 (1 events, 6KB)
+    Sensory: 0.00b  Perceptual: 0.00b
+    Action MI: 0.00b  Coherence: 0.0%
+    Compression: 1.00  Consolidation: 0.0%
+    Feedback MI: 0.00b  KL div: 0.000
+    Anomalies: 0 total, 0 named
+  Session c7f20e99 (1 events, 4KB)
+    Sensory: 0.00b  Perceptual: 0.00b
+    Action MI: 0.00b  Coherence: 0.0%
+    Compression: 1.00  Consolidation: 0.0%
+    Feedback MI: 0.00b  KL div: 0.000
+    Anomalies: 0 total, 0 named
+  Session 2659d01b (53 events, 196KB)
+    Sensory: 1.75b  Perceptual: 1.00b
+    Action MI: 1.41b  Coherence: 70.6%
+    Compression: 1.00  Consolidation: 90.9%
+    Feedback MI: 0.00b  KL div: 0.000
+    Anomalies: 0 total, 0 named
+  Session 67d9174b (29 events, 153KB)
+    Sensory: 3.31b  Perceptual: 2.87b
+    Action MI: 1.75b  Coherence: 87.5%
+    Compression: 1.00  Consolidation: 0.0%
+    Feedback MI: 0.00b  KL div: 0.000
+    Anomalies: 0 total, 0 named
+  Session 35d159ce (1 events, 4KB)
+    Sensory: 0.00b  Perceptual: 0.00b
+    Action MI: 0.00b  Coherence: 0.0%
+    Compression: 1.00  Consolidation: 0.0%
+    Feedback MI: 0.00b  KL div: 0.000
+    Anomalies: 0 total, 0 named
+  Session 21ab0aae (128 events, 421KB)
+    Sensory: 2.10b  Perceptual: 2.05b
+    Action MI: 1.86b  Coherence: 93.0%
+    Compression: 1.00  Consolidation: 41.1%
+    Feedback MI: 0.41b  KL div: 0.126
+    Anomalies: 0 total, 0 named
+  Session 12f79cd7 (36 events, 128KB)
+    Sensory: 3.45b  Perceptual: 3.02b
+    Action MI: 1.70b  Coherence: 84.9%
+    Compression: 1.00  Consolidation: 0.0%
+    Feedback MI: 0.00b  KL div: 0.000
+    Anomalies: 0 total, 0 named
+  Session a873381c (1 events, 4KB)
+    Sensory: 0.00b  Perceptual: 0.00b
+    Action MI: 0.00b  Coherence: 0.0%
+    Compression: 1.00  Consolidation: 0.0%
+    Feedback MI: 0.00b  KL div: 0.000
+    Anomalies: 0 total, 0 named
+  Session 73f91131 (117 events, 713KB)
+    Sensory: 2.97b  Perceptual: 3.32b
+    Action MI: 1.93b  Coherence: 96.6%
+    Compression: 1.00  Consolidation: 28.2%
+    Feedback MI: 0.35b  KL div: 0.539
+    Anomalies: 0 total, 0 named
+  Session 4f261786 (24 events, 207KB)
+    Sensory: 3.33b  Perceptual: 2.68b
+    Action MI: 2.09b  Coherence: 100.0%
+    Compression: 1.00  Consolidation: 0.0%
+    Feedback MI: 0.00b  KL div: 0.000
+    Anomalies: 0 total, 0 named
+
+==============================================================================
+CROSS-CONDITION ANALYSIS
+==============================================================================
+
+1. Effect of bad prompt (A-Normal vs A-BadPrompt):
+   Same monitoring (vanilla), different prompts.
+   Action MI change:   -0.50b
+   KL divergence change: -0.157
+   Anomaly count change: +5.7
+   -> Bad prompt produces MORE anomalies (expected)
+
+3. Harness advantage on same failure (A-BadPrompt vs B-BadPrompt):
+   Same thrash anomaly, vanilla vs harness monitoring.
+   Action MI change:     -0.11b
+   KL divergence change: -0.024
+   Anomaly count change: -5.7
+   Named anomaly change: -5.7
+
+==============================================================================
+INTERPRETATION GUIDE
+==============================================================================
+
+  Key metrics to compare:
+    - Action MI: Higher = more purposeful. Bad prompts should lower it.
+    - KL divergence: Higher = behavior shifted from baseline. Spikes = anomaly.
+    - Named anomalies: More = better classification (not just 'something weird').
+    - Coherence: Higher = sequential logic. Bad prompts may lower it.
+    - Compression: Lower = more repetitive. Loop anomaly should tank this.
+
+  What the harness should improve:
+    - Phase-conditional baselines -> fewer false positives on healthy agents
+    - Evaluation markers -> retrospective validation of anomalies
+    - Better anomaly classification (named vs unclassified)

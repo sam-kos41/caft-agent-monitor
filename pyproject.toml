@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agentdiag"
+version = "0.1.0"
+description = "Anomaly detection for AI agent execution traces"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+dependencies = [
+    "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[project.scripts]
+agentdiag = "agentdiag.__main__:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

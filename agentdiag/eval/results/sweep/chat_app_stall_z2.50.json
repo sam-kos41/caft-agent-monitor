@@ -1,0 +1,5762 @@
+{
+  "trace": "agentdiag/eval/traces/chat_app_stall.jsonl",
+  "z_threshold": 2.5,
+  "calibration_window": 100,
+  "total_events": 360,
+  "total_anomalies": 66,
+  "anomalies": [
+    {
+      "step": 166,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.4822,
+          "z_score": 2.55,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.1139,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 167,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.3622,
+          "z_score": 2.72,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.1761,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 168,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.2423,
+          "z_score": 2.88,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.2243,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 169,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.1211,
+          "z_score": 3.04,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.1211,
+          "z_score": 2.59,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.2814,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 170,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.0,
+          "z_score": 3.21,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.0,
+          "z_score": 2.78,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.3646,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 171,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.0,
+          "z_score": 3.21,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.0,
+          "z_score": 2.78,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.3646,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 172,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.0,
+          "z_score": 3.21,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.0,
+          "z_score": 2.78,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.3646,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 173,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.0,
+          "z_score": 3.21,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.0,
+          "z_score": 2.78,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.3646,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 174,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.0,
+          "z_score": 3.21,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.0,
+          "z_score": 2.78,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.3646,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 175,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.0,
+          "z_score": 3.21,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.0,
+          "z_score": 2.78,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.3646,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 176,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.0,
+          "z_score": 3.21,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.0,
+          "z_score": 2.78,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.3646,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 177,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.0,
+          "z_score": 3.21,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.0,
+          "z_score": 2.78,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.3646,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 178,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.0,
+          "z_score": 3.21,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.0,
+          "z_score": 2.78,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.3646,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 179,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.0,
+          "z_score": 3.21,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.0,
+          "z_score": 2.78,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.3646,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 180,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.0,
+          "z_score": 3.21,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.0,
+          "z_score": 2.78,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.3646,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 181,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.0,
+          "z_score": 3.21,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.0,
+          "z_score": 2.78,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.3646,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 182,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.1211,
+          "z_score": 3.04,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.0,
+          "z_score": 2.78,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.3156,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 183,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.2423,
+          "z_score": 2.88,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.0,
+          "z_score": 2.78,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.2666,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 184,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.3222,
+          "z_score": 2.77,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.0,
+          "z_score": 2.78,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.2288,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 185,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.4022,
+          "z_score": 2.66,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.0,
+          "z_score": 2.78,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.1911,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 186,
+      "signature": "distributional_anomaly",
+      "severity": "info",
+      "metrics": {
+        "action_entropy": {
+          "value": 1.5209,
+          "z_score": 2.5,
+          "expected_mean": 3.3669,
+          "expected_std": 0.7379,
+          "direction": "low"
+        },
+        "read_entropy": {
+          "value": 1.1211,
+          "z_score": 2.59,
+          "expected_mean": 2.7716,
+          "expected_std": 0.6383,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 2.1356,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 315,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.1414,
+          "z_score": 2.62,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.5159,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 316,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.5343,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 317,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.544,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 318,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.544,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 319,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.544,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 320,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.5457,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 321,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.5322,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 322,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.5223,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 323,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.5223,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 324,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4919,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 325,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4919,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 326,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4854,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 327,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4854,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 328,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4718,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 329,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4684,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 330,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4571,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 331,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4638,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 332,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4556,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 333,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4531,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 334,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4361,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 335,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4315,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 336,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.433,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 337,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4073,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 338,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.3821,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 339,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.3939,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 340,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.3847,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 341,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.3626,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 342,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.3683,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 343,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.3802,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 344,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4112,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 345,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.416,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 346,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4167,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 347,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4177,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 348,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4276,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 349,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.446,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 350,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4563,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 351,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4433,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 352,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4328,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 353,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4328,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 354,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4009,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 355,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4261,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 356,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4135,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 357,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.432,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 358,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4541,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    },
+    {
+      "step": 359,
+      "signature": "unclassified_anomaly",
+      "severity": "info",
+      "metrics": {
+        "tool_entropy": {
+          "value": 0.0,
+          "z_score": 3.13,
+          "expected_mean": 0.8744,
+          "expected_std": 0.2796,
+          "direction": "low"
+        },
+        "kl_divergence": {
+          "value": 0.4461,
+          "z_score": 3.5,
+          "expected_mean": 0.0,
+          "expected_std": 0.0,
+          "direction": "high"
+        }
+      }
+    }
+  ],
+  "metrics_timeline": [
+    {
+      "step": 0,
+      "action_entropy": 0.0,
+      "action_mi": 0.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.0,
+      "tool_entropy": 0.0,
+      "read_entropy": 0.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 1,
+      "action_entropy": 1.0,
+      "action_mi": 0.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.0,
+      "tool_entropy": 0.0,
+      "read_entropy": 0.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 2,
+      "action_entropy": 1.585,
+      "action_mi": 1.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.585,
+      "tool_entropy": 0.0,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 3,
+      "action_entropy": 1.5,
+      "action_mi": 0.9183,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.8074,
+      "tool_entropy": 0.0,
+      "read_entropy": 0.9183,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 4,
+      "action_entropy": 1.9219,
+      "action_mi": 1.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 1.5,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 5,
+      "action_entropy": 2.2516,
+      "action_mi": 1.5219,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.4594,
+      "tool_entropy": 0.0,
+      "read_entropy": 1.9219,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 6,
+      "action_entropy": 2.1281,
+      "action_mi": 1.4591,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.0,
+      "tool_entropy": 0.0,
+      "read_entropy": 1.7925,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 7,
+      "action_entropy": 2.1556,
+      "action_mi": 1.1631,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.7004,
+      "tool_entropy": 0.0,
+      "read_entropy": 1.8424,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 8,
+      "action_entropy": 2.1972,
+      "action_mi": 1.3113,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.8074,
+      "tool_entropy": 0.0,
+      "read_entropy": 1.8424,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 9,
+      "action_entropy": 2.4464,
+      "action_mi": 1.4466,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.0,
+      "tool_entropy": 0.9183,
+      "read_entropy": 1.8424,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 10,
+      "action_entropy": 2.4817,
+      "action_mi": 1.571,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.0875,
+      "tool_entropy": 1.0,
+      "read_entropy": 1.8424,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 11,
+      "action_entropy": 2.4591,
+      "action_mi": 1.504,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.585,
+      "tool_entropy": 0.971,
+      "read_entropy": 1.8424,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 12,
+      "action_entropy": 2.4493,
+      "action_mi": 1.5,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.663,
+      "tool_entropy": 1.0,
+      "read_entropy": 1.8424,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 13,
+      "action_entropy": 2.4138,
+      "action_mi": 1.5059,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.3219,
+      "tool_entropy": 0.9852,
+      "read_entropy": 1.8424,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 14,
+      "action_entropy": 2.6062,
+      "action_mi": 1.5378,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.4594,
+      "tool_entropy": 0.9852,
+      "read_entropy": 2.1556,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 15,
+      "action_entropy": 2.5778,
+      "action_mi": 1.5723,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.5236,
+      "tool_entropy": 0.9852,
+      "read_entropy": 2.0588,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 16,
+      "action_entropy": 2.6313,
+      "action_mi": 1.4835,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.585,
+      "tool_entropy": 0.9852,
+      "read_entropy": 2.1219,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 17,
+      "action_entropy": 2.6835,
+      "action_mi": 1.4837,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.6439,
+      "tool_entropy": 0.9852,
+      "read_entropy": 2.1867,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 18,
+      "action_entropy": 2.8398,
+      "action_mi": 1.5997,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.7549,
+      "tool_entropy": 0.9852,
+      "read_entropy": 2.4183,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 19,
+      "action_entropy": 2.9842,
+      "action_mi": 1.8129,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.858,
+      "tool_entropy": 0.9852,
+      "read_entropy": 2.6235,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 20,
+      "action_entropy": 3.023,
+      "action_mi": 1.9087,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.9069,
+      "tool_entropy": 0.9852,
+      "read_entropy": 2.6645,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 21,
+      "action_entropy": 3.0272,
+      "action_mi": 1.8676,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.3692,
+      "tool_entropy": 0.9852,
+      "read_entropy": 2.6566,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 22,
+      "action_entropy": 3.0125,
+      "action_mi": 1.7767,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.0,
+      "tool_entropy": 1.0,
+      "read_entropy": 2.6566,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 23,
+      "action_entropy": 3.0016,
+      "action_mi": 1.6753,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.0444,
+      "tool_entropy": 1.0,
+      "read_entropy": 2.625,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 24,
+      "action_entropy": 2.9795,
+      "action_mi": 1.585,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.7655,
+      "tool_entropy": 0.9911,
+      "read_entropy": 2.625,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 25,
+      "action_entropy": 3.1001,
+      "action_mi": 1.6195,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.9911,
+      "read_entropy": 2.7933,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 26,
+      "action_entropy": 3.2138,
+      "action_mi": 1.7924,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.2479,
+      "tool_entropy": 0.9911,
+      "read_entropy": 2.9477,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 27,
+      "action_entropy": 3.182,
+      "action_mi": 1.8208,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.7004,
+      "tool_entropy": 0.971,
+      "read_entropy": 2.9477,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 28,
+      "action_entropy": 3.1459,
+      "action_mi": 1.6995,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.5146,
+      "tool_entropy": 0.9457,
+      "read_entropy": 2.9477,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 29,
+      "action_entropy": 3.1069,
+      "action_mi": 1.6406,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.3576,
+      "tool_entropy": 0.9183,
+      "read_entropy": 2.9477,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 30,
+      "action_entropy": 3.1234,
+      "action_mi": 1.6267,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.8074,
+      "tool_entropy": 0.9183,
+      "read_entropy": 2.945,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 31,
+      "action_entropy": 3.125,
+      "action_mi": 1.5862,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.4263,
+      "tool_entropy": 0.9183,
+      "read_entropy": 2.9219,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 32,
+      "action_entropy": 3.1427,
+      "action_mi": 1.5498,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.8745,
+      "tool_entropy": 0.9183,
+      "read_entropy": 2.9278,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 33,
+      "action_entropy": 3.1085,
+      "action_mi": 1.4835,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.3219,
+      "tool_entropy": 0.8905,
+      "read_entropy": 2.9278,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 34,
+      "action_entropy": 3.2069,
+      "action_mi": 1.4981,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.5546,
+      "tool_entropy": 0.8905,
+      "read_entropy": 3.0615,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 35,
+      "action_entropy": 3.1706,
+      "action_mi": 1.513,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.263,
+      "tool_entropy": 0.8631,
+      "read_entropy": 3.0615,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 36,
+      "action_entropy": 3.2642,
+      "action_mi": 1.5239,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.6439,
+      "tool_entropy": 0.8631,
+      "read_entropy": 3.0615,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 37,
+      "action_entropy": 3.3539,
+      "action_mi": 1.6619,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.7004,
+      "tool_entropy": 0.8631,
+      "read_entropy": 3.0615,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 38,
+      "action_entropy": 3.4399,
+      "action_mi": 1.7938,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.7549,
+      "tool_entropy": 0.8631,
+      "read_entropy": 3.0615,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 39,
+      "action_entropy": 3.4726,
+      "action_mi": 1.8685,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.7814,
+      "tool_entropy": 0.8631,
+      "read_entropy": 3.0615,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 40,
+      "action_entropy": 3.5045,
+      "action_mi": 1.8905,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.8074,
+      "tool_entropy": 0.8631,
+      "read_entropy": 3.0615,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 41,
+      "action_entropy": 3.5061,
+      "action_mi": 1.8819,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.8329,
+      "tool_entropy": 0.8631,
+      "read_entropy": 3.0453,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 42,
+      "action_entropy": 3.5,
+      "action_mi": 1.8362,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.5361,
+      "tool_entropy": 0.9183,
+      "read_entropy": 3.0453,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 43,
+      "action_entropy": 3.5143,
+      "action_mi": 1.8048,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.2977,
+      "tool_entropy": 0.9183,
+      "read_entropy": 3.0453,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 44,
+      "action_entropy": 3.5098,
+      "action_mi": 1.8211,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.585,
+      "tool_entropy": 0.9183,
+      "read_entropy": 3.0179,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 45,
+      "action_entropy": 3.5247,
+      "action_mi": 1.7929,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.3458,
+      "tool_entropy": 0.9183,
+      "read_entropy": 3.0179,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 46,
+      "action_entropy": 3.5982,
+      "action_mi": 1.8452,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.9773,
+      "tool_entropy": 0.9183,
+      "read_entropy": 3.0179,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 47,
+      "action_entropy": 3.5942,
+      "action_mi": 1.8776,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.6781,
+      "tool_entropy": 0.9183,
+      "read_entropy": 2.9951,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 48,
+      "action_entropy": 3.6645,
+      "action_mi": 1.9094,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.0444,
+      "tool_entropy": 0.9183,
+      "read_entropy": 2.9951,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 49,
+      "action_entropy": 3.6927,
+      "action_mi": 1.9734,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.0661,
+      "tool_entropy": 0.9183,
+      "read_entropy": 2.9951,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 50,
+      "action_entropy": 3.7085,
+      "action_mi": 1.9573,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.4811,
+      "tool_entropy": 0.9183,
+      "read_entropy": 2.9651,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 51,
+      "action_entropy": 3.7485,
+      "action_mi": 2.0131,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.0875,
+      "tool_entropy": 0.9183,
+      "read_entropy": 2.9651,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 52,
+      "action_entropy": 3.7865,
+      "action_mi": 2.0911,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.0875,
+      "tool_entropy": 0.9183,
+      "read_entropy": 2.9651,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 53,
+      "action_entropy": 3.8187,
+      "action_mi": 2.1613,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.0875,
+      "tool_entropy": 0.9183,
+      "read_entropy": 3.0097,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 54,
+      "action_entropy": 3.8836,
+      "action_mi": 2.2584,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1085,
+      "tool_entropy": 0.9183,
+      "read_entropy": 3.0097,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 55,
+      "action_entropy": 3.9158,
+      "action_mi": 2.3555,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1085,
+      "tool_entropy": 0.9183,
+      "read_entropy": 3.0531,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 56,
+      "action_entropy": 3.9256,
+      "action_mi": 2.3975,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.5236,
+      "tool_entropy": 0.9183,
+      "read_entropy": 3.0531,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 57,
+      "action_entropy": 3.8856,
+      "action_mi": 2.3673,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1085,
+      "tool_entropy": 0.9183,
+      "read_entropy": 3.0952,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 58,
+      "action_entropy": 3.9762,
+      "action_mi": 2.4179,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1293,
+      "tool_entropy": 0.9183,
+      "read_entropy": 3.0952,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 59,
+      "action_entropy": 3.9762,
+      "action_mi": 2.4685,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.8074,
+      "tool_entropy": 0.9544,
+      "read_entropy": 3.0952,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 60,
+      "action_entropy": 3.9762,
+      "action_mi": 2.4685,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.8074,
+      "tool_entropy": 0.9774,
+      "read_entropy": 3.0952,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 61,
+      "action_entropy": 3.9982,
+      "action_mi": 2.4506,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1293,
+      "tool_entropy": 0.9774,
+      "read_entropy": 3.0649,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 62,
+      "action_entropy": 4.0055,
+      "action_mi": 2.4799,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1293,
+      "tool_entropy": 0.9774,
+      "read_entropy": 3.0649,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 63,
+      "action_entropy": 4.0235,
+      "action_mi": 2.5051,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1293,
+      "tool_entropy": 0.9774,
+      "read_entropy": 3.0649,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 64,
+      "action_entropy": 4.0484,
+      "action_mi": 2.508,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1293,
+      "tool_entropy": 0.9774,
+      "read_entropy": 3.1071,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 65,
+      "action_entropy": 4.0411,
+      "action_mi": 2.5256,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.8074,
+      "tool_entropy": 0.9911,
+      "read_entropy": 3.1071,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 66,
+      "action_entropy": 4.0338,
+      "action_mi": 2.511,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.8074,
+      "tool_entropy": 0.9911,
+      "read_entropy": 3.1071,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 67,
+      "action_entropy": 4.0109,
+      "action_mi": 2.4808,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.5443,
+      "tool_entropy": 0.998,
+      "read_entropy": 3.1071,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 68,
+      "action_entropy": 4.0109,
+      "action_mi": 2.4579,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1293,
+      "tool_entropy": 0.998,
+      "read_entropy": 3.1481,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 69,
+      "action_entropy": 3.986,
+      "action_mi": 2.433,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1293,
+      "tool_entropy": 0.998,
+      "read_entropy": 3.1168,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 70,
+      "action_entropy": 3.9689,
+      "action_mi": 2.431,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.8074,
+      "tool_entropy": 0.998,
+      "read_entropy": 3.1168,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 71,
+      "action_entropy": 3.9309,
+      "action_mi": 2.4159,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.5443,
+      "tool_entropy": 0.998,
+      "read_entropy": 3.1168,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 72,
+      "action_entropy": 3.9309,
+      "action_mi": 2.3779,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.5443,
+      "tool_entropy": 0.998,
+      "read_entropy": 3.1168,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 73,
+      "action_entropy": 3.8529,
+      "action_mi": 2.2999,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.5443,
+      "tool_entropy": 1.0,
+      "read_entropy": 3.1168,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 74,
+      "action_entropy": 3.9309,
+      "action_mi": 2.2999,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1497,
+      "tool_entropy": 1.0,
+      "read_entropy": 3.1168,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 75,
+      "action_entropy": 3.9309,
+      "action_mi": 2.3779,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1497,
+      "tool_entropy": 1.0,
+      "read_entropy": 3.1356,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 76,
+      "action_entropy": 3.9309,
+      "action_mi": 2.3779,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1497,
+      "tool_entropy": 1.0,
+      "read_entropy": 3.1356,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 77,
+      "action_entropy": 3.9382,
+      "action_mi": 2.3852,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1497,
+      "tool_entropy": 1.0,
+      "read_entropy": 3.1217,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 78,
+      "action_entropy": 3.9202,
+      "action_mi": 2.3746,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.3424,
+      "tool_entropy": 0.9984,
+      "read_entropy": 3.1217,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 79,
+      "action_entropy": 3.9202,
+      "action_mi": 2.3566,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.5648,
+      "tool_entropy": 0.9984,
+      "read_entropy": 3.1217,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 80,
+      "action_entropy": 3.8953,
+      "action_mi": 2.3317,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1497,
+      "tool_entropy": 0.9984,
+      "read_entropy": 3.1217,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 81,
+      "action_entropy": 3.8953,
+      "action_mi": 2.3068,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.9984,
+      "read_entropy": 3.1217,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 82,
+      "action_entropy": 3.8733,
+      "action_mi": 2.2848,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.1699,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1217,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 83,
+      "action_entropy": 3.8733,
+      "action_mi": 2.2627,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1416,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 84,
+      "action_entropy": 3.8411,
+      "action_mi": 2.2305,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.848,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1416,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 85,
+      "action_entropy": 3.7762,
+      "action_mi": 2.1334,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1416,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 86,
+      "action_entropy": 3.7762,
+      "action_mi": 2.0685,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.585,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1416,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 87,
+      "action_entropy": 3.786,
+      "action_mi": 2.0783,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1416,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 88,
+      "action_entropy": 3.8411,
+      "action_mi": 2.1432,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1384,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 89,
+      "action_entropy": 3.8562,
+      "action_mi": 2.2134,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1384,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 90,
+      "action_entropy": 3.8455,
+      "action_mi": 2.2179,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.3626,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1384,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 91,
+      "action_entropy": 3.8137,
+      "action_mi": 2.1753,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.1699,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1384,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 92,
+      "action_entropy": 3.8606,
+      "action_mi": 2.1504,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1589,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 93,
+      "action_entropy": 3.8349,
+      "action_mi": 2.1717,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.0,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1589,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 94,
+      "action_entropy": 3.8349,
+      "action_mi": 2.146,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1589,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 95,
+      "action_entropy": 3.7811,
+      "action_mi": 2.0922,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.848,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1589,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 96,
+      "action_entropy": 3.7811,
+      "action_mi": 2.0384,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1589,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 97,
+      "action_entropy": 3.791,
+      "action_mi": 2.0482,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1589,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 98,
+      "action_entropy": 3.8139,
+      "action_mi": 2.081,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.994,
+      "read_entropy": 3.1667,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 99,
+      "action_entropy": 3.782,
+      "action_mi": 2.112,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.1699,
+      "tool_entropy": 0.9877,
+      "read_entropy": 3.1667,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.0
+    },
+    {
+      "step": 100,
+      "action_entropy": 3.7404,
+      "action_mi": 2.0785,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.7105,
+      "tool_entropy": 0.9877,
+      "read_entropy": 3.1667,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.1828
+    },
+    {
+      "step": 101,
+      "action_entropy": 3.782,
+      "action_mi": 2.1185,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.9877,
+      "read_entropy": 3.1667,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.2007
+    },
+    {
+      "step": 102,
+      "action_entropy": 3.8142,
+      "action_mi": 2.1923,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.9877,
+      "read_entropy": 3.1667,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.2147
+    },
+    {
+      "step": 103,
+      "action_entropy": 3.8142,
+      "action_mi": 2.2245,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.9877,
+      "read_entropy": 3.1667,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.2538
+    },
+    {
+      "step": 104,
+      "action_entropy": 3.8142,
+      "action_mi": 2.2245,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.9877,
+      "read_entropy": 3.1667,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3096
+    },
+    {
+      "step": 105,
+      "action_entropy": 3.8142,
+      "action_mi": 2.2245,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.9877,
+      "read_entropy": 3.1873,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3386
+    },
+    {
+      "step": 106,
+      "action_entropy": 3.824,
+      "action_mi": 2.2343,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.9877,
+      "read_entropy": 3.1873,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3644
+    },
+    {
+      "step": 107,
+      "action_entropy": 3.7591,
+      "action_mi": 2.1792,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.9877,
+      "read_entropy": 3.1873,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3869
+    },
+    {
+      "step": 108,
+      "action_entropy": 3.7085,
+      "action_mi": 2.0637,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.0,
+      "tool_entropy": 0.9799,
+      "read_entropy": 3.1873,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3341
+    },
+    {
+      "step": 109,
+      "action_entropy": 3.744,
+      "action_mi": 2.0886,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.9799,
+      "read_entropy": 3.1959,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3762
+    },
+    {
+      "step": 110,
+      "action_entropy": 3.744,
+      "action_mi": 2.1241,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.1699,
+      "tool_entropy": 0.971,
+      "read_entropy": 3.1959,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.347
+    },
+    {
+      "step": 111,
+      "action_entropy": 3.744,
+      "action_mi": 2.1241,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.971,
+      "read_entropy": 3.1959,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3786
+    },
+    {
+      "step": 112,
+      "action_entropy": 3.7085,
+      "action_mi": 2.0886,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.0,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.1959,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3626
+    },
+    {
+      "step": 113,
+      "action_entropy": 3.7636,
+      "action_mi": 2.0682,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.2165,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3734
+    },
+    {
+      "step": 114,
+      "action_entropy": 3.7787,
+      "action_mi": 2.1384,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.2256,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.403
+    },
+    {
+      "step": 115,
+      "action_entropy": 3.7726,
+      "action_mi": 2.1074,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.7105,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.2256,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3807
+    },
+    {
+      "step": 116,
+      "action_entropy": 3.7726,
+      "action_mi": 2.1013,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.235,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3766
+    },
+    {
+      "step": 117,
+      "action_entropy": 3.8045,
+      "action_mi": 2.1332,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.2367,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3907
+    },
+    {
+      "step": 118,
+      "action_entropy": 3.8045,
+      "action_mi": 2.1251,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.2367,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4276
+    },
+    {
+      "step": 119,
+      "action_entropy": 3.7645,
+      "action_mi": 2.0851,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.2367,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.43
+    },
+    {
+      "step": 120,
+      "action_entropy": 3.7051,
+      "action_mi": 2.0257,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.585,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.2367,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4168
+    },
+    {
+      "step": 121,
+      "action_entropy": 3.65,
+      "action_mi": 1.9113,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.2389,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4461
+    },
+    {
+      "step": 122,
+      "action_entropy": 3.5949,
+      "action_mi": 1.8011,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.2418,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4734
+    },
+    {
+      "step": 123,
+      "action_entropy": 3.6129,
+      "action_mi": 1.764,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.2391,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5066
+    },
+    {
+      "step": 124,
+      "action_entropy": 3.6031,
+      "action_mi": 1.8121,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.2371,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5379
+    },
+    {
+      "step": 125,
+      "action_entropy": 3.5309,
+      "action_mi": 1.7701,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.848,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.231,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5732
+    },
+    {
+      "step": 126,
+      "action_entropy": 3.558,
+      "action_mi": 1.7801,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.848,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.1881,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.6065
+    },
+    {
+      "step": 127,
+      "action_entropy": 3.48,
+      "action_mi": 1.7843,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.585,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.1881,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.6426
+    },
+    {
+      "step": 128,
+      "action_entropy": 3.48,
+      "action_mi": 1.7712,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.585,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.184,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.6768
+    },
+    {
+      "step": 129,
+      "action_entropy": 3.4939,
+      "action_mi": 1.81,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.3626,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.1583,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.7131
+    },
+    {
+      "step": 130,
+      "action_entropy": 3.5048,
+      "action_mi": 1.867,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.3626,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.1457,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.7476
+    },
+    {
+      "step": 131,
+      "action_entropy": 3.4579,
+      "action_mi": 1.9032,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.1299,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.7835
+    },
+    {
+      "step": 132,
+      "action_entropy": 3.4431,
+      "action_mi": 1.8795,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.0361,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.8177
+    },
+    {
+      "step": 133,
+      "action_entropy": 3.4076,
+      "action_mi": 1.9072,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.0,
+      "tool_entropy": 0.9612,
+      "read_entropy": 3.0116,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.8531
+    },
+    {
+      "step": 134,
+      "action_entropy": 3.4076,
+      "action_mi": 1.9545,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.0,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.9871,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.8868
+    },
+    {
+      "step": 135,
+      "action_entropy": 3.3689,
+      "action_mi": 1.9987,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.848,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.96,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.9214
+    },
+    {
+      "step": 136,
+      "action_entropy": 3.3621,
+      "action_mi": 2.0401,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.848,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.9158,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.9544
+    },
+    {
+      "step": 137,
+      "action_entropy": 3.3303,
+      "action_mi": 2.0485,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.7105,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.8692,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.988
+    },
+    {
+      "step": 138,
+      "action_entropy": 3.2336,
+      "action_mi": 2.0106,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.7105,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.8692,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.0202
+    },
+    {
+      "step": 139,
+      "action_entropy": 3.1743,
+      "action_mi": 1.9452,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.585,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.8323,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.0529
+    },
+    {
+      "step": 140,
+      "action_entropy": 3.1578,
+      "action_mi": 1.9232,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.585,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.7684,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.0841
+    },
+    {
+      "step": 141,
+      "action_entropy": 3.1341,
+      "action_mi": 1.9768,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.4695,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.6644,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.1158
+    },
+    {
+      "step": 142,
+      "action_entropy": 3.0723,
+      "action_mi": 1.988,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.4695,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.6644,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.1462
+    },
+    {
+      "step": 143,
+      "action_entropy": 3.0406,
+      "action_mi": 1.9912,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.3626,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.6306,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.1768
+    },
+    {
+      "step": 144,
+      "action_entropy": 2.9366,
+      "action_mi": 1.9548,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.3626,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.5797,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.2063
+    },
+    {
+      "step": 145,
+      "action_entropy": 2.8955,
+      "action_mi": 1.9091,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.263,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.5118,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.2359
+    },
+    {
+      "step": 146,
+      "action_entropy": 2.8295,
+      "action_mi": 1.9037,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.263,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.4688,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.2644
+    },
+    {
+      "step": 147,
+      "action_entropy": 2.7767,
+      "action_mi": 1.8866,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.4239,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.2931
+    },
+    {
+      "step": 148,
+      "action_entropy": 2.6688,
+      "action_mi": 1.8298,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.3693,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.3206
+    },
+    {
+      "step": 149,
+      "action_entropy": 2.6239,
+      "action_mi": 1.7809,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.0825,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.2978,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.3483
+    },
+    {
+      "step": 150,
+      "action_entropy": 2.5693,
+      "action_mi": 1.7875,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.0825,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.2513,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.4067
+    },
+    {
+      "step": 151,
+      "action_entropy": 2.4978,
+      "action_mi": 1.7674,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.0,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.1934,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.4572
+    },
+    {
+      "step": 152,
+      "action_entropy": 2.4264,
+      "action_mi": 1.7325,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.0,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.1452,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.5076
+    },
+    {
+      "step": 153,
+      "action_entropy": 2.3134,
+      "action_mi": 1.6559,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.922,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.0707,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.5594
+    },
+    {
+      "step": 154,
+      "action_entropy": 2.2403,
+      "action_mi": 1.5796,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.922,
+      "tool_entropy": 0.9612,
+      "read_entropy": 2.0707,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.5926
+    },
+    {
+      "step": 155,
+      "action_entropy": 2.2403,
+      "action_mi": 1.6163,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.922,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.9947,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.5926
+    },
+    {
+      "step": 156,
+      "action_entropy": 2.1258,
+      "action_mi": 1.6132,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.848,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.9352,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.6556
+    },
+    {
+      "step": 157,
+      "action_entropy": 2.0112,
+      "action_mi": 1.4955,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.848,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.9352,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.7186
+    },
+    {
+      "step": 158,
+      "action_entropy": 1.9503,
+      "action_mi": 1.4331,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.7776,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.8192,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.7859
+    },
+    {
+      "step": 159,
+      "action_entropy": 1.9503,
+      "action_mi": 1.4852,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.848,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.7018,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.7859
+    },
+    {
+      "step": 160,
+      "action_entropy": 1.8729,
+      "action_mi": 1.5224,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.7105,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.5845,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.861
+    },
+    {
+      "step": 161,
+      "action_entropy": 1.7569,
+      "action_mi": 1.4436,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.7776,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.5209,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.9066
+    },
+    {
+      "step": 162,
+      "action_entropy": 1.6382,
+      "action_mi": 1.3249,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.6464,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.4022,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.9929
+    },
+    {
+      "step": 163,
+      "action_entropy": 1.6396,
+      "action_mi": 1.3235,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.7105,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.3222,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.9921
+    },
+    {
+      "step": 164,
+      "action_entropy": 1.6396,
+      "action_mi": 1.4422,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.7105,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.2023,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.9921
+    },
+    {
+      "step": 165,
+      "action_entropy": 1.5609,
+      "action_mi": 1.4809,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.6464,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.2023,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.0631
+    },
+    {
+      "step": 166,
+      "action_entropy": 1.4822,
+      "action_mi": 1.4422,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.6464,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.2011,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.1139
+    },
+    {
+      "step": 167,
+      "action_entropy": 1.3622,
+      "action_mi": 1.3622,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.585,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.2023,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.1761
+    },
+    {
+      "step": 168,
+      "action_entropy": 1.2423,
+      "action_mi": 1.2423,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.585,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.2023,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.2243
+    },
+    {
+      "step": 169,
+      "action_entropy": 1.1211,
+      "action_mi": 1.1211,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.5261,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.1211,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.2814
+    },
+    {
+      "step": 170,
+      "action_entropy": 1.0,
+      "action_mi": 1.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.5261,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.3646
+    },
+    {
+      "step": 171,
+      "action_entropy": 1.0,
+      "action_mi": 1.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.5261,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.3646
+    },
+    {
+      "step": 172,
+      "action_entropy": 1.0,
+      "action_mi": 1.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.5261,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.3646
+    },
+    {
+      "step": 173,
+      "action_entropy": 1.0,
+      "action_mi": 1.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.5261,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.3646
+    },
+    {
+      "step": 174,
+      "action_entropy": 1.0,
+      "action_mi": 1.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.5261,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.3646
+    },
+    {
+      "step": 175,
+      "action_entropy": 1.0,
+      "action_mi": 1.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.5261,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.3646
+    },
+    {
+      "step": 176,
+      "action_entropy": 1.0,
+      "action_mi": 1.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.5261,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.3646
+    },
+    {
+      "step": 177,
+      "action_entropy": 1.0,
+      "action_mi": 1.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.5261,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.3646
+    },
+    {
+      "step": 178,
+      "action_entropy": 1.0,
+      "action_mi": 1.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.5261,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.3646
+    },
+    {
+      "step": 179,
+      "action_entropy": 1.0,
+      "action_mi": 1.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.5261,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.3646
+    },
+    {
+      "step": 180,
+      "action_entropy": 1.0,
+      "action_mi": 1.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.5261,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.3646
+    },
+    {
+      "step": 181,
+      "action_entropy": 1.0,
+      "action_mi": 1.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.5261,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.3646
+    },
+    {
+      "step": 182,
+      "action_entropy": 1.1211,
+      "action_mi": 1.0,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.3156
+    },
+    {
+      "step": 183,
+      "action_entropy": 1.2423,
+      "action_mi": 1.1211,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.2666
+    },
+    {
+      "step": 184,
+      "action_entropy": 1.3222,
+      "action_mi": 1.2023,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.2288
+    },
+    {
+      "step": 185,
+      "action_entropy": 1.4022,
+      "action_mi": 1.2822,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.0,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.1911
+    },
+    {
+      "step": 186,
+      "action_entropy": 1.5209,
+      "action_mi": 1.3622,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.1211,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.1356
+    },
+    {
+      "step": 187,
+      "action_entropy": 1.6396,
+      "action_mi": 1.4809,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.2423,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.0743
+    },
+    {
+      "step": 188,
+      "action_entropy": 1.7569,
+      "action_mi": 1.5996,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.3622,
+      "memory_entropy": 0.0,
+      "kl_divergence": 2.0139
+    },
+    {
+      "step": 189,
+      "action_entropy": 1.8343,
+      "action_mi": 1.6769,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.9612,
+      "read_entropy": 1.4422,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.9639
+    },
+    {
+      "step": 190,
+      "action_entropy": 1.9503,
+      "action_mi": 1.7543,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.951,
+      "read_entropy": 1.4422,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.8793
+    },
+    {
+      "step": 191,
+      "action_entropy": 2.0112,
+      "action_mi": 1.8152,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.951,
+      "read_entropy": 1.4422,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.851
+    },
+    {
+      "step": 192,
+      "action_entropy": 2.1258,
+      "action_mi": 1.8761,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.951,
+      "read_entropy": 1.4422,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.7722
+    },
+    {
+      "step": 193,
+      "action_entropy": 2.1754,
+      "action_mi": 1.9258,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.951,
+      "read_entropy": 1.4422,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.7499
+    },
+    {
+      "step": 194,
+      "action_entropy": 2.2485,
+      "action_mi": 1.9354,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.9403,
+      "read_entropy": 1.4422,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.6778
+    },
+    {
+      "step": 195,
+      "action_entropy": 2.3615,
+      "action_mi": 2.0085,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.9403,
+      "read_entropy": 1.4422,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.609
+    },
+    {
+      "step": 196,
+      "action_entropy": 2.3599,
+      "action_mi": 2.0085,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.922,
+      "tool_entropy": 0.9403,
+      "read_entropy": 1.4409,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.6101
+    },
+    {
+      "step": 197,
+      "action_entropy": 2.3599,
+      "action_mi": 1.8954,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.922,
+      "tool_entropy": 0.9403,
+      "read_entropy": 1.4409,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.6101
+    },
+    {
+      "step": 198,
+      "action_entropy": 2.4296,
+      "action_mi": 1.8554,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.9403,
+      "read_entropy": 1.4409,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.5449
+    },
+    {
+      "step": 199,
+      "action_entropy": 2.4876,
+      "action_mi": 1.8734,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.9294,
+      "read_entropy": 1.4409,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.4796
+    },
+    {
+      "step": 200,
+      "action_entropy": 2.4825,
+      "action_mi": 1.8183,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.922,
+      "tool_entropy": 0.9294,
+      "read_entropy": 1.4372,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.4829
+    },
+    {
+      "step": 201,
+      "action_entropy": 2.5955,
+      "action_mi": 1.8183,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.9294,
+      "read_entropy": 1.5583,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.4091
+    },
+    {
+      "step": 202,
+      "action_entropy": 2.7015,
+      "action_mi": 1.9313,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.9294,
+      "read_entropy": 1.5583,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.345
+    },
+    {
+      "step": 203,
+      "action_entropy": 2.7579,
+      "action_mi": 1.9877,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.9294,
+      "read_entropy": 1.5583,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.2855
+    },
+    {
+      "step": 204,
+      "action_entropy": 2.8618,
+      "action_mi": 2.044,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.9294,
+      "read_entropy": 1.5583,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.2397
+    },
+    {
+      "step": 205,
+      "action_entropy": 2.9715,
+      "action_mi": 2.1537,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.9294,
+      "read_entropy": 1.6743,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.1762
+    },
+    {
+      "step": 206,
+      "action_entropy": 2.9635,
+      "action_mi": 2.1537,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.0825,
+      "tool_entropy": 0.9294,
+      "read_entropy": 1.6743,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.1814
+    },
+    {
+      "step": 207,
+      "action_entropy": 3.0333,
+      "action_mi": 2.1137,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.9294,
+      "read_entropy": 1.7489,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.1283
+    },
+    {
+      "step": 208,
+      "action_entropy": 3.0677,
+      "action_mi": 2.1186,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.9183,
+      "read_entropy": 1.7489,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.077
+    },
+    {
+      "step": 209,
+      "action_entropy": 3.0677,
+      "action_mi": 2.0937,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.1699,
+      "tool_entropy": 0.9183,
+      "read_entropy": 1.7489,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.077
+    },
+    {
+      "step": 210,
+      "action_entropy": 3.0995,
+      "action_mi": 2.0688,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.9183,
+      "read_entropy": 1.7489,
+      "memory_entropy": 0.0,
+      "kl_divergence": 1.0321
+    },
+    {
+      "step": 211,
+      "action_entropy": 3.1352,
+      "action_mi": 2.0396,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.848,
+      "tool_entropy": 0.9183,
+      "read_entropy": 1.7489,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.984
+    },
+    {
+      "step": 212,
+      "action_entropy": 3.189,
+      "action_mi": 2.0753,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.9183,
+      "read_entropy": 1.7489,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.9551
+    },
+    {
+      "step": 213,
+      "action_entropy": 3.2399,
+      "action_mi": 2.0862,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.9183,
+      "read_entropy": 1.7489,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.9253
+    },
+    {
+      "step": 214,
+      "action_entropy": 3.2583,
+      "action_mi": 2.065,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.848,
+      "tool_entropy": 0.9072,
+      "read_entropy": 1.7489,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.8834
+    },
+    {
+      "step": 215,
+      "action_entropy": 3.2974,
+      "action_mi": 2.0318,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.9072,
+      "read_entropy": 1.7489,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.8599
+    },
+    {
+      "step": 216,
+      "action_entropy": 3.3292,
+      "action_mi": 2.0158,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.9072,
+      "read_entropy": 1.7489,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.8502
+    },
+    {
+      "step": 217,
+      "action_entropy": 3.3529,
+      "action_mi": 1.9844,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.585,
+      "tool_entropy": 0.896,
+      "read_entropy": 1.7489,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.8047
+    },
+    {
+      "step": 218,
+      "action_entropy": 3.3958,
+      "action_mi": 1.9681,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.896,
+      "read_entropy": 1.7489,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.7656
+    },
+    {
+      "step": 219,
+      "action_entropy": 3.4229,
+      "action_mi": 1.9552,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.848,
+      "tool_entropy": 0.896,
+      "read_entropy": 1.7489,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.7491
+    },
+    {
+      "step": 220,
+      "action_entropy": 3.4229,
+      "action_mi": 1.9443,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.585,
+      "tool_entropy": 0.896,
+      "read_entropy": 1.7489,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.7491
+    },
+    {
+      "step": 221,
+      "action_entropy": 3.4416,
+      "action_mi": 1.885,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.585,
+      "tool_entropy": 0.896,
+      "read_entropy": 1.7489,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.7116
+    },
+    {
+      "step": 222,
+      "action_entropy": 3.431,
+      "action_mi": 1.8609,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.3626,
+      "tool_entropy": 0.896,
+      "read_entropy": 1.7489,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.6918
+    },
+    {
+      "step": 223,
+      "action_entropy": 3.4848,
+      "action_mi": 1.8318,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.896,
+      "read_entropy": 1.8219,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.6572
+    },
+    {
+      "step": 224,
+      "action_entropy": 3.5497,
+      "action_mi": 1.8856,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.896,
+      "read_entropy": 1.8219,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.6348
+    },
+    {
+      "step": 225,
+      "action_entropy": 3.5851,
+      "action_mi": 1.9211,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.896,
+      "read_entropy": 1.8219,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5978
+    },
+    {
+      "step": 226,
+      "action_entropy": 3.6002,
+      "action_mi": 1.9166,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.896,
+      "read_entropy": 1.8219,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.591
+    },
+    {
+      "step": 227,
+      "action_entropy": 3.6872,
+      "action_mi": 1.9636,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.896,
+      "read_entropy": 1.9418,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5389
+    },
+    {
+      "step": 228,
+      "action_entropy": 3.7272,
+      "action_mi": 2.0506,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.896,
+      "read_entropy": 2.0533,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5182
+    },
+    {
+      "step": 229,
+      "action_entropy": 3.7379,
+      "action_mi": 2.0612,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.848,
+      "tool_entropy": 0.896,
+      "read_entropy": 2.0533,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.52
+    },
+    {
+      "step": 230,
+      "action_entropy": 3.6598,
+      "action_mi": 1.9938,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.585,
+      "tool_entropy": 0.896,
+      "read_entropy": 2.0533,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5579
+    },
+    {
+      "step": 231,
+      "action_entropy": 3.7379,
+      "action_mi": 1.9938,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.896,
+      "read_entropy": 2.0533,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5179
+    },
+    {
+      "step": 232,
+      "action_entropy": 3.751,
+      "action_mi": 2.0849,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.896,
+      "read_entropy": 2.0533,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4854
+    },
+    {
+      "step": 233,
+      "action_entropy": 3.766,
+      "action_mi": 2.0731,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.896,
+      "read_entropy": 2.0533,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4603
+    },
+    {
+      "step": 234,
+      "action_entropy": 3.8382,
+      "action_mi": 2.1604,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.896,
+      "read_entropy": 2.0533,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4258
+    },
+    {
+      "step": 235,
+      "action_entropy": 3.806,
+      "action_mi": 2.2004,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.848,
+      "tool_entropy": 0.896,
+      "read_entropy": 2.0533,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4417
+    },
+    {
+      "step": 236,
+      "action_entropy": 3.766,
+      "action_mi": 2.1282,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.896,
+      "read_entropy": 2.132,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4352
+    },
+    {
+      "step": 237,
+      "action_entropy": 3.766,
+      "action_mi": 2.1282,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.896,
+      "read_entropy": 2.2017,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4307
+    },
+    {
+      "step": 238,
+      "action_entropy": 3.751,
+      "action_mi": 2.1131,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.896,
+      "read_entropy": 2.264,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4294
+    },
+    {
+      "step": 239,
+      "action_entropy": 3.711,
+      "action_mi": 2.058,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.896,
+      "read_entropy": 2.264,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4538
+    },
+    {
+      "step": 240,
+      "action_entropy": 3.711,
+      "action_mi": 2.058,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.585,
+      "tool_entropy": 0.885,
+      "read_entropy": 2.264,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4538
+    },
+    {
+      "step": 241,
+      "action_entropy": 3.728,
+      "action_mi": 2.0751,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.885,
+      "read_entropy": 2.264,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4263
+    },
+    {
+      "step": 242,
+      "action_entropy": 3.728,
+      "action_mi": 2.0922,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.3626,
+      "tool_entropy": 0.874,
+      "read_entropy": 2.264,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4215
+    },
+    {
+      "step": 243,
+      "action_entropy": 3.7529,
+      "action_mi": 2.1171,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.874,
+      "read_entropy": 2.3319,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3795
+    },
+    {
+      "step": 244,
+      "action_entropy": 3.7529,
+      "action_mi": 2.142,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.3626,
+      "tool_entropy": 0.8631,
+      "read_entropy": 2.3319,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3795
+    },
+    {
+      "step": 245,
+      "action_entropy": 3.7129,
+      "action_mi": 2.102,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.8631,
+      "read_entropy": 2.3928,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4012
+    },
+    {
+      "step": 246,
+      "action_entropy": 3.7451,
+      "action_mi": 2.0942,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.8631,
+      "read_entropy": 2.3928,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3853
+    },
+    {
+      "step": 247,
+      "action_entropy": 3.7549,
+      "action_mi": 2.1362,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.8631,
+      "read_entropy": 2.3928,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3883
+    },
+    {
+      "step": 248,
+      "action_entropy": 3.746,
+      "action_mi": 2.1522,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.1699,
+      "tool_entropy": 0.8524,
+      "read_entropy": 2.3928,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3889
+    },
+    {
+      "step": 249,
+      "action_entropy": 3.768,
+      "action_mi": 2.1653,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.8524,
+      "read_entropy": 2.4339,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3931
+    },
+    {
+      "step": 250,
+      "action_entropy": 3.7362,
+      "action_mi": 2.1555,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.1699,
+      "tool_entropy": 0.8419,
+      "read_entropy": 2.4339,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.38
+    },
+    {
+      "step": 251,
+      "action_entropy": 3.7762,
+      "action_mi": 2.1636,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.8419,
+      "read_entropy": 2.4339,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3813
+    },
+    {
+      "step": 252,
+      "action_entropy": 3.7762,
+      "action_mi": 2.2036,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.8419,
+      "read_entropy": 2.4339,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4064
+    },
+    {
+      "step": 253,
+      "action_entropy": 3.7933,
+      "action_mi": 2.2207,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.8419,
+      "read_entropy": 2.4836,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4176
+    },
+    {
+      "step": 254,
+      "action_entropy": 3.8064,
+      "action_mi": 2.2109,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.8419,
+      "read_entropy": 2.4836,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4183
+    },
+    {
+      "step": 255,
+      "action_entropy": 3.7933,
+      "action_mi": 2.2109,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.585,
+      "tool_entropy": 0.8419,
+      "read_entropy": 2.4836,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4396
+    },
+    {
+      "step": 256,
+      "action_entropy": 3.7611,
+      "action_mi": 2.1656,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.848,
+      "tool_entropy": 0.8419,
+      "read_entropy": 2.4836,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4637
+    },
+    {
+      "step": 257,
+      "action_entropy": 3.7762,
+      "action_mi": 2.1485,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.8419,
+      "read_entropy": 2.473,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4707
+    },
+    {
+      "step": 258,
+      "action_entropy": 3.7762,
+      "action_mi": 2.1236,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.1699,
+      "tool_entropy": 0.8315,
+      "read_entropy": 2.473,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4707
+    },
+    {
+      "step": 259,
+      "action_entropy": 3.8162,
+      "action_mi": 2.1636,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.8315,
+      "read_entropy": 2.5875,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.45
+    },
+    {
+      "step": 260,
+      "action_entropy": 3.8089,
+      "action_mi": 2.1963,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.848,
+      "tool_entropy": 0.8315,
+      "read_entropy": 2.5875,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4882
+    },
+    {
+      "step": 261,
+      "action_entropy": 3.7734,
+      "action_mi": 2.1784,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.0,
+      "tool_entropy": 0.8213,
+      "read_entropy": 2.5875,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5034
+    },
+    {
+      "step": 262,
+      "action_entropy": 3.7576,
+      "action_mi": 2.1271,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.848,
+      "tool_entropy": 0.8113,
+      "read_entropy": 2.5875,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4822
+    },
+    {
+      "step": 263,
+      "action_entropy": 3.8298,
+      "action_mi": 2.1435,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.8113,
+      "read_entropy": 2.5875,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4558
+    },
+    {
+      "step": 264,
+      "action_entropy": 3.8836,
+      "action_mi": 2.2695,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.8113,
+      "read_entropy": 2.5966,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4578
+    },
+    {
+      "step": 265,
+      "action_entropy": 3.8934,
+      "action_mi": 2.3331,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.8113,
+      "read_entropy": 2.6455,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4357
+    },
+    {
+      "step": 266,
+      "action_entropy": 3.9256,
+      "action_mi": 2.3751,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.8113,
+      "read_entropy": 2.7169,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4015
+    },
+    {
+      "step": 267,
+      "action_entropy": 3.9513,
+      "action_mi": 2.3681,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.8113,
+      "read_entropy": 2.7464,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4116
+    },
+    {
+      "step": 268,
+      "action_entropy": 3.9158,
+      "action_mi": 2.3583,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.0,
+      "tool_entropy": 0.8015,
+      "read_entropy": 2.7464,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4178
+    },
+    {
+      "step": 269,
+      "action_entropy": 3.8771,
+      "action_mi": 2.3241,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.848,
+      "tool_entropy": 0.7919,
+      "read_entropy": 2.7464,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.409
+    },
+    {
+      "step": 270,
+      "action_entropy": 3.8771,
+      "action_mi": 2.3254,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.7919,
+      "read_entropy": 2.8011,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.387
+    },
+    {
+      "step": 271,
+      "action_entropy": 3.8204,
+      "action_mi": 2.3087,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.7105,
+      "tool_entropy": 0.7824,
+      "read_entropy": 2.8011,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4128
+    },
+    {
+      "step": 272,
+      "action_entropy": 3.7211,
+      "action_mi": 2.2078,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.585,
+      "tool_entropy": 0.7732,
+      "read_entropy": 2.8011,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4509
+    },
+    {
+      "step": 273,
+      "action_entropy": 3.6843,
+      "action_mi": 2.1366,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.4695,
+      "tool_entropy": 0.7642,
+      "read_entropy": 2.8011,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4478
+    },
+    {
+      "step": 274,
+      "action_entropy": 3.6692,
+      "action_mi": 2.1398,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.7642,
+      "read_entropy": 2.8355,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4326
+    },
+    {
+      "step": 275,
+      "action_entropy": 3.6443,
+      "action_mi": 2.0998,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.7642,
+      "read_entropy": 2.8785,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4445
+    },
+    {
+      "step": 276,
+      "action_entropy": 3.5403,
+      "action_mi": 1.9709,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.3626,
+      "tool_entropy": 0.7554,
+      "read_entropy": 2.8785,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4594
+    },
+    {
+      "step": 277,
+      "action_entropy": 3.4992,
+      "action_mi": 1.898,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.263,
+      "tool_entropy": 0.7467,
+      "read_entropy": 2.8785,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4704
+    },
+    {
+      "step": 278,
+      "action_entropy": 3.4841,
+      "action_mi": 1.8418,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.7467,
+      "read_entropy": 2.903,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4735
+    },
+    {
+      "step": 279,
+      "action_entropy": 3.4484,
+      "action_mi": 1.831,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.1699,
+      "tool_entropy": 0.7383,
+      "read_entropy": 2.903,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4566
+    },
+    {
+      "step": 280,
+      "action_entropy": 3.4484,
+      "action_mi": 1.8353,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.7383,
+      "read_entropy": 2.931,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4427
+    },
+    {
+      "step": 281,
+      "action_entropy": 3.4386,
+      "action_mi": 1.8255,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.7383,
+      "read_entropy": 2.9526,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.436
+    },
+    {
+      "step": 282,
+      "action_entropy": 3.3737,
+      "action_mi": 1.7908,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.7383,
+      "read_entropy": 2.9844,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4583
+    },
+    {
+      "step": 283,
+      "action_entropy": 3.3039,
+      "action_mi": 1.6961,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.0825,
+      "tool_entropy": 0.73,
+      "read_entropy": 2.9844,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4768
+    },
+    {
+      "step": 284,
+      "action_entropy": 3.3439,
+      "action_mi": 1.6664,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.73,
+      "read_entropy": 3.035,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4663
+    },
+    {
+      "step": 285,
+      "action_entropy": 3.2876,
+      "action_mi": 1.65,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.0,
+      "tool_entropy": 0.7219,
+      "read_entropy": 3.035,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4608
+    },
+    {
+      "step": 286,
+      "action_entropy": 3.2394,
+      "action_mi": 1.6236,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.922,
+      "tool_entropy": 0.6801,
+      "read_entropy": 3.035,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4763
+    },
+    {
+      "step": 287,
+      "action_entropy": 3.1249,
+      "action_mi": 1.5437,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.848,
+      "tool_entropy": 0.6343,
+      "read_entropy": 3.035,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5085
+    },
+    {
+      "step": 288,
+      "action_entropy": 3.064,
+      "action_mi": 1.4552,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.7776,
+      "tool_entropy": 0.6343,
+      "read_entropy": 3.035,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5279
+    },
+    {
+      "step": 289,
+      "action_entropy": 3.0567,
+      "action_mi": 1.4519,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.848,
+      "tool_entropy": 0.6343,
+      "read_entropy": 3.0587,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5018
+    },
+    {
+      "step": 290,
+      "action_entropy": 3.1327,
+      "action_mi": 1.4655,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.6343,
+      "read_entropy": 3.0439,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4894
+    },
+    {
+      "step": 291,
+      "action_entropy": 3.0678,
+      "action_mi": 1.4766,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.6343,
+      "read_entropy": 3.0677,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.505
+    },
+    {
+      "step": 292,
+      "action_entropy": 3.1273,
+      "action_mi": 1.4712,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.6343,
+      "read_entropy": 3.0677,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5004
+    },
+    {
+      "step": 293,
+      "action_entropy": 3.1994,
+      "action_mi": 1.5379,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.6343,
+      "read_entropy": 3.1119,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4858
+    },
+    {
+      "step": 294,
+      "action_entropy": 3.2403,
+      "action_mi": 1.611,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.848,
+      "tool_entropy": 0.6343,
+      "read_entropy": 3.1119,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4693
+    },
+    {
+      "step": 295,
+      "action_entropy": 3.1922,
+      "action_mi": 1.6037,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.922,
+      "tool_entropy": 0.6343,
+      "read_entropy": 3.1119,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4736
+    },
+    {
+      "step": 296,
+      "action_entropy": 3.1273,
+      "action_mi": 1.5307,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.6343,
+      "read_entropy": 3.1257,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4902
+    },
+    {
+      "step": 297,
+      "action_entropy": 3.0678,
+      "action_mi": 1.4463,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.848,
+      "tool_entropy": 0.5842,
+      "read_entropy": 3.1257,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4867
+    },
+    {
+      "step": 298,
+      "action_entropy": 3.0678,
+      "action_mi": 1.4374,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.848,
+      "tool_entropy": 0.5842,
+      "read_entropy": 3.1257,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4867
+    },
+    {
+      "step": 299,
+      "action_entropy": 3.0678,
+      "action_mi": 1.4374,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.5842,
+      "read_entropy": 3.1257,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4867
+    },
+    {
+      "step": 300,
+      "action_entropy": 3.1273,
+      "action_mi": 1.4569,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.5842,
+      "read_entropy": 3.1644,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4718
+    },
+    {
+      "step": 301,
+      "action_entropy": 3.0551,
+      "action_mi": 1.4441,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.848,
+      "tool_entropy": 0.5842,
+      "read_entropy": 3.1538,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4915
+    },
+    {
+      "step": 302,
+      "action_entropy": 3.0302,
+      "action_mi": 1.3871,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.5842,
+      "read_entropy": 3.1795,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.485
+    },
+    {
+      "step": 303,
+      "action_entropy": 2.9805,
+      "action_mi": 1.3125,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.848,
+      "tool_entropy": 0.5294,
+      "read_entropy": 3.1795,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4903
+    },
+    {
+      "step": 304,
+      "action_entropy": 2.9045,
+      "action_mi": 1.2806,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.7776,
+      "tool_entropy": 0.5294,
+      "read_entropy": 3.1795,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4946
+    },
+    {
+      "step": 305,
+      "action_entropy": 2.8645,
+      "action_mi": 1.1646,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.5294,
+      "read_entropy": 3.1795,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4948
+    },
+    {
+      "step": 306,
+      "action_entropy": 2.8094,
+      "action_mi": 1.0695,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.5294,
+      "read_entropy": 3.1795,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.504
+    },
+    {
+      "step": 307,
+      "action_entropy": 2.7996,
+      "action_mi": 1.0046,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.5294,
+      "read_entropy": 3.1325,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5033
+    },
+    {
+      "step": 308,
+      "action_entropy": 2.8376,
+      "action_mi": 1.0728,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.585,
+      "tool_entropy": 0.5294,
+      "read_entropy": 3.0855,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4882
+    },
+    {
+      "step": 309,
+      "action_entropy": 2.7865,
+      "action_mi": 1.1148,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.7776,
+      "tool_entropy": 0.469,
+      "read_entropy": 3.0855,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4989
+    },
+    {
+      "step": 310,
+      "action_entropy": 2.6691,
+      "action_mi": 1.043,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.7105,
+      "tool_entropy": 0.4022,
+      "read_entropy": 3.0855,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5146
+    },
+    {
+      "step": 311,
+      "action_entropy": 2.6691,
+      "action_mi": 1.025,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.7105,
+      "tool_entropy": 0.3274,
+      "read_entropy": 3.0855,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5146
+    },
+    {
+      "step": 312,
+      "action_entropy": 2.7314,
+      "action_mi": 1.043,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.3274,
+      "read_entropy": 3.0897,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4942
+    },
+    {
+      "step": 313,
+      "action_entropy": 2.7314,
+      "action_mi": 1.1053,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.3274,
+      "read_entropy": 3.0248,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4942
+    },
+    {
+      "step": 314,
+      "action_entropy": 2.6691,
+      "action_mi": 1.043,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.7105,
+      "tool_entropy": 0.2423,
+      "read_entropy": 3.0248,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5007
+    },
+    {
+      "step": 315,
+      "action_entropy": 2.6226,
+      "action_mi": 1.0336,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.6464,
+      "tool_entropy": 0.1414,
+      "read_entropy": 3.0248,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5159
+    },
+    {
+      "step": 316,
+      "action_entropy": 2.5578,
+      "action_mi": 0.984,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.585,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0248,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5343
+    },
+    {
+      "step": 317,
+      "action_entropy": 2.5015,
+      "action_mi": 0.9668,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.5261,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0248,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.544
+    },
+    {
+      "step": 318,
+      "action_entropy": 2.5015,
+      "action_mi": 0.9766,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.5261,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0248,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.544
+    },
+    {
+      "step": 319,
+      "action_entropy": 2.5015,
+      "action_mi": 0.9766,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.5261,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0248,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.544
+    },
+    {
+      "step": 320,
+      "action_entropy": 2.5073,
+      "action_mi": 0.9273,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.848,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0248,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5457
+    },
+    {
+      "step": 321,
+      "action_entropy": 2.5505,
+      "action_mi": 0.9211,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.585,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.017,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5322
+    },
+    {
+      "step": 322,
+      "action_entropy": 2.5876,
+      "action_mi": 0.9354,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.3626,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0012,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5223
+    },
+    {
+      "step": 323,
+      "action_entropy": 2.5876,
+      "action_mi": 0.9237,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.6464,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0012,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.5223
+    },
+    {
+      "step": 324,
+      "action_entropy": 2.6598,
+      "action_mi": 0.9558,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0012,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4919
+    },
+    {
+      "step": 325,
+      "action_entropy": 2.6598,
+      "action_mi": 0.988,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.3626,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9915,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4919
+    },
+    {
+      "step": 326,
+      "action_entropy": 2.6915,
+      "action_mi": 1.0198,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.975,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4854
+    },
+    {
+      "step": 327,
+      "action_entropy": 2.6915,
+      "action_mi": 1.0048,
+      "compression_ratio": 1.0,
+      "last_surprisal": 1.7105,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.975,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4854
+    },
+    {
+      "step": 328,
+      "action_entropy": 2.7466,
+      "action_mi": 1.0048,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.975,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4718
+    },
+    {
+      "step": 329,
+      "action_entropy": 2.7734,
+      "action_mi": 1.0867,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.0,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9455,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4684
+    },
+    {
+      "step": 330,
+      "action_entropy": 2.7885,
+      "action_mi": 1.0886,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9455,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4571
+    },
+    {
+      "step": 331,
+      "action_entropy": 2.7983,
+      "action_mi": 1.0735,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9455,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4638
+    },
+    {
+      "step": 332,
+      "action_entropy": 2.824,
+      "action_mi": 1.149,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9455,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4556
+    },
+    {
+      "step": 333,
+      "action_entropy": 2.8494,
+      "action_mi": 1.185,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.0,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9195,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4531
+    },
+    {
+      "step": 334,
+      "action_entropy": 2.8494,
+      "action_mi": 1.2104,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9195,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4361
+    },
+    {
+      "step": 335,
+      "action_entropy": 2.9089,
+      "action_mi": 1.2699,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9195,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4315
+    },
+    {
+      "step": 336,
+      "action_entropy": 2.9281,
+      "action_mi": 1.2893,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.848,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.8964,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.433
+    },
+    {
+      "step": 337,
+      "action_entropy": 3.0395,
+      "action_mi": 1.3233,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0024,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4073
+    },
+    {
+      "step": 338,
+      "action_entropy": 3.1093,
+      "action_mi": 1.4106,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0024,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3821
+    },
+    {
+      "step": 339,
+      "action_entropy": 3.1093,
+      "action_mi": 1.4804,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9951,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3939
+    },
+    {
+      "step": 340,
+      "action_entropy": 3.1644,
+      "action_mi": 1.5355,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9951,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3847
+    },
+    {
+      "step": 341,
+      "action_entropy": 3.2031,
+      "action_mi": 1.5893,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9951,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3626
+    },
+    {
+      "step": 342,
+      "action_entropy": 3.1709,
+      "action_mi": 1.5958,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.848,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9951,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3683
+    },
+    {
+      "step": 343,
+      "action_entropy": 3.146,
+      "action_mi": 1.5387,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.021,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.3802
+    },
+    {
+      "step": 344,
+      "action_entropy": 3.108,
+      "action_mi": 1.4758,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.585,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.021,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4112
+    },
+    {
+      "step": 345,
+      "action_entropy": 3.1331,
+      "action_mi": 1.478,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.3626,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.021,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.416
+    },
+    {
+      "step": 346,
+      "action_entropy": 3.1082,
+      "action_mi": 1.4782,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.021,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4167
+    },
+    {
+      "step": 347,
+      "action_entropy": 3.1591,
+      "action_mi": 1.5442,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0039,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4177
+    },
+    {
+      "step": 348,
+      "action_entropy": 3.1761,
+      "action_mi": 1.5215,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0039,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4276
+    },
+    {
+      "step": 349,
+      "action_entropy": 3.1121,
+      "action_mi": 1.4345,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.3626,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0039,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.446
+    },
+    {
+      "step": 350,
+      "action_entropy": 3.0832,
+      "action_mi": 1.3817,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.848,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9722,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4563
+    },
+    {
+      "step": 351,
+      "action_entropy": 3.1048,
+      "action_mi": 1.4144,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.848,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9722,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4433
+    },
+    {
+      "step": 352,
+      "action_entropy": 3.1199,
+      "action_mi": 1.4511,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9828,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4328
+    },
+    {
+      "step": 353,
+      "action_entropy": 3.1199,
+      "action_mi": 1.4662,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.3626,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9828,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4328
+    },
+    {
+      "step": 354,
+      "action_entropy": 3.2239,
+      "action_mi": 1.4832,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9828,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4009
+    },
+    {
+      "step": 355,
+      "action_entropy": 3.1199,
+      "action_mi": 1.4832,
+      "compression_ratio": 1.0,
+      "last_surprisal": 2.3626,
+      "tool_entropy": 0.0,
+      "read_entropy": 2.9828,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4261
+    },
+    {
+      "step": 356,
+      "action_entropy": 3.135,
+      "action_mi": 1.3943,
+      "compression_ratio": 1.0,
+      "last_surprisal": 5.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0208,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4135
+    },
+    {
+      "step": 357,
+      "action_entropy": 3.057,
+      "action_mi": 1.3714,
+      "compression_ratio": 1.0,
+      "last_surprisal": 3.585,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0208,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.432
+    },
+    {
+      "step": 358,
+      "action_entropy": 3.057,
+      "action_mi": 1.2934,
+      "compression_ratio": 1.0,
+      "last_surprisal": 6.1699,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0208,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4541
+    },
+    {
+      "step": 359,
+      "action_entropy": 3.1059,
+      "action_mi": 1.3422,
+      "compression_ratio": 1.0,
+      "last_surprisal": 4.585,
+      "tool_entropy": 0.0,
+      "read_entropy": 3.0102,
+      "memory_entropy": 0.0,
+      "kl_divergence": 0.4461
+    }
+  ],
+  "compositor_summary": {
+    "total_anomalies": 66,
+    "signature_counts": {
+      "distributional_anomaly": 21,
+      "unclassified_anomaly": 45
+    },
+    "recent": [
+      {
+        "signature": "unclassified_anomaly",
+        "severity": "info",
+        "interpretation": "Multiple metrics are simultaneously anomalous (tool_entropy, kl_divergence) but the pattern doesn't match any known information-theoretic signature.  This may be a novel failure mode worth investigating.",
+        "metrics": {
+          "tool_entropy": {
+            "value": 0.0,
+            "z_score": 3.13,
+            "expected_mean": 0.8744,
+            "expected_std": 0.2796,
+            "direction": "low"
+          },
+          "kl_divergence": {
+            "value": 0.4563,
+            "z_score": 3.5,
+            "expected_mean": 0.0,
+            "expected_std": 0.0,
+            "direction": "high"
+          }
+        },
+        "step": 350,
+        "wickens_stage": "unknown"
+      },
+      {
+        "signature": "unclassified_anomaly",
+        "severity": "info",
+        "interpretation": "Multiple metrics are simultaneously anomalous (tool_entropy, kl_divergence) but the pattern doesn't match any known information-theoretic signature.  This may be a novel failure mode worth investigating.",
+        "metrics": {
+          "tool_entropy": {
+            "value": 0.0,
+            "z_score": 3.13,
+            "expected_mean": 0.8744,
+            "expected_std": 0.2796,
+            "direction": "low"
+          },
+          "kl_divergence": {
+            "value": 0.4433,
+            "z_score": 3.5,
+            "expected_mean": 0.0,
+            "expected_std": 0.0,
+            "direction": "high"
+          }
+        },
+        "step": 351,
+        "wickens_stage": "unknown"
+      },
+      {
+        "signature": "unclassified_anomaly",
+        "severity": "info",
+        "interpretation": "Multiple metrics are simultaneously anomalous (tool_entropy, kl_divergence) but the pattern doesn't match any known information-theoretic signature.  This may be a novel failure mode worth investigating.",
+        "metrics": {
+          "tool_entropy": {
+            "value": 0.0,
+            "z_score": 3.13,
+            "expected_mean": 0.8744,
+            "expected_std": 0.2796,
+            "direction": "low"
+          },
+          "kl_divergence": {
+            "value": 0.4328,
+            "z_score": 3.5,
+            "expected_mean": 0.0,
+            "expected_std": 0.0,
+            "direction": "high"
+          }
+        },
+        "step": 352,
+        "wickens_stage": "unknown"
+      },
+      {
+        "signature": "unclassified_anomaly",
+        "severity": "info",
+        "interpretation": "Multiple metrics are simultaneously anomalous (tool_entropy, kl_divergence) but the pattern doesn't match any known information-theoretic signature.  This may be a novel failure mode worth investigating.",
+        "metrics": {
+          "tool_entropy": {
+            "value": 0.0,
+            "z_score": 3.13,
+            "expected_mean": 0.8744,
+            "expected_std": 0.2796,
+            "direction": "low"
+          },
+          "kl_divergence": {
+            "value": 0.4328,
+            "z_score": 3.5,
+            "expected_mean": 0.0,
+            "expected_std": 0.0,
+            "direction": "high"
+          }
+        },
+        "step": 353,
+        "wickens_stage": "unknown"
+      },
+      {
+        "signature": "unclassified_anomaly",
+        "severity": "info",
+        "interpretation": "Multiple metrics are simultaneously anomalous (tool_entropy, kl_divergence) but the pattern doesn't match any known information-theoretic signature.  This may be a novel failure mode worth investigating.",
+        "metrics": {
+          "tool_entropy": {
+            "value": 0.0,
+            "z_score": 3.13,
+            "expected_mean": 0.8744,
+            "expected_std": 0.2796,
+            "direction": "low"
+          },
+          "kl_divergence": {
+            "value": 0.4009,
+            "z_score": 3.5,
+            "expected_mean": 0.0,
+            "expected_std": 0.0,
+            "direction": "high"
+          }
+        },
+        "step": 354,
+        "wickens_stage": "unknown"
+      },
+      {
+        "signature": "unclassified_anomaly",
+        "severity": "info",
+        "interpretation": "Multiple metrics are simultaneously anomalous (tool_entropy, kl_divergence) but the pattern doesn't match any known information-theoretic signature.  This may be a novel failure mode worth investigating.",
+        "metrics": {
+          "tool_entropy": {
+            "value": 0.0,
+            "z_score": 3.13,
+            "expected_mean": 0.8744,
+            "expected_std": 0.2796,
+            "direction": "low"
+          },
+          "kl_divergence": {
+            "value": 0.4261,
+            "z_score": 3.5,
+            "expected_mean": 0.0,
+            "expected_std": 0.0,
+            "direction": "high"
+          }
+        },
+        "step": 355,
+        "wickens_stage": "unknown"
+      },
+      {
+        "signature": "unclassified_anomaly",
+        "severity": "info",
+        "interpretation": "Multiple metrics are simultaneously anomalous (tool_entropy, kl_divergence) but the pattern doesn't match any known information-theoretic signature.  This may be a novel failure mode worth investigating.",
+        "metrics": {
+          "tool_entropy": {
+            "value": 0.0,
+            "z_score": 3.13,
+            "expected_mean": 0.8744,
+            "expected_std": 0.2796,
+            "direction": "low"
+          },
+          "kl_divergence": {
+            "value": 0.4135,
+            "z_score": 3.5,
+            "expected_mean": 0.0,
+            "expected_std": 0.0,
+            "direction": "high"
+          }
+        },
+        "step": 356,
+        "wickens_stage": "unknown"
+      },
+      {
+        "signature": "unclassified_anomaly",
+        "severity": "info",
+        "interpretation": "Multiple metrics are simultaneously anomalous (tool_entropy, kl_divergence) but the pattern doesn't match any known information-theoretic signature.  This may be a novel failure mode worth investigating.",
+        "metrics": {
+          "tool_entropy": {
+            "value": 0.0,
+            "z_score": 3.13,
+            "expected_mean": 0.8744,
+            "expected_std": 0.2796,
+            "direction": "low"
+          },
+          "kl_divergence": {
+            "value": 0.432,
+            "z_score": 3.5,
+            "expected_mean": 0.0,
+            "expected_std": 0.0,
+            "direction": "high"
+          }
+        },
+        "step": 357,
+        "wickens_stage": "unknown"
+      },
+      {
+        "signature": "unclassified_anomaly",
+        "severity": "info",
+        "interpretation": "Multiple metrics are simultaneously anomalous (tool_entropy, kl_divergence) but the pattern doesn't match any known information-theoretic signature.  This may be a novel failure mode worth investigating.",
+        "metrics": {
+          "tool_entropy": {
+            "value": 0.0,
+            "z_score": 3.13,
+            "expected_mean": 0.8744,
+            "expected_std": 0.2796,
+            "direction": "low"
+          },
+          "kl_divergence": {
+            "value": 0.4541,
+            "z_score": 3.5,
+            "expected_mean": 0.0,
+            "expected_std": 0.0,
+            "direction": "high"
+          }
+        },
+        "step": 358,
+        "wickens_stage": "unknown"
+      },
+      {
+        "signature": "unclassified_anomaly",
+        "severity": "info",
+        "interpretation": "Multiple metrics are simultaneously anomalous (tool_entropy, kl_divergence) but the pattern doesn't match any known information-theoretic signature.  This may be a novel failure mode worth investigating.",
+        "metrics": {
+          "tool_entropy": {
+            "value": 0.0,
+            "z_score": 3.13,
+            "expected_mean": 0.8744,
+            "expected_std": 0.2796,
+            "direction": "low"
+          },
+          "kl_divergence": {
+            "value": 0.4461,
+            "z_score": 3.5,
+            "expected_mean": 0.0,
+            "expected_std": 0.0,
+            "direction": "high"
+          }
+        },
+        "step": 359,
+        "wickens_stage": "unknown"
+      }
+    ]
+  },
+  "baseline_summary": {
+    "calibrating": false,
+    "observation_count": 360,
+    "global": {
+      "action_entropy": {
+        "mean": 3.3669,
+        "std": 0.7379
+      },
+      "action_mi": {
+        "mean": 1.9181,
+        "std": 0.4772
+      },
+      "compression_ratio": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "last_surprisal": {
+        "mean": 4.0502,
+        "std": 1.1764
+      },
+      "tool_entropy": {
+        "mean": 0.8744,
+        "std": 0.2796
+      },
+      "read_entropy": {
+        "mean": 2.7716,
+        "std": 0.6383
+      },
+      "memory_entropy": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "kl_divergence": {
+        "mean": 0.0,
+        "std": 0.0
+      }
+    },
+    "phases": {}
+  },
+  "is_calibrating": false
+}

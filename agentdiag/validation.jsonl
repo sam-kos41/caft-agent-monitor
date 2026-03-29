@@ -1,0 +1,3 @@
+{"type": "session_start", "timestamp": 1774745936.792448, "goal": "Validation: 4f74311f-e4b1-4940-849d-d6abaee6d365.jsonl", "source": "/Users/samkoscelny/.claude/projects/-Users-samkoscelny-GazeVLM-local-agentdiag/4f74311f-e4b1-4940-849d-d6abaee6d365.jsonl"}
+{"type": "session_end", "timestamp": 1774745936.8368251, "event_count": 0, "human_marks": 0, "system_detections": 0}
+{"type": "session_start", "timestamp": 1774746028.3833458, "goal": "Validation: f1129a18-578b-48f7-9048-355fbffc8359.jsonl", "source": "/Users/samkoscelny/.claude/projects/-Users-samkoscelny-GazeVLM-local-agentdiag/f1129a18-578b-48f7-9048-355fbffc8359.jsonl"}
