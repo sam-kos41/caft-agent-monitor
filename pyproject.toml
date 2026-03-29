@@ -3,22 +3,40 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "agentdiag"
+name = "caft"
 version = "0.1.0"
-description = "Anomaly detection for AI agent execution traces"
+description = "Zero-config anomaly detection for AI coding agents"
 requires-python = ">=3.10"
 license = "Apache-2.0"
+readme = "README.md"
+keywords = ["ai", "agent", "monitoring", "anomaly-detection", "observability"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Quality Assurance",
+    "Programming Language :: Python :: 3",
+]
 dependencies = [
     "numpy>=1.24",
 ]
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0"]
+pdf = ["reportlab>=4.0"]
+mcp = ["mcp>=1.0"]
+dashboard = ["uvicorn>=0.30", "fastapi>=0.100"]
+all = ["reportlab>=4.0", "mcp>=1.0", "uvicorn>=0.30", "fastapi>=0.100"]
 
 [project.scripts]
-agentdiag = "agentdiag.__main__:main"
 caft = "agentdiag.plugin:cli"
 caft-mcp = "agentdiag.mcp_server:main"
+agentdiag = "agentdiag.__main__:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.hatch.build.targets.sdist]
+include = ["agentdiag/"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["agentdiag"]

@@ -624,8 +624,18 @@ def cli():
     # caft audit
     p_audit = sub.add_parser("audit", help="Batch audit all sessions in a directory")
     p_audit.add_argument("path", help="Directory with trace files")
-    p_audit.add_argument("--output", "-o", help="Save report to file")
+    p_audit.add_argument("--output", "-o", help="Save report (.txt or .pdf)")
     p_audit.add_argument("--sensitivity", type=float, default=2.0)
+    p_audit.add_argument("--team-size", type=int, default=1, help="Number of developers")
+    p_audit.add_argument("--hourly-rate", type=float, default=75.0, help="Loaded engineering cost/hr")
+    p_audit.add_argument("--sessions-per-week", type=int, default=0, help="Estimated sessions/week")
+    p_audit.add_argument("--company", default="Agent Audit", help="Company name for report header")
+
+    # caft dashboard
+    p_dash = sub.add_parser("dashboard", help="Open the supervisor dashboard")
+    p_dash.add_argument("--port", type=int, default=8080, help="Dashboard port")
+    p_dash.add_argument("--traces", help="Path to trace directory")
+    p_dash.add_argument("--agent", help="Agent type (claude-code, codex, cursor)")
 
     args = parser.parse_args()
 
@@ -663,14 +673,59 @@ def cli():
 
     elif args.command == "audit":
         caft = CAFT(sensitivity=args.sensitivity)
-        summary = caft.audit(args.path, output=args.output)
-        print(f"\n{'='*50}")
-        print(f"Sessions:    {summary['sessions']}")
-        print(f"Healthy:     {summary['healthy']}")
-        print(f"Degraded:    {summary['degraded']}")
-        print(f"Problematic: {summary['problematic']}")
-        print(f"Total events:    {summary['total_events']}")
-        print(f"Total anomalies: {summary['total_anomalies']}")
+        summary = caft.audit(args.path, verbose=True)
+
+        output = args.output
+        if output and output.endswith(".pdf"):
+            try:
+                from agentdiag.audit_pdf import export_pdf
+                export_pdf(
+                    summary, output,
+                    team_size=args.team_size,
+                    sessions_per_week=args.sessions_per_week,
+                    hourly_rate=args.hourly_rate,
+                    company_name=args.company,
+                )
+                print(f"\nPDF report saved to {output}")
+            except ImportError:
+                print("\nPDF export requires: pip install reportlab")
+                print("Falling back to text report...")
+                output = output.replace(".pdf", ".txt")
+        elif output and output.endswith(".txt"):
+            from agentdiag.audit_report import generate_audit_report
+            report = generate_audit_report(
+                summary,
+                team_size=args.team_size,
+                sessions_per_week=args.sessions_per_week,
+                hourly_rate=args.hourly_rate,
+                company_name=args.company,
+            )
+            Path(output).write_text(report)
+            print(f"\nText report saved to {output}")
+        elif output:
+            Path(output).write_text(json.dumps(summary, indent=2, default=str))
+            print(f"\nJSON saved to {output}")
+
+        # Always print summary to stdout
+        from agentdiag.audit_report import generate_audit_report
+        print()
+        print(generate_audit_report(
+            summary,
+            team_size=args.team_size,
+            sessions_per_week=args.sessions_per_week,
+            hourly_rate=args.hourly_rate,
+            company_name=args.company,
+        ))
+
+    elif args.command == "dashboard":
+        # Serve the React supervisor dashboard
+        caft = CAFT()
+        caft.monitor(
+            agent=getattr(args, "agent", None),
+            traces=getattr(args, "traces", None),
+            port=args.port,
+            dashboard=True,
+        )
 
     else:
         parser.print_help()
