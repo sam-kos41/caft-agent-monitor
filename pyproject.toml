@@ -18,6 +18,7 @@ dev = ["pytest>=7.0"]
 [project.scripts]
 agentdiag = "agentdiag.__main__:main"
 caft = "agentdiag.plugin:cli"
+caft-mcp = "agentdiag.mcp_server:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
