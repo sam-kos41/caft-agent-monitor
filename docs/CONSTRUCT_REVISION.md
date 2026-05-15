@@ -166,8 +166,55 @@ constructs. Report raw fact distributions per session and ask narrow
 falsifiable questions (e.g. "of sessions with literal_loop_max ≥ 8,
 what fraction did the domain expert call problematic?"). The
 inter-rater scale machinery stays for provenance, but the *claims*
-must attach to raw facts, not mapped scores. (Future work — not this
-revision.)
+must attach to raw facts, not mapped scores.
+
+## 5b. The decisive test: lead/lag (resolved 2026-05-15)
+
+The §5 validation plan named the one test that could still rescue
+CAFT-as-detector: does its signal fire **before** the trivial
+literal-loop detector (early warning) or only co-fire (expensive
+regex)? Measured on the same event axis CAFT consumes, with CAFT's
+fire = the real pipeline emitting a named signature
+(`agentdiag/validation/leadlag.py`):
+
+```
+session     n_evt  t_literal  t_caft  verdict
+137f1898     2129       1828     105   "led" +1723   <-- artifact
+6badcc8f     2103        236     134   "led"  +102   <-- artifact
+47b5baa3      265          –     183   caft_only
+71ec0464      831          –     180   caft_only
+73eef0e5      253          –     100   caft_only
+9971516a      386          –     106   caft_only
+ddc2fba4      114          –     101   caft_only
+```
+
+**CAFT fires in 7/7 sessions, t_caft clustered at events 100–183,
+regardless of whether a literal loop exists.** That index is the
+~100-event `SelfCalibratingBaseline` calibration window: CAFT emits
+its first signature as soon as calibration closes and subsequent
+events read as "deviation from this session's own start." The
+apparent +1723 / +102 "lead" is **constant firing, not prescience** —
+a detector that triggers in 100 % of sessions at a fixed point has
+≈ zero discriminative power about the thing it claims to detect.
+
+(Note: the analysis tool's first formatter naively concluded "CAFT is
+an early-warning signal" from `led > lagged`. That was the same class
+of error this whole document is about — mistaking a constant for a
+signal. An artifact guard was added; the tool now reports the honest
+result. Recorded here because the failure of one's own instrument is
+itself data.)
+
+**Decision: CAFT-as-detector does not survive validation.** It is not
+an anomaly detector, a health classifier, or an early-warning signal.
+It is a within-session phase-variation metric whose verdict layer
+fires on a clock. The durable contributions are: (1) the construct-
+validation methodology and harness; (2) this documented negative
+result, evidenced down to per-event timing; (3) the honestly reframed
+descriptive `behavioral_state` surface (no detection claim). Further
+investment in CAFT-as-detector is not warranted; the cross-session
+baseline (option B) remains the only path that could earn a real
+detection claim and is explicitly future research, not a current
+capability.
 
 ## 6. What is explicitly NOT being done
 
