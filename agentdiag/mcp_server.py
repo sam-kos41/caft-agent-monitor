@@ -40,19 +40,46 @@ import time
 from pathlib import Path
 from typing import Any
 
-from mcp.server.fastmcp import FastMCP
+try:
+    from mcp.server.fastmcp import FastMCP
+    HAS_MCP = True
+except ImportError:
+    HAS_MCP = False
+    FastMCP = None
 
-# Initialize the MCP server
-mcp = FastMCP(
-    "caft",
-    instructions=(
-        "CAFT: Zero-config anomaly detection for AI coding agents. "
-        "Monitors agent behavior using information theory and detects "
-        "failures without training data. Use caft_status for health, "
-        "caft_detect to find traces, caft_analyze for single sessions, "
-        "caft_audit for batch analysis, caft_explain for anomaly details."
-    ),
-)
+
+def _require_mcp():
+    if not HAS_MCP:
+        raise SystemExit(
+            "CAFT MCP server requires the mcp package. Install with:\n"
+            "    pip install caft[mcp]\n"
+            "or:\n"
+            "    pip install mcp"
+        )
+
+
+if HAS_MCP:
+    mcp = FastMCP(
+        "caft",
+        instructions=(
+            "CAFT: Zero-config anomaly detection for AI coding agents. "
+            "Monitors agent behavior using information theory and detects "
+            "failures without training data. Use caft_status for health, "
+            "caft_detect to find traces, caft_analyze for single sessions, "
+            "caft_audit for batch analysis, caft_explain for anomaly details."
+        ),
+    )
+else:
+    # Stub so module-level @mcp.tool() decorators don't crash on import.
+    class _StubMCP:
+        def __getattr__(self, name):
+            def passthrough(*args, **kwargs):
+                def wrap(fn):
+                    return fn
+                return wrap
+            return passthrough
+
+    mcp = _StubMCP()
 
 # ---------------------------------------------------------------------------
 # Lazy imports — avoid importing heavy modules until needed
@@ -60,6 +87,7 @@ mcp = FastMCP(
 
 _plugin = None
 _monitor_state = {}
+_coordination_tracker = None
 
 
 def _get_plugin():
@@ -81,6 +109,15 @@ def _get_detect():
     """Lazy-load the detect function."""
     from agentdiag.plugin import detect_agents
     return detect_agents
+
+
+def _get_coordination_tracker():
+    """Lazy-load the CoordinationTracker singleton."""
+    global _coordination_tracker
+    if _coordination_tracker is None:
+        from agentdiag.coordination import CoordinationTracker
+        _coordination_tracker = CoordinationTracker()
+    return _coordination_tracker
 
 
 # ---------------------------------------------------------------------------
@@ -444,6 +481,98 @@ def caft_status() -> str:
     )
 
 
+@mcp.tool()
+def caft_coordination(agent_ids: str = "") -> str:
+    """Get cross-agent coordination status.
+
+    Shows how multiple agents are coordinating (or failing to coordinate)
+    by measuring mutual information between their action sequences and
+    detecting shared file access patterns.
+
+    Returns:
+    - Agent graph: nodes (agents) with health, edges with MI weights
+    - Coordination signals: successful write→read handoffs
+    - Coordination failures: race conditions, stale reads, concurrent mods
+    - Dependency graph: inferred producer→consumer relationships
+
+    Args:
+        agent_ids: Comma-separated agent IDs to register (e.g., "planner,generator,evaluator").
+                   If empty, shows the current coordination state.
+    """
+    tracker = _get_coordination_tracker()
+
+    # Register new agents if requested
+    if agent_ids:
+        for aid in agent_ids.split(","):
+            aid = aid.strip()
+            if aid and aid not in tracker._agents:
+                tracker.register_agent(aid)
+
+    state = tracker.get_state()
+    summary = state["summary"]
+
+    if summary["agent_count"] == 0:
+        return (
+            "No agents registered for coordination monitoring.\n\n"
+            "Register agents by passing agent_ids (e.g., 'planner,generator').\n"
+            "Then feed events via the Python API:\n\n"
+            "  from agentdiag.coordination import CoordinationTracker\n"
+            "  tracker = CoordinationTracker()\n"
+            "  tracker.register_agent('agent_a', monitor_a)\n"
+            "  tracker.observe('agent_a', event)\n"
+        )
+
+    lines = [
+        f"Cross-Agent Coordination ({summary['agent_count']} agents, "
+        f"{summary['pair_count']} pairs)",
+        f"Health: {summary['coordination_health'].upper()}",
+        f"Average MI: {summary['average_mi']:.3f} bits",
+        "",
+    ]
+
+    # Nodes
+    lines.append("Agents:")
+    for node in state["nodes"]:
+        health_icon = {"green": "OK", "yellow": "WARN", "red": "FAIL",
+                       "unknown": "?"}.get(node["health"], "?")
+        lines.append(
+            f"  [{health_icon}] {node['id']}: {node['events']} events, "
+            f"{node['files_read']}R/{node['files_written']}W files"
+        )
+    lines.append("")
+
+    # Edges
+    if state["edges"]:
+        lines.append("Pairwise MI:")
+        for edge in state["edges"]:
+            status_icon = {"normal": " ", "warning": "!", "breakdown": "X"
+                          }.get(edge["status"], " ")
+            lines.append(
+                f"  [{status_icon}] {edge['source']} <-> {edge['target']}: "
+                f"{edge['mi']:.3f}b ({edge['weight']}) "
+                f"[{edge['pairs']} pairs]"
+            )
+        lines.append("")
+
+    # Recent failures
+    if state["failures"]:
+        lines.append(f"Recent failures ({summary['total_failures']} total):")
+        for f in state["failures"][-5:]:
+            lines.append(f"  {f['failure_type']}: {f['description'][:100]}")
+        lines.append("")
+
+    # Dependencies
+    if state["dependency_graph"]:
+        lines.append("Inferred dependencies:")
+        for dep in state["dependency_graph"]:
+            lines.append(
+                f"  {dep['producer']} -> {dep['consumer']} "
+                f"({dep['signal_count']} signals, {dep['strength']})"
+            )
+
+    return "\n".join(lines)
+
+
 # ---------------------------------------------------------------------------
 # Resources
 # ---------------------------------------------------------------------------
@@ -482,11 +611,12 @@ def get_about() -> str:
         "No training data needed. No configuration needed. Works on any\n"
         "agent that produces tool call logs (Claude Code, Codex, Cursor, etc.).\n\n"
         "Tools available:\n"
-        "  caft_status   — Current health status\n"
-        "  caft_detect   — Find agent traces on this system\n"
-        "  caft_analyze  — Analyze a single session\n"
-        "  caft_audit    — Batch audit all sessions\n"
-        "  caft_explain  — Explain an anomaly signature\n"
+        "  caft_status        — Current health status\n"
+        "  caft_detect        — Find agent traces on this system\n"
+        "  caft_analyze       — Analyze a single session\n"
+        "  caft_audit         — Batch audit all sessions\n"
+        "  caft_explain       — Explain an anomaly signature\n"
+        "  caft_coordination  — Cross-agent coordination monitoring\n"
     )
 
 
@@ -496,6 +626,7 @@ def get_about() -> str:
 
 def main():
     """Run the CAFT MCP server."""
+    _require_mcp()
     mcp.run(transport="stdio")
 
 

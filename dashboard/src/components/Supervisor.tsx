@@ -2,6 +2,7 @@ import type { SupervisorState, SessionState } from "../types";
 import { AgentCard } from "./AgentCard";
 import { TimelineBar } from "./TimelineBar";
 import { AlertFeed } from "./AlertFeed";
+import { CoordinationGraph } from "./CoordinationGraph";
 
 function formatUptime(seconds: number): string {
   const m = Math.floor(seconds / 60);
@@ -79,6 +80,13 @@ export function Supervisor({
           {sessions.map((session) => (
             <TimelineBar key={session.sessionId} session={session} />
           ))}
+        </section>
+      )}
+
+      {/* Cross-Agent Coordination */}
+      {state.coordination && state.coordination.nodes.length > 0 && (
+        <section className="supervisor__coordination">
+          <CoordinationGraph state={state.coordination} />
         </section>
       )}
 
