@@ -1,12 +1,15 @@
 """
-PDF export for CAFT audit reports.
+PDF export for CAFT session behavioral-profile reports.
 
-Generates a professional single-page PDF suitable for forwarding to
-a VP of Engineering. Uses reportlab (no external dependencies beyond pip).
+Single-page PDF describing the information-theoretic shape of each
+session (steady / phase_shifting / looping). DESCRIPTIVE, not a quality
+or cost verdict — the dollar-impact estimate and health verdict were
+removed (see docs/CONSTRUCT_REVISION.md). team_size/hourly_rate are
+kept for signature compatibility but ignored.
 
 Usage:
     from agentdiag.audit_pdf import export_pdf
-    export_pdf(audit_results, "audit_report.pdf", team_size=5, hourly_rate=75)
+    export_pdf(audit_results, "report.pdf")
 
     # Or from CLI:
     caft audit /path/to/traces -o report.pdf
@@ -94,23 +97,15 @@ def export_pdf(
     if n_sessions == 0:
         raise ValueError("No sessions to export")
 
-    healthy = [r for r in results if r["health"] == "green"]
-    degraded = [r for r in results if r["health"] == "yellow"]
-    problematic = [r for r in results if r["health"] == "red"]
+    # Descriptive behavioral state, not a quality verdict, and NO dollar
+    # estimate — see docs/CONSTRUCT_REVISION.md.
+    def _state(r):
+        return r.get("behavioral_state", r.get("health", "unknown"))
+
+    steady = [r for r in results if _state(r) == "steady"]
+    phase_shifting = [r for r in results if _state(r) == "phase_shifting"]
+    looping = [r for r in results if _state(r) == "looping"]
     total_anomalies = sum(r["anomaly_count"] for r in results)
-
-    anomaly_rate = len(degraded) + len(problematic)
-    anomaly_pct = (anomaly_rate / n_sessions * 100) if n_sessions > 0 else 0
-
-    total_wasted = sum(_estimate_wasted_minutes(r) for r in results)
-    avg_wasted = total_wasted / max(anomaly_rate, 1)
-
-    if sessions_per_week == 0:
-        sessions_per_week = max(10, n_sessions * 2)
-
-    problem_per_week = int(sessions_per_week * anomaly_pct / 100)
-    weekly_hours = problem_per_week * avg_wasted / 60
-    monthly_cost = weekly_hours * 4.3 * hourly_rate * team_size
 
     # Build PDF
     doc = SimpleDocTemplate(
@@ -176,7 +171,7 @@ def export_pdf(
     # Title
     elements.append(Paragraph(company_name, title_style))
     elements.append(Paragraph(
-        f"CAFT Agent Monitoring Audit | {datetime.now().strftime('%B %d, %Y')} | "
+        f"CAFT Session Behavioral Profile | {datetime.now().strftime('%B %d, %Y')} | "
         f"{n_sessions} sessions analyzed",
         subtitle_style,
     ))
@@ -185,19 +180,19 @@ def export_pdf(
     ))
     elements.append(Spacer(1, 12))
 
-    # Executive summary boxes
+    # Summary boxes — behavioral states (descriptive)
     summary_data = [
         [
-            Paragraph(f"<b>{len(healthy)}</b>", stat_style),
-            Paragraph(f"<b>{len(degraded)}</b>", stat_style),
-            Paragraph(f"<b>{len(problematic)}</b>", stat_style),
+            Paragraph(f"<b>{len(steady)}</b>", stat_style),
+            Paragraph(f"<b>{len(phase_shifting)}</b>", stat_style),
+            Paragraph(f"<b>{len(looping)}</b>", stat_style),
             Paragraph(f"<b>{total_anomalies}</b>", stat_style),
         ],
         [
-            Paragraph("Healthy", stat_label_style),
-            Paragraph("Degraded", stat_label_style),
-            Paragraph("Problematic", stat_label_style),
-            Paragraph("Total Anomalies", stat_label_style),
+            Paragraph("Steady", stat_label_style),
+            Paragraph("Phase-shifting", stat_label_style),
+            Paragraph("Looping", stat_label_style),
+            Paragraph("IT-anomaly windows", stat_label_style),
         ],
     ]
 
@@ -209,11 +204,8 @@ def export_pdf(
         ("BOTTOMPADDING", (0, 0), (-1, 0), 0),
         ("TOPPADDING", (0, 1), (-1, 1), 0),
         ("BOTTOMPADDING", (0, 1), (-1, 1), 8),
-        # Color the healthy/problematic numbers
-        ("TEXTCOLOR", (0, 0), (0, 0), GREEN),
-        ("TEXTCOLOR", (1, 0), (1, 0), YELLOW if len(degraded) > 0 else DIM_TEXT),
-        ("TEXTCOLOR", (2, 0), (2, 0), RED if len(problematic) > 0 else DIM_TEXT),
-        ("TEXTCOLOR", (3, 0), (3, 0), RED if total_anomalies > 0 else DIM_TEXT),
+        # Neutral coloring — no state is "good" or "bad"
+        ("TEXTCOLOR", (0, 0), (3, 0), ACCENT),
         ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#e2e8f0")),
         ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#e2e8f0")),
         ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#f8fafc")),
@@ -221,32 +213,32 @@ def export_pdf(
     elements.append(summary_table)
     elements.append(Spacer(1, 12))
 
-    # Cost estimate
-    if anomaly_rate > 0:
-        elements.append(Paragraph("Estimated Impact", heading_style))
-        cost_text = (
-            f"Based on {n_sessions} sessions analyzed, <b>{anomaly_pct:.0f}%</b> showed anomalous "
-            f"behavior with an average detection delay of <b>{avg_wasted:.0f} minutes</b>. "
-            f"Projected at {sessions_per_week} sessions/week with {team_size} developers, "
-            f"this represents approximately <b>{weekly_hours:.1f} wasted hours/week</b>, "
-            f"or <font color='#ef4444'><b>${monthly_cost:,.0f}/month</b></font> "
-            f"in unproductive agent time (at ${hourly_rate:.0f}/hr loaded cost)."
-        )
-        elements.append(Paragraph(cost_text, body_style))
-        elements.append(Spacer(1, 8))
+    # Honest caveat in place of the (removed) dollar-impact estimate
+    elements.append(Paragraph("How to read this", heading_style))
+    elements.append(Paragraph(
+        "Behavioral state describes the information-theoretic shape of a "
+        "session (how repetitive vs. how varied). It is <b>not</b> a "
+        "quality, success, or cost verdict. 'Looping' may be a focused "
+        "code search (fine) or a stuck agent (not fine) — the signature "
+        "alone cannot distinguish these; that requires task-outcome "
+        "context. Use the per-session signatures as a place to look, "
+        "not as a conclusion.",
+        body_style,
+    ))
+    elements.append(Spacer(1, 8))
 
     # Session table
     elements.append(Paragraph("Session Details", heading_style))
 
-    table_data = [["Status", "Session", "Events", "Anomalies", "Action MI", "Issue"]]
+    table_data = [["State", "Session", "Events", "IT-anom", "Action MI",
+                   "Dominant signature"]]
     for r in sorted(results, key=lambda x: x["anomaly_count"], reverse=True):
-        health = r["health"]
+        state = r.get("behavioral_state", r.get("health", "unknown"))
         name = Path(r.get("path", "unknown")).stem[:10]
         events = str(r.get("events", 0))
         anomalies = str(r.get("anomaly_count", 0))
         mi = f"{r.get('metrics', {}).get('action_mi', 0):.2f}b"
 
-        # Find top anomaly signature
         issue = ""
         if r["anomaly_count"] > 0:
             sigs = {}
@@ -258,8 +250,7 @@ def export_pdf(
                 top = max(sigs, key=sigs.get)
                 issue = _anomaly_explanation(top)[:50]
 
-        status = {"green": "OK", "yellow": "WARN", "red": "FAIL"}.get(health, "?")
-        table_data.append([status, name, events, anomalies, mi, issue])
+        table_data.append([state, name, events, anomalies, mi, issue])
 
     session_table = Table(
         table_data,
@@ -283,35 +274,26 @@ def export_pdf(
         ("LEFTPADDING", (0, 0), (-1, -1), 6),
     ]))
 
-    # Color-code status column
-    for i, r in enumerate(sorted(results, key=lambda x: x["anomaly_count"], reverse=True), 1):
-        color = _health_color(r["health"])
+    # State column: bold + neutral accent (no good/bad coloring)
+    for i, _r in enumerate(results, 1):
         session_table.setStyle(TableStyle([
-            ("TEXTCOLOR", (0, i), (0, i), color),
+            ("TEXTCOLOR", (0, i), (0, i), ACCENT),
             ("FONTNAME", (0, i), (0, i), "Helvetica-Bold"),
         ]))
 
     elements.append(session_table)
     elements.append(Spacer(1, 16))
 
-    # Recommendations
-    elements.append(Paragraph("Recommendations", heading_style))
-    if problematic:
-        recs = [
-            "Set up continuous CAFT monitoring to detect anomalies in real-time.",
-            "Review problematic sessions — anomaly signatures indicate specific failure modes "
-            "addressable through better prompting or task decomposition.",
-        ]
-        if any(r["anomaly_count"] > 10 for r in results):
-            recs.append(
-                "Multiple repetition anomalies suggest adding retry limits or verification "
-                "steps to agent workflows."
-            )
-    else:
-        recs = [
-            "All sessions appear healthy. Consider running CAFT in continuous monitoring "
-            "mode to catch issues as they arise."
-        ]
+    # No "recommendations" — that implied the states were verdicts.
+    elements.append(Paragraph("Interpreting these states", heading_style))
+    recs = [
+        "steady: stable, varied flow — no strong repetition or shift.",
+        "phase_shifting: the action mix changes across the session "
+        "(common in long, legitimately multi-task work).",
+        "looping: repetition dominates — could be a focused search OR a "
+        "stuck agent; inspect the dominant signature and the trace.",
+        "IT-anomaly windows count within-session deviation, not errors.",
+    ]
 
     for i, rec in enumerate(recs, 1):
         elements.append(Paragraph(f"<b>{i}.</b> {rec}", body_style))

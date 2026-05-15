@@ -343,16 +343,13 @@ class CAFT:
         Returns:
             dict with session profile, anomalies, and health assessment.
         """
-        from agentdiag.trivia_game_evaluate import replay_session, extract_ip_profile
-        # Fallback: use the evaluate_sessions module
         try:
-            # Try importing from the package
             from agentdiag.plugin_analyze import replay_and_profile
             return replay_and_profile(path, self.sensitivity, verbose)
         except ImportError:
             pass
 
-        # Inline implementation
+        # Inline implementation (the standard path)
         return self._analyze_session(path, verbose)
 
     def _analyze_session(self, path: str, verbose: bool = False) -> dict:
@@ -430,7 +427,8 @@ class CAFT:
             "path": path,
             "events": events_processed,
             "anomaly_count": len(anomalies),
-            "health": self._assess_health(events_processed, len(anomalies), it),
+            "behavioral_state": self._assess_behavioral_state(
+                events_processed, len(anomalies), it),
             "metrics": {
                 "action_mi": it.get("action_mi", 0),
                 "tool_entropy": it.get("tool_entropy", 0),
@@ -475,7 +473,7 @@ class CAFT:
                 results.append(r)
                 if verbose:
                     print(f"{r['events']} events, {r['anomaly_count']} anomalies, "
-                          f"health={r['health']}")
+                          f"state={r['behavioral_state']}")
             except Exception as e:
                 if verbose:
                     print(f"ERROR: {e}")
@@ -484,15 +482,15 @@ class CAFT:
         if not results:
             return {"error": "No sessions analyzed"}
 
-        healthy = sum(1 for r in results if r["health"] == "green")
-        degraded = sum(1 for r in results if r["health"] == "yellow")
-        problematic = sum(1 for r in results if r["health"] == "red")
+        def _count(state):
+            return sum(1 for r in results
+                       if r.get("behavioral_state") == state)
 
         summary = {
             "sessions": len(results),
-            "healthy": healthy,
-            "degraded": degraded,
-            "problematic": problematic,
+            "steady": _count("steady"),
+            "phase_shifting": _count("phase_shifting"),
+            "looping": _count("looping"),
             "total_events": sum(r["events"] for r in results),
             "total_anomalies": sum(r["anomaly_count"] for r in results),
             "results": results,
@@ -577,19 +575,38 @@ class CAFT:
         return "green"
 
     @staticmethod
-    def _assess_health(events: int, anomalies: int, metrics: dict) -> str:
-        """Assess session health from final metrics."""
+    def _assess_behavioral_state(events: int, anomalies: int,
+                                 metrics: dict) -> str:
+        """Describe the session's behavioral state from IT metrics.
+
+        DESCRIPTIVE, NOT EVALUATIVE. These labels say what the math
+        computed, not whether the session was good or bad. See
+        docs/CONSTRUCT_REVISION.md — the prior red/yellow/green "health"
+        verdict was not supported by the math (kappa = -0.04 vs a
+        domain expert) and has been retired.
+
+          looping        — repetition dominates (high LZ compressibility
+                            or sustained low action-MI)
+          phase_shifting — the action distribution keeps changing
+                            (high KL / high within-session deviation)
+          steady         — neither; stable, varied flow
+
+        No state implies a quality judgment. A long healthy research
+        session is legitimately phase_shifting; a focused grep sweep is
+        legitimately looping. Interpretation is the consumer's job.
+        """
         if events == 0:
             return "unknown"
         rate = anomalies / events if events > 0 else 0
         mi = metrics.get("action_mi", 0)
         kl = metrics.get("kl_divergence", 0)
+        comp = metrics.get("compression_ratio", 1.0)
 
-        if rate > 0.15 or mi < 0.3 or kl > 0.5:
-            return "red"
-        elif rate > 0.05 or mi < 0.8 or kl > 0.3:
-            return "yellow"
-        return "green"
+        if comp < 0.7 or mi < 0.4:
+            return "looping"
+        if kl > 0.45 or rate > 0.15:
+            return "phase_shifting"
+        return "steady"
 
 
 # ---------------------------------------------------------------------------
@@ -637,6 +654,24 @@ def cli():
     p_dash.add_argument("--traces", help="Path to trace directory")
     p_dash.add_argument("--agent", help="Agent type (claude-code, codex, cursor)")
 
+    p_val = sub.add_parser(
+        "validate",
+        help="Inter-rater validation harness (human + Ollama + CAFT)")
+    p_val.add_argument("corpus", help="Directory of session JSONL files")
+    p_val.add_argument("--ledger", default="validation_ledger.jsonl",
+                       help="Path to ratings ledger (created if missing)")
+    p_val.add_argument("--human-id", default="default",
+                       help="Identifier for the human rater")
+    p_val.add_argument("--ollama-model", default="llama3.2:3b",
+                       help="Ollama model name")
+    p_val.add_argument("--port", type=int, default=8090,
+                       help="Rating UI port")
+    p_val.add_argument("--report-only", action="store_true",
+                       help="Just write the markdown report and exit")
+    p_val.add_argument("--auto-rate", action="store_true",
+                       help="Run CAFT+Ollama on every session, then exit "
+                            "(no UI) — pre-populates the ledger")
+
     args = parser.parse_args()
 
     if args.command == "detect":
@@ -665,7 +700,8 @@ def cli():
     elif args.command == "analyze":
         caft = CAFT(sensitivity=args.sensitivity)
         result = caft._analyze_session(args.path, verbose=True)
-        print(f"\nHealth: {result['health']}")
+        print(f"\nBehavioral state: {result['behavioral_state']} "
+              f"(descriptive, not a quality verdict)")
         print(f"Events: {result['events']}")
         print(f"Anomalies: {result['anomaly_count']}")
         for k, v in result["metrics"].items():
@@ -726,6 +762,69 @@ def cli():
             port=args.port,
             dashboard=True,
         )
+
+    elif args.command == "validate":
+        from pathlib import Path
+        from agentdiag.validation.digest import build_digest
+        from agentdiag.validation.ledger import Ledger
+        from agentdiag.validation.rate_caft import rate_with_caft
+        from agentdiag.validation.rate_ollama import (
+            rate_with_ollama, is_ollama_available,
+        )
+        from agentdiag.validation.signals import rate_with_signals
+        from agentdiag.validation.report import write_report
+
+        corpus = Path(args.corpus)
+        if not corpus.exists():
+            print(f"Corpus not found: {corpus}")
+            return
+        ledger = Ledger(args.ledger)
+        report_path = Path(args.ledger).with_suffix(".report.md")
+
+        if args.report_only:
+            write_report(ledger, report_path)
+            print(f"Report written to {report_path}")
+            return
+
+        if args.auto_rate:
+            sessions = sorted(corpus.glob("*.jsonl"))
+            ollama_up = is_ollama_available()
+            print(f"Auto-rating {len(sessions)} sessions "
+                  f"(Ollama: {'UP' if ollama_up else 'DOWN — skipping'})")
+            for p in sessions:
+                d = build_digest(p)
+                rows = rate_with_caft(d)
+                # deterministic programmatic ground truth (no judgment)
+                rows += rate_with_signals(p)
+                tag = "caft+signal"
+                if ollama_up:
+                    try:
+                        rows += rate_with_ollama(d, model=args.ollama_model)
+                        tag = "caft+ollama"
+                    except Exception as e:
+                        print(f"  {d.session_id}: ollama failed ({e})")
+                ledger.append_many(rows)
+                print(f"  {d.session_id}: {len(rows)} ratings ({tag})")
+            write_report(ledger, report_path)
+            print(f"\nReport written to {report_path}")
+            print(f"Now rate them yourself:  caft validate {args.corpus} "
+                  f"--ledger {args.ledger} --human-id {args.human_id}")
+            return
+
+        # Launch the web UI
+        from agentdiag.validation import server as val_server
+        val_server._corpus_root = corpus.resolve()
+        val_server._ledger = ledger
+        val_server._human_id = args.human_id
+        val_server._ollama_model = args.ollama_model
+        import uvicorn
+        print(f"Corpus: {corpus.resolve()}  ({len(list(corpus.glob('*.jsonl')))} sessions)")
+        print(f"Ledger: {ledger.path}")
+        print(f"Ollama: {args.ollama_model} "
+              f"({'UP' if is_ollama_available() else 'DOWN'})")
+        print(f"Open:   http://127.0.0.1:{args.port}/")
+        app = val_server._make_app()
+        uvicorn.run(app, host="127.0.0.1", port=args.port, log_level="warning")
 
     else:
         parser.print_help()

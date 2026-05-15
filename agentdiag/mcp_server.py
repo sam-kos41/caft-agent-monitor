@@ -62,11 +62,13 @@ if HAS_MCP:
     mcp = FastMCP(
         "caft",
         instructions=(
-            "CAFT: Zero-config anomaly detection for AI coding agents. "
-            "Monitors agent behavior using information theory and detects "
-            "failures without training data. Use caft_status for health, "
-            "caft_detect to find traces, caft_analyze for single sessions, "
-            "caft_audit for batch analysis, caft_explain for anomaly details."
+            "CAFT: information-theoretic behavioral profiling for AI "
+            "coding agents. Describes the SHAPE of a session (steady / "
+            "phase_shifting / looping) from tool-use entropy, MI, KL and "
+            "compression — these are descriptive, NOT quality or success "
+            "verdicts. Use caft_status for the live signal, caft_detect "
+            "to find traces, caft_analyze for one session, caft_audit for "
+            "a batch, caft_explain for what a signature means."
         ),
     )
 else:
@@ -158,13 +160,17 @@ def caft_detect() -> str:
 
 @mcp.tool()
 def caft_analyze(session_path: str) -> str:
-    """Analyze a single agent session file and return its health profile.
+    """Analyze a single agent session and return its behavioral profile.
 
-    Replays the session through the full CAFT pipeline and returns:
-    - Health status (green/yellow/red)
+    Replays the session through the CAFT pipeline and returns a
+    DESCRIPTIVE profile (not a quality/health verdict — see
+    docs/CONSTRUCT_REVISION.md):
+    - Behavioral state: steady / phase_shifting / looping
     - Key metrics (action MI, entropy, KL divergence)
-    - Anomaly count and types
-    - Plain-English assessment
+    - IT-anomaly window count and dominant signatures
+
+    These describe the information-theoretic shape of the session, not
+    whether it succeeded. Interpretation requires task context.
 
     Args:
         session_path: Absolute path to a JSONL session file.
@@ -177,71 +183,70 @@ def caft_analyze(session_path: str) -> str:
 
     result = caft._analyze_session(str(path))
 
-    health = result["health"]
+    state = result.get("behavioral_state", "unknown")
     events = result["events"]
     anomalies = result["anomaly_count"]
     metrics = result.get("metrics", {})
 
-    health_icon = {"green": "OK", "yellow": "WARN", "red": "FAIL"}.get(health, "?")
     mi = metrics.get("action_mi", 0)
     kl = metrics.get("kl_divergence", 0)
     entropy = metrics.get("tool_entropy", 0)
 
     lines = [
-        f"Health: {health_icon} {health.upper()}",
+        f"Behavioral state: {state}  (DESCRIPTIVE — not a success verdict)",
         f"Events: {events}",
-        f"Anomalies: {anomalies}",
+        f"IT-anomaly windows (within-session deviation): {anomalies}",
         "",
         "Metrics:",
-        f"  Action MI: {mi:.2f} bits (higher = more purposeful)",
+        f"  Action MI: {mi:.2f} bits (sequential dependence of actions)",
         f"  Tool entropy: {entropy:.2f} bits (diversity of actions)",
-        f"  KL divergence: {kl:.3f} (behavior shift from baseline)",
+        f"  KL divergence: {kl:.3f} (within-session distribution shift)",
         "",
     ]
 
-    # Assessment
-    if health == "green":
-        lines.append("Assessment: This session looks healthy. The agent worked")
-        lines.append("purposefully with consistent behavior throughout.")
-    elif health == "yellow":
-        lines.append("Assessment: Some minor irregularities detected. The agent")
-        lines.append("may have had brief periods of confusion or context loss,")
-        lines.append("but overall completed its task.")
-    else:
-        lines.append("Assessment: Significant problems detected. The agent's")
-        lines.append("behavior pattern broke down — likely got stuck in a loop,")
-        lines.append("lost context, or drifted off the original goal.")
+    state_desc = {
+        "steady": "Stable, varied flow — no strong repetition or shift. "
+                  "Says nothing about success.",
+        "phase_shifting": "The action mix changed over the session. Common "
+                          "in long, legitimately multi-task work; not a "
+                          "problem by itself.",
+        "looping": "Repetition dominates. Could be a focused search (fine) "
+                   "OR a stuck agent (not fine) — the signature alone "
+                   "cannot tell; inspect the trace.",
+    }
+    lines.append("What this means: " +
+                 state_desc.get(state, "Behavioral shape only."))
 
-        # Explain specific anomalies
-        if anomalies > 0:
+    if anomalies > 0:
+        lines.append("")
+        sig_counts = {}
+        for a in result.get("anomalies", []):
+            if isinstance(a, dict):
+                sig = a.get("signature", "unclassified")
+                sig_counts[sig] = sig_counts.get(sig, 0) + 1
+
+        if sig_counts:
+            lines.append("Dominant IT signatures (descriptive):")
+            for sig, count in sorted(sig_counts.items(), key=lambda x: -x[1]):
+                lines.append(f"  {sig}: {count}x")
+
+        if mi < 0.5:
             lines.append("")
-            sig_counts = {}
-            for a in result.get("anomalies", []):
-                if isinstance(a, dict):
-                    sig = a.get("signature", "unclassified")
-                    sig_counts[sig] = sig_counts.get(sig, 0) + 1
-
-            if sig_counts:
-                lines.append("Anomaly breakdown:")
-                for sig, count in sorted(sig_counts.items(), key=lambda x: -x[1]):
-                    lines.append(f"  {sig}: {count}x")
-
-            if mi < 0.5:
-                lines.append("")
-                lines.append(f"Action MI is very low ({mi:.2f}b) — the agent's actions")
-                lines.append("had almost no sequential logic. This typically means")
-                lines.append("the agent was thrashing between unrelated operations.")
+            lines.append(f"Action MI is low ({mi:.2f}b) — consecutive actions "
+                         "had little sequential dependence. Describes the "
+                         "pattern; does not by itself mean failure.")
 
     return "\n".join(lines)
 
 
 @mcp.tool()
 def caft_audit(traces_dir: str = "") -> str:
-    """Batch audit all agent sessions in a directory.
+    """Batch-profile all agent sessions in a directory.
 
-    Analyzes every JSONL file and returns a summary showing which sessions
-    were healthy, degraded, or problematic. Includes a cost estimate of
-    wasted developer time.
+    Analyzes every JSONL file and returns a DESCRIPTIVE summary by
+    behavioral state (steady / phase_shifting / looping). No quality
+    verdict and no cost estimate — those were not supported by the math
+    and were removed (see docs/CONSTRUCT_REVISION.md).
 
     Args:
         traces_dir: Path to directory with trace files. If empty, auto-detects
@@ -284,21 +289,20 @@ def caft_audit(traces_dir: str = "") -> str:
     # Fallback: simple summary
     n = results["sessions"]
     lines = [
-        f"Audited {n} sessions from {path.name}",
+        f"Profiled {n} sessions from {path.name}  (descriptive, not verdicts)",
         "",
-        f"  Healthy:     {results['healthy']}",
-        f"  Degraded:    {results['degraded']}",
-        f"  Problematic: {results['problematic']}",
-        f"  Total anomalies: {results['total_anomalies']}",
+        f"  steady:         {results.get('steady', 0)}",
+        f"  phase_shifting: {results.get('phase_shifting', 0)}",
+        f"  looping:        {results.get('looping', 0)}",
+        f"  IT-anomaly windows: {results['total_anomalies']}",
         "",
     ]
 
     for r in results.get("results", []):
-        health = r["health"]
-        icon = {"green": "OK", "yellow": "WARN", "red": "FAIL"}.get(health, "?")
+        state = r.get("behavioral_state", r.get("health", "unknown"))
         name = Path(r.get("path", "?")).stem[:12]
-        lines.append(f"  [{icon}] {name}: {r['events']} events, "
-                     f"{r['anomaly_count']} anomalies")
+        lines.append(f"  [{state}] {name}: {r['events']} events, "
+                     f"{r['anomaly_count']} IT-anomaly windows")
 
     return "\n".join(lines)
 
@@ -422,8 +426,9 @@ def caft_explain(anomaly_signature: str) -> str:
 def caft_status() -> str:
     """Get the current CAFT monitoring status.
 
-    Returns health (green/yellow/red), key metrics, and recent activity.
-    If no session is actively being monitored, reports on the most recent
+    Returns the live behavioral signal (descriptive, not a quality
+    verdict — see docs/CONSTRUCT_REVISION.md), key metrics, and recent
+    activity. If nothing is actively monitored, reports the most recent
     completed session.
     """
     caft = _get_plugin()
@@ -431,11 +436,10 @@ def caft_status() -> str:
     # Check if we have an active monitor
     status = caft.status()
     if status.get("health") != "not_started" and status.get("event_count", 0) > 0:
-        health = status["health"]
-        icon = {"green": "OK", "yellow": "WARN", "red": "FAIL"}.get(health, "?")
+        signal = status.get("health", "unknown")
         it = status.get("info_theoretic", {})
         return (
-            f"Health: {icon} {health.upper()}\n"
+            f"Live signal: {signal}  (descriptive, not a verdict)\n"
             f"Events: {status['event_count']}\n"
             f"Anomalies: {status['anomaly_count']}\n"
             f"Uptime: {status.get('uptime_seconds', 0):.0f}s\n"
