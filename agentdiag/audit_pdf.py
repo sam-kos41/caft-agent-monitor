@@ -29,21 +29,20 @@ try:
         HRFlowable, KeepTogether,
     )
     HAS_REPORTLAB = True
+
+    GREEN = colors.HexColor("#22c55e")
+    YELLOW = colors.HexColor("#eab308")
+    RED = colors.HexColor("#ef4444")
+    DARK_BG = colors.HexColor("#1a1d27")
+    LIGHT_TEXT = colors.HexColor("#e2e8f0")
+    DIM_TEXT = colors.HexColor("#94a3b8")
+    ACCENT = colors.HexColor("#3b82f6")
 except ImportError:
     HAS_REPORTLAB = False
+    GREEN = YELLOW = RED = DARK_BG = LIGHT_TEXT = DIM_TEXT = ACCENT = None
 
 
-# Colors matching the dashboard theme
-GREEN = colors.HexColor("#22c55e")
-YELLOW = colors.HexColor("#eab308")
-RED = colors.HexColor("#ef4444")
-DARK_BG = colors.HexColor("#1a1d27")
-LIGHT_TEXT = colors.HexColor("#e2e8f0")
-DIM_TEXT = colors.HexColor("#94a3b8")
-ACCENT = colors.HexColor("#3b82f6")
-
-
-def _health_color(health: str) -> colors.Color:
+def _health_color(health):
     if health == "green":
         return GREEN
     elif health == "yellow":

@@ -26,9 +26,49 @@ import time
 from pathlib import Path
 from typing import IO, Optional
 
-import uvicorn
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.responses import HTMLResponse, JSONResponse
+try:
+    import uvicorn
+    from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+    from fastapi.responses import HTMLResponse, JSONResponse
+    HAS_FASTAPI = True
+except ImportError:
+    HAS_FASTAPI = False
+    uvicorn = None
+
+    class _StubApp:
+        """No-op stand-in for FastAPI when the dashboard extra is not installed.
+
+        Keeps module import working so pure-Python helpers
+        (_dashboard_to_dict, _agent_phases, _agent_active) remain
+        accessible without fastapi/uvicorn. Server entry points raise
+        a clear error via _require_fastapi() before doing anything.
+        """
+
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def __getattr__(self, name):
+            def decorator_factory(*args, **kwargs):
+                def wrap(fn):
+                    return fn
+                return wrap
+            return decorator_factory
+
+    class WebSocketDisconnect(Exception):
+        pass
+
+    WebSocket = object
+    HTMLResponse = JSONResponse = object
+    FastAPI = _StubApp
+
+
+def _require_fastapi():
+    if not HAS_FASTAPI:
+        raise ImportError(
+            "Visualization server requires fastapi+uvicorn. Install with:\n"
+            "    pip install caft[dashboard]"
+        )
+
 
 from agentdiag.monitor import MonitorEngine, DashboardState, ActionEntry
 from agentdiag.hta import Phase
@@ -859,6 +899,7 @@ def start_server(
         cognitive: Enable cognitive load monitoring.
         input_path: Path to the input file being analyzed (for session metadata).
     """
+    _require_fastapi()
     global _engine, _context_store, _status_engine, _current_state_json, _event_count, _stream_ended
     global _agent_phases, _agent_active, _next_agent_idx, _session_meta
 
@@ -933,6 +974,7 @@ def start_compare_server(
         host: Bind address.
         delay: Seconds between events for pacing.
     """
+    _require_fastapi()
     global _engine, _engine_b, _context_store
     global _current_state_json, _event_count, _stream_ended
     global _current_state_b_json, _event_count_b, _stream_ended_b
@@ -1046,6 +1088,7 @@ def start_ablation_server(
     _ablation_progress_callback which updates global state polled by
     the WebSocket handler at 10Hz.
     """
+    _require_fastapi()
     global _ablation_mode, _ablation_state, _ablation_events
     global _ablation_event_count, _ablation_complete, _context_store
 
