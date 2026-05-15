@@ -204,17 +204,81 @@ signal. An artifact guard was added; the tool now reports the honest
 result. Recorded here because the failure of one's own instrument is
 itself data.)
 
-**Decision: CAFT-as-detector does not survive validation.** It is not
-an anomaly detector, a health classifier, or an early-warning signal.
-It is a within-session phase-variation metric whose verdict layer
-fires on a clock. The durable contributions are: (1) the construct-
-validation methodology and harness; (2) this documented negative
-result, evidenced down to per-event timing; (3) the honestly reframed
-descriptive `behavioral_state` surface (no detection claim). Further
-investment in CAFT-as-detector is not warranted; the cross-session
-baseline (option B) remains the only path that could earn a real
-detection claim and is explicitly future research, not a current
-capability.
+**Decision (corrected 2026-05-15, narrowed):** the earlier draft of
+this section claimed "CAFT-as-detector does not survive validation."
+That over-claimed. The precise, defensible statement is:
+
+> **The self-calibrating-on-first-~100-events baseline variant
+> failed.** Its verdict fires on a clock (calibration-window close),
+> not on session content. This indicts that *specific calibration
+> mechanism*, not the information-theoretic approach, which has never
+> been run with a baseline meaning "unlike normal sessions."
+
+The negative finding is partly a consequence of a fixable design
+decision, so the honest next step is an experiment, not an obituary.
+Two steelman variants are under test (`baseline_variants.py`):
+
+  1. **Corpus baseline (leave-one-out)** — z-score each session's
+     per-step metrics against a reference distribution pooled across
+     the *other* sessions, so "anomaly" = "unlike normal sessions."
+  2. **Change-point detection** — abandon z-vs-baseline entirely;
+     detect whether the IT trajectory *shifts* at the event a literal
+     loop/thrash actually begins.
+
+Pre-stated caveats (so a fix can't silently move the goalposts):
+small corpus (n≈7, LOO reference is thin → directional only); and the
+session-level κ evidence suggests the IT metrics may not track
+human/objective judgment *even with a correct baseline* — fixing
+calibration is necessary but possibly not sufficient. If the steelman
+variants still fire indiscriminately or still fail convergent
+validity, the negative result stands but is then *earned* (the strong
+version was tested), not an artifact.
+
+Durable regardless of the steelman outcome: (1) the construct-
+validation methodology and harness; (2) the honestly reframed
+descriptive `behavioral_state` surface (no detection claim). Whether
+(3) "a documented negative result" or "a recovered detection claim"
+is the third asset is what the steelman experiment decides.
+
+## 5c. Steelman result (resolved 2026-05-15, `baseline_variants.py`)
+
+Both alternatives were implemented and run on the 7-session corpus,
+same event axis, pipeline's own per-step metrics, leave-one-out for
+the corpus reference:
+
+```
+method     fire-rate  cluster        verdict
+self        100%       events 100-183  ARTIFACT (calibration window)
+corpus      100%       event 0         ARTIFACT (cold-start degeneracy)
+changept    100%       events 20-53    ARTIFACT (window-fill transient)
+```
+
+All three fire in **7/7 sessions at an early clustered index,
+regardless of whether a literal loop exists**. They fail for a
+*common, deeper* reason than the calibration window: the per-step IT
+metrics have a large content-independent transient while the sliding
+window fills, and every threshold/shift method trips on that transient
+in every session. Changing the baseline (corpus) moved the artifact to
+event 0; changing the method entirely (change-point) moved it to
+events 20-53. The artifact moves; it does not disappear.
+
+(Honesty note: the change-point detector's first implementation could
+not detect a clean synthetic step — a unit test caught it. "changept
+never fires" was briefly reported; that was a broken instrument, not a
+CAFT result. Fixed, re-run; the finding above is post-fix.)
+
+**This answers the steelman challenge.** The negative result is not an
+artifact of one design choice: the two strongest alternatives were
+tested and both fail, for a reason intrinsic to using these
+window-based IT metrics as per-step detectors on real sessions of this
+length. One lever remains untried — excluding a fixed warmup before
+any detection — but the pattern (each method fires precisely at *its
+own* transient) predicts that will merely relocate the artifact again
+unless there is genuine post-warmup, content-discriminative signal;
+the session-level κ work already indicated there is not. The
+responsible position: the evidence has converged. CAFT-as-per-step-
+detector is not supported; the third asset is the documented,
+steelmanned negative result.
 
 ## 6. What is explicitly NOT being done
 
