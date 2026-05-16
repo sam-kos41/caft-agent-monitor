@@ -163,7 +163,7 @@ _HTML = r"""<!DOCTYPE html>
 --ok:#4e598c;--warn:#fcaf58;--bad:#ff8c42}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);
 color:var(--ink);font:14px/1.55 -apple-system,system-ui,Segoe UI,sans-serif}
-.wrap{max-width:1080px;margin:0 auto;padding:34px 18px 70px}
+.wrap{max-width:1160px;margin:0 auto;padding:34px 18px 70px}
 h1{font-size:23px;margin:0 0 4px;letter-spacing:-.01em;
 color:var(--dusk)}
 .sub{color:var(--dim);font-size:13.5px;margin:0 0 14px}
@@ -173,12 +173,12 @@ color:var(--dim);margin:2px 0 16px;max-width:780px}
 .scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;
 background:#fff}
 .grid{display:grid;grid-auto-flow:column;min-width:max-content}
-.col{width:66px;border-right:1px solid #f0e6d3;position:relative}
+.col{width:54px;border-right:1px solid #f0e6d3;position:relative}
 .rowlab{position:sticky;left:0;z-index:2;background:var(--card);
-border-right:2px solid var(--dusk);width:118px;min-width:118px}
+border-right:2px solid var(--dusk);width:102px;min-width:102px}
 .cell{height:46px;border-bottom:1px solid #f0e6d3;display:flex;
 align-items:center;justify-content:center;font-size:11px}
-.rowlab .cell{justify-content:flex-start;padding:0 12px;
+.rowlab .cell{justify-content:flex-start;padding:0 9px;
 color:var(--dusk);font-size:11.5px;font-weight:600}
 .wlbar{width:14px;background:linear-gradient(180deg,var(--pumpkin),
 var(--sandy),var(--apricot));border-radius:2px;align-self:flex-end;
@@ -196,9 +196,12 @@ border-right:2px solid var(--dusk)}
 padding:2px 9px;border-radius:999px;background:var(--dusk);
 color:#fff;letter-spacing:.02em;vertical-align:middle}
 /* IT ribbon is the load-bearing lane — render it dominant. */
-.cell.it{height:62px;border-top:2px solid var(--dusk);
+.cell.it{height:70px;flex-direction:column;gap:4px;
+border-top:2px solid var(--dusk);
 border-bottom:2px solid var(--dusk);background:#fbf3e6}
-.rowlab .cell.it{color:var(--dusk);font-weight:800;font-size:11px}
+.rowlab .cell.it{flex-direction:column;justify-content:center;
+align-items:flex-start;gap:0;color:var(--dusk);font-weight:800;
+font-size:10px;line-height:1.25}
 .act{font-size:10px;font-weight:700;border-radius:4px;
 padding:4px 6px;text-align:center;white-space:nowrap;
 box-shadow:0 1px 3px rgba(78,89,140,.18)}
