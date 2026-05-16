@@ -49,7 +49,7 @@ leg strengthens the framework paper; it does not weaken it.
 | **1 — Behavioral structure (information theory)** | predictability (MI), redundancy (compression), distributional shift (KL), diversity (entropy), cross-agent MI | **Validated at population level** on SWE-agent/Llama-70b (pilot, 2026-05). Modest robust effect ΔAUC +0.044 (CI excludes 0), non-artifactual. Convergent validity w/ test outcomes shown; construct validity of specific feature→construct mappings still open. |
 | **2 — Cognitive workload analogs** | resource demand (Wickens MRT, Sweller CLT, NASA-TLX) | **Documented NEGATIVE (2026-05): not a distinct leg.** Locked W-H3 failed (ΔAUC +0.006 over baseline+IT, CI spans 0; max workload↔IT corr 0.74). Workload predicts outcome (W-H1 pass) but the signal is already captured by Leg-1 IT — folds into Leg 1. Corpus-limited (timing/branching excluded by honest-scoping; no timestamps in nebius). Strengthens the framework paper as a discriminant-validity finding. |
 | **3 — Situation awareness analogs** | perception / comprehension / projection (Endsley, SAGAT/SART) | **Documented NEGATIVE (2026-05): not a distinct leg.** Locked SA-H3 failed (ΔAUC +0.003 over baseline+IT, CI spans 0; max SA↔IT corr 0.64). SA-H1 weakly passes (AUC 0.65 — lowest of any leg) but folds into Leg 1. L2 comprehension excluded by honest-scoping. The strongest distinctness candidate collapsed into IT — see meta-thesis note below. |
-| **4 — Error recovery & adaptive behavior** | resilience (Reason; Hollnagel/FRAM; adaptive automation) | **Pre-registration drafted, IN HUMAN REVIEW** (`PREREG_LEG4_ERROR_RECOVERY.md`). Run as a **confirmatory** test of the parsimony thesis with a stated prior it also reduces to IT — but error recovery is the most distinct axis from IT (discrete adverse events vs steady-state sequence shape), so a leg-defining pass is held genuinely open. **Final empirical leg: regardless of outcome, the empirical phase ends here → methodology-paper drafting begins.** |
+| **4 — Error recovery & adaptive behavior** | resilience (Reason; Hollnagel/FRAM; adaptive automation) | **Documented NEGATIVE (2026-05): not a distinct leg.** Locked E-H3 failed (ΔAUC +0.004 over baseline+IT, CI spans 0; max ER↔IT corr 0.75). E-H1 passes (AUC 0.71). Completes the parsimony result. **Empirical phase CLOSED.** |
 
 Per-leg theoretical roots, candidate constructs, and validation plans
 are specified in each leg's pre-registration, grounded in cited HF
@@ -64,14 +64,22 @@ was the conceptually strongest distinctness candidate (different axis:
 agent↔environment, not action-sequence shape). n=2 convergent
 discriminant negatives, including the strongest case.
 
-Working thesis (this corpus / these operationalizations, not yet
-universal): **information-theoretic behavioral structure is the
-load-bearing construct for population-level agent measurement; HF
-analogs carry outcome signal but reduce to it.** This is a parsimony
-finding — arguably a stronger contribution than four independent
-legs. Leg 4 (error recovery) is now the test of whether *any* HF
-analog survives distinct from IT, with a strong prior it will not.
-Still data-driven: a distinct Leg 4 would re-open the question.
+**ESTABLISHED (empirical phase closed 2026-05): the parsimony
+thesis.** All three tested HF analogs — workload (Leg 2), situation
+awareness (Leg 3), error recovery (Leg 4) — each predict the
+test-based outcome on their own (H1 AUC 0.65–0.71) yet each collapse
+to ≈0 incremental signal once Leg-1 IT is in the model (all three
+leg-defining H3 ΔAUC ≤ 0.006 with 95% CI spanning 0; each correlates
+0.64–0.75 with IT). n=3 convergent discriminant negatives, including
+both axes pre-judged most distinct (SA, error recovery).
+
+**Information-theoretic behavioral structure is the load-bearing
+population-level construct for these agent traces; the HF analogs
+re-measure it under other names.** A parsimony finding — on this
+corpus (nebius SWE-agent / Llama) and these honest-scoped
+operationalizations; generalization across agents/corpora is the
+stated boundary, not a claim. Empirical phase complete →
+methodology-paper drafting (`PAPER_OUTLINE.md`).
 
 ## Shared infrastructure (build once, use everywhere)
 

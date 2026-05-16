@@ -1,0 +1,41 @@
+{
+  "n": 2000,
+  "E_H1": {
+    "obs_auc": 0.7127225,
+    "null_p95": 0.5272926250000001,
+    "null_mean": 0.500246775,
+    "floor": 0.55,
+    "n_perm": 1000,
+    "pass": true
+  },
+  "E_H2": {
+    "auc_baseline": 0.723884,
+    "auc_baseline_ER": 0.7522139999999999,
+    "delta": 0.028329999999999966,
+    "ci": [
+      0.011156850661567621,
+      0.046726277670712635
+    ],
+    "n_boot": 2000,
+    "min": 0.03,
+    "pass": false
+  },
+  "E_H3": {
+    "auc_baseline_IT": 0.768098,
+    "auc_baseline_IT_ER": 0.771877,
+    "delta": 0.003779000000000088,
+    "ci": [
+      -0.004564019625300386,
+      0.011582596140838869
+    ],
+    "n_boot": 2000,
+    "min": 0.02,
+    "pass": false
+  },
+  "discriminant_max_abs_corr_ER_vs_IT": 0.7472590115998358,
+  "decision": {
+    "code": "E_H1_PASS_E_H3_FAIL",
+    "conclusion": "Error recovery redundant with Leg-1 IT \u2014 not distinct. COMPLETES the parsimony result: all 3 tested HF analogs reduce to IT (airtight; strongest-distinct axis too).",
+    "action": "Document; END empirical phase -> paper."
+  }
+}
