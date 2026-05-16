@@ -31,10 +31,22 @@ Lanes:
 - **Thought–Action** — did the stated intent match the action taken?
   (agent-native).
 
+The **action ribbon is rendered as the dominant lane** — it is the
+load-bearing measurement, and each cell is tagged `● new` / `↻ rep`
+to show the sequence's own redundancy (the visible signature of what
+compression / MI score; illustrative, not a per-step metric).
+
+Below the trajectory: a **three-step zoom** (executes-well /
+heaviest-or-errored / struggling, chosen from this trajectory) so the
+lenses are visibly varying, and the **population finding table**
+(N = 2,000) — each construct alone vs. beyond IT vs. correlation with
+IT. The finding lives on the page itself, not only behind a link.
+
 Every per-step value is computed with the **same frozen logic the
-committed extractors use** (imported, not re-derived); the data is
-baked into the page — no analysis runs in the browser. Regenerate with
-`python demo/build_trajectory_demo.py`.
+committed extractors use** (imported, not re-derived); the table
+numbers are the validated population results (see snapshot); the data
+is baked into the page — no analysis runs in the browser. Regenerate
+with `python demo/build_trajectory_demo.py`.
 
 ## Read this — it is part of the result
 

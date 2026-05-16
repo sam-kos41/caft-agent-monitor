@@ -61,6 +61,7 @@ def build():
     traj = row.get("trajectory") or []
     steps = []
     seen_paths: set[str] = set()
+    seen_cats: set[str] = set()   # for ribbon-redundancy display only
     # pre-index: for each ai step, was the immediately following
     # observation an error, and did the next action change?
     seq = []  # (kind, payload, raw_turn_index)
@@ -78,6 +79,12 @@ def build():
     for n, (_, (verb, args, ai_text), ti) in enumerate(acts):
         v = verb.lower()
         cat = _CAT.get(v, "other")
+        # Ribbon redundancy: has this action type already occurred?
+        # This is a *rendering* of the shown sequence's own
+        # compressibility (what MI/compression score) — not a new
+        # metric, just the visible signature of structure.
+        repeat = cat in seen_cats
+        seen_cats.add(cat)
         tok = _target_tok(args)
         thought = _thought(ai_text)
         tw = set(_WORD.findall(thought.lower()))
@@ -114,6 +121,7 @@ def build():
         steps.append({
             "i": n + 1,
             "verb": verb, "cat": cat,
+            "repeat": repeat,
             "target": tok or "",
             "thought": " ".join(thought.split())[:240],
             "wl": len(thought),
@@ -144,53 +152,106 @@ def build():
 _HTML = r"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Human-factors constructs over a real agent trajectory</title>
+<title>Four ways to measure an AI agent — and why each reduces to the action sequence</title>
 <style>
-:root{--bg:#0d1017;--card:#161b25;--line:#272e3b;--ink:#e6edf3;
---dim:#8b97a7;--ok:#3fb950;--bad:#f85149;--warn:#d29922;--accent:#58a6ff}
+/* Palette — Dusk Blue / White / Apricot Cream / Sandy Brown /
+   Pumpkin Spice (light theme; dusk blue = structure & text,
+   warm ramp = accents & severity). */
+:root{--bg:#ffffff;--card:#fdf3e4;--line:#ead9bc;--ink:#3a4170;
+--dim:#8189ad;--accent:#4e598c;--dusk:#4e598c;--apricot:#f9c784;
+--sandy:#fcaf58;--pumpkin:#ff8c42;
+--ok:#4e598c;--warn:#fcaf58;--bad:#ff8c42}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);
 color:var(--ink);font:14px/1.55 -apple-system,system-ui,Segoe UI,sans-serif}
 .wrap{max-width:1080px;margin:0 auto;padding:34px 18px 70px}
-h1{font-size:23px;margin:0 0 4px;letter-spacing:-.01em}
+h1{font-size:23px;margin:0 0 4px;letter-spacing:-.01em;
+color:var(--dusk)}
 .sub{color:var(--dim);font-size:13.5px;margin:0 0 14px}
-.banner{background:#0f2236;border:1px solid #21456e;border-radius:8px;
-padding:11px 15px;font-size:13px;color:#cfe3fb;margin:0 0 20px}
+.banner{background:var(--card);border:1px solid var(--line);
+border-left:4px solid var(--dusk);border-radius:8px;
+padding:11px 15px;font-size:13px;color:var(--dusk);margin:0 0 20px}
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;
 color:var(--dim);margin:0 0 14px}
-.legend b{color:var(--ink)}
+.legend b{color:var(--dusk)}
 .scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;
-background:var(--card)}
+background:#fff}
 .grid{display:grid;grid-auto-flow:column;min-width:max-content}
-.col{width:54px;border-right:1px solid #20262f;position:relative}
-.col:hover{background:#1b2230}
+.col{width:54px;border-right:1px solid #f0e6d3;position:relative}
+.col:hover{background:#fbf3e6}
 .rowlab{position:sticky;left:0;z-index:2;background:var(--card);
-border-right:2px solid var(--line);width:118px;min-width:118px}
-.cell{height:46px;border-bottom:1px solid #20262f;display:flex;
+border-right:2px solid var(--dusk);width:118px;min-width:118px}
+.cell{height:46px;border-bottom:1px solid #f0e6d3;display:flex;
 align-items:center;justify-content:center;font-size:11px}
-.rowlab .cell{justify-content:flex-start;padding:0 12px;color:var(--dim);
-font-size:11.5px;font-weight:600}
-.act{font-size:10px;color:#0d1017;font-weight:700;border-radius:4px;
-padding:3px 4px;max-width:46px;overflow:hidden;text-overflow:ellipsis;
-white-space:nowrap}
-.wlbar{width:14px;background:linear-gradient(#f85149,#d29922,#3fb950);
-border-radius:2px;align-self:flex-end;margin-bottom:5px}
+.rowlab .cell{justify-content:flex-start;padding:0 12px;
+color:var(--dusk);font-size:11.5px;font-weight:600}
+.wlbar{width:14px;background:linear-gradient(180deg,var(--pumpkin),
+var(--sandy),var(--apricot));border-radius:2px;align-self:flex-end;
+margin-bottom:5px}
 .mk{font-size:13px;font-weight:700}
-.dotn{color:#3b424d}
-.tip{position:fixed;max-width:340px;background:#0b0e14;
-border:1px solid #30363d;border-radius:8px;padding:11px 13px;
-font-size:12px;color:var(--ink);pointer-events:none;opacity:0;
-transition:opacity .1s;z-index:10;box-shadow:0 8px 30px #000a}
-.tip b{color:var(--accent)} .tip .t{color:var(--dim);font-style:italic}
-.tip .cs{margin-top:7px;border-top:1px solid #222;padding-top:6px}
+.dotn{color:#cdd0e0}
+.tip{position:fixed;max-width:340px;background:var(--dusk);
+border:1px solid #3a4170;border-radius:8px;padding:11px 13px;
+font-size:12px;color:#fff;pointer-events:none;opacity:0;
+transition:opacity .1s;z-index:10;box-shadow:0 10px 30px rgba(78,89,140,.35)}
+.tip b{color:var(--apricot)}
+.tip .t{color:#dde0f0;font-style:italic}
+.tip .cs{margin-top:7px;border-top:1px solid #6b73a0;padding-top:6px}
 .tip .cs div{margin:3px 0}
 footer{margin-top:26px;color:var(--dim);font-size:12.5px;
 border-top:1px solid var(--line);padding-top:14px}
-a{color:var(--accent)}
+a{color:var(--pumpkin)}
 .idx{position:sticky;left:0;background:var(--card);
-border-right:2px solid var(--line)}
+border-right:2px solid var(--dusk)}
+.ctx{font-size:13px;color:var(--ink);margin:0 0 16px;max-width:760px}
+.ctx b{color:var(--dusk)}
+.badge{display:inline-block;font-size:11px;font-weight:700;
+padding:2px 9px;border-radius:999px;background:var(--dusk);
+color:#fff;letter-spacing:.02em;vertical-align:middle}
+.symlegend{display:flex;gap:20px;flex-wrap:wrap;font-size:11.5px;
+color:var(--dim);margin:0 0 16px}
+.symlegend span b{color:var(--dusk);font-weight:700}
+/* IT ribbon is the load-bearing lane — render it dominant. */
+.cell.it{height:62px;border-top:2px solid var(--dusk);
+border-bottom:2px solid var(--dusk);background:#fbf3e6}
+.rowlab .cell.it{color:var(--dusk);font-weight:800;font-size:11px}
+.act{font-size:10px;font-weight:700;border-radius:4px;
+padding:4px 5px;max-width:46px;overflow:hidden;text-overflow:ellipsis;
+white-space:nowrap;box-shadow:0 1px 3px rgba(78,89,140,.18)}
+.rep{font-size:9px;color:var(--dim);margin-top:2px;font-weight:700}
+.new{font-size:9px;color:var(--pumpkin);margin-top:2px;font-weight:800}
+.find{max-width:760px;margin:26px 0 4px}
+.find h2{font-size:15px;margin:0 0 4px;color:var(--dusk)}
+.find p{font-size:12.5px;color:var(--dim);margin:0 0 10px}
+table.f{border-collapse:collapse;width:100%;font-size:12.5px}
+table.f th,table.f td{border:1px solid var(--line);padding:6px 9px;
+text-align:left}
+table.f th{background:var(--card);color:var(--dusk);font-weight:700}
+table.f td.n{text-align:right;font-variant-numeric:tabular-nums}
+.v{color:var(--dusk);font-weight:700}
+.x{color:var(--pumpkin);font-weight:700}
+table.f tr.lb td{background:#fbf3e6}
+.focus{max-width:880px;margin:24px 0 0}
+.focus h2{font-size:15px;margin:0 0 8px;color:var(--dusk)}
+.fcards{display:flex;gap:12px;flex-wrap:wrap}
+.fc{flex:1;min-width:240px;background:var(--card);
+border:1px solid var(--line);border-left:4px solid var(--dusk);
+border-radius:8px;padding:12px 14px}
+.fc .h{font-size:12px;font-weight:800;color:var(--dusk);
+margin:0 0 5px}
+.fc .q{font-size:12px;font-style:italic;color:var(--ink);
+margin:0 0 8px}
+.fc .r{font-size:11.5px;color:var(--dim);margin:3px 0}
+.fc .r b{color:var(--dusk)}
 </style></head><body><div class="wrap">
-<h1>What each construct measures — on one real agent trajectory</h1>
+<h1>Four ways to measure an AI agent — and why each reduces to the
+action sequence</h1>
 <p class="sub" id="meta"></p>
+<p class="ctx">This trajectory <b>succeeded</b>. The four constructs vary
+all the way through it regardless of outcome — which is exactly why
+the interesting question is discriminant: does any of them add
+anything <i>beyond the action sequence itself</i>? On 2,000
+trajectories, none do. The table below the trajectory is the finding;
+the trajectory shows what each lens actually measures, step by step.</p>
 <div class="banner">One real SWE-agent trajectory, shown to make the
 constructs concrete. <b>The validated result is population-level</b>
 (2,000 trajectories): all four constructs predict task outcome on
@@ -206,7 +267,54 @@ for per-instance detection (that regime was tested and failed).</div>
 <span><b>Error/recovery</b> = errored → strategy change? (Reason)</span>
 <span><b>Thought–Action</b> = stated intent matches action?</span>
 </div>
+<div class="symlegend">
+<span><b>IT ribbon</b> <span class="new">●new</span> first use of an
+action type · <span class="rep">↻rep</span> a repeat (redundancy =
+what compression/MI score)</span>
+<span><b>Thought–Action</b> ● intent matches · ◐ partial · ○ no match</span>
+<span><b>Perception</b> ✓ read file first · ✗ edited unread file</span>
+<span><b>Error</b> ✗ errored · ✗→↻ errored then changed strategy</span>
+</div>
 <div class="scroll"><div class="grid" id="grid"></div></div>
+
+<div class="focus">
+<h2>Three steps, zoomed — the lenses do vary</h2>
+<div class="fcards" id="fcards"></div>
+</div>
+
+<div class="find">
+<h2>The finding (population-level, N = 2,000 — not this one trajectory)</h2>
+<p>Each construct predicts task outcome <i>on its own</i>. Not one
+adds predictive value <i>beyond</i> the information-theoretic action
+sequence (locked decision rule: does it beat baseline + IT?). The
+agent-native lens is the sharpest case — least correlated with IT
+(0.43) yet still adds essentially zero.</p>
+<table class="f">
+<tr><th>Construct</th><th>Source</th><th class="n">Alone (H1 AUC)</th>
+<th class="n">Beyond IT (ΔAUC)</th><th class="n">corr w/ IT</th>
+<th>Verdict</th></tr>
+<tr class="lb"><td>IT behavioral structure</td>
+<td>information theory</td><td class="n v">0.75</td>
+<td class="n">— (reference)</td><td class="n">—</td>
+<td class="v">load-bearing</td></tr>
+<tr><td>Cognitive workload</td><td>Wickens / Sweller / NASA-TLX</td>
+<td class="n">0.70</td><td class="n x">+0.006 (CI∋0)</td>
+<td class="n">0.74</td><td class="x">reduces to IT</td></tr>
+<tr><td>Situation awareness</td><td>Endsley</td>
+<td class="n">0.65</td><td class="n x">+0.003 (CI∋0)</td>
+<td class="n">0.64</td><td class="x">reduces to IT</td></tr>
+<tr><td>Error recovery</td><td>Reason / Hollnagel</td>
+<td class="n">0.71</td><td class="n x">+0.004 (CI∋0)</td>
+<td class="n">0.75</td><td class="x">reduces to IT</td></tr>
+<tr><td>Thought–action coherence</td><td>agent-native</td>
+<td class="n">0.67</td><td class="n x">−0.0002 (CI∋0)</td>
+<td class="n">0.43</td><td class="x">reduces to IT</td></tr>
+</table>
+<p>Holds under a graded outcome too (Generalization G) — not a
+binarization artifact. Full arc &amp; evidence ledger:
+<a href="../docs/PROJECT_SNAPSHOT.html">the project snapshot</a>.</p>
+</div>
+
 <div class="tip" id="tip"></div>
 <footer>Trajectory <code id="inst"></code> = frozen-sample row
 <code id="ridx"></code> (selected by position; instance ids are
@@ -217,35 +325,46 @@ page.</footer>
 </div>
 <script>
 const D=/*DATA*/;
-document.getElementById('meta').textContent=
+document.getElementById('meta').innerHTML=
  `instance ${D.instance} · model ${D.model} · `+
- `${D.n_steps} action steps · outcome: ${D.resolved?'resolved':'not resolved'}`;
+ `${D.n_steps} action steps · outcome: `+
+ `<span class="badge">${D.resolved?'RESOLVED':'NOT RESOLVED'}</span>`;
 document.getElementById('inst').textContent=D.instance;
 document.getElementById('ridx').textContent=D.row_idx;
 const ROWS=[
  {k:'idx',  lab:'step'},
- {k:'act',  lab:'action (IT ribbon)'},
+ {k:'act',  lab:'ACTION SEQUENCE ▸ IT (load-bearing)'},
  {k:'wl',   lab:'workload'},
  {k:'perc', lab:'perception'},
  {k:'err',  lab:'error / recovery'},
  {k:'tac',  lab:'thought–action'}];
-const CC={observe:'#58a6ff',search:'#3fb950',mutate:'#d29922',
-verify:'#a371f7',submit:'#8b97a7',other:'#6e7681'};
+// action-ribbon palette (Dusk Blue / warm ramp) + readable text
+const CC={observe:'#4e598c',search:'#7e88b4',mutate:'#ff8c42',
+verify:'#fcaf58',submit:'#f9c784',other:'#c9ccdd'};
+const CT={observe:'#fff',search:'#fff',mutate:'#fff',
+verify:'#3a2e12',submit:'#5a3c14',other:'#3a4170'};
 const g=document.getElementById('grid');
 // label column
 const lc=document.createElement('div');lc.className='col rowlab';
-ROWS.forEach(r=>{const c=document.createElement('div');c.className='cell';
+ROWS.forEach(r=>{const c=document.createElement('div');
+c.className='cell'+(r.k==='act'?' it':'');
 c.textContent=r.lab;lc.appendChild(c);});g.appendChild(lc);
 // step columns
 D.steps.forEach(s=>{
  const col=document.createElement('div');col.className='col';
  col.dataset.i=s.i;
  ROWS.forEach(r=>{
-  const c=document.createElement('div');c.className='cell';
+  const c=document.createElement('div');
+  c.className='cell'+(r.k==='act'?' it':'');
   if(r.k==='idx'){c.textContent=s.i;c.style.color='#6e7681';}
   else if(r.k==='act'){const a=document.createElement('div');
    a.className='act';a.style.background=CC[s.cat]||CC.other;
-   a.textContent=s.verb;c.appendChild(a);}
+   a.style.color=CT[s.cat]||CT.other;
+   a.textContent=s.verb;c.appendChild(a);
+   const rd=document.createElement('div');
+   rd.className=s.repeat?'rep':'new';
+   rd.textContent=s.repeat?'↻ rep':'● new';
+   c.appendChild(rd);}
   else if(r.k==='wl'){const b=document.createElement('div');
    b.className='wlbar';b.style.height=(6+s.wl_norm*32)+'px';
    c.appendChild(b);}
@@ -268,8 +387,7 @@ D.steps.forEach(s=>{
  col.addEventListener('mouseleave',hideTip);
  g.appendChild(col);
 });
-const tip=document.getElementById('tip');
-function showTip(e,s){
+function reads(s){
  const pc=s.perception===null?'n/a (not an edit)':
   (s.perception?'edited a file it had read ✓':
    'edited a file it had NOT read ✗');
@@ -279,14 +397,45 @@ function showTip(e,s){
    'errored (end of trajectory)');
  const tc=s.tac>=1?'intent matches action ●':
   s.tac>=0.5?'partial match ◐':'intent does not match ○';
+ return [
+  ['IT', `action “${s.cat}”, `+
+   (s.repeat?'a repeat (redundancy IT scores)':'first of its type')],
+  ['Workload', `${s.wl} chars of reasoning`],
+  ['Perception', pc],
+  ['Error/recovery', ec],
+  ['Thought–Action', tc]];
+}
+// Three illustrative steps: executes well / struggles / heaviest.
+(function(){
+ const byHi=[...D.steps].sort((a,b)=>b.tac-a.tac||b.wl-a.wl);
+ const hi=byHi[0];
+ const lo=[...D.steps].sort((a,b)=>a.tac-b.tac||b.wl-a.wl)[0];
+ const mid=D.steps.filter(s=>s.errored)
+   .find(s=>s.i!==hi.i&&s.i!==lo.i)
+  ||[...D.steps].sort((a,b)=>b.wl-a.wl)
+   .find(s=>s.i!==hi.i&&s.i!==lo.i);
+ const picks=[
+  ['Executing well — highest thought–action coherence',hi],
+  [(mid&&mid.errored?'Hit an error — recovery behavior':
+    'Heaviest reasoning step'),mid],
+  ['Struggling — lowest thought–action coherence',lo]]
+  .filter(p=>p[1]);
+ const seen=new Set();
+ document.getElementById('fcards').innerHTML=picks
+  .filter(p=>!seen.has(p[1].i)&&seen.add(p[1].i))
+  .map(([h,s])=>`<div class="fc"><div class="h">${h}</div>`+
+   `<div class="q">step ${s.i} · ${s.verb} ${s.target||''} — `+
+   `“${s.thought||'(no reasoning text)'}”</div>`+
+   reads(s).map(([k,v])=>`<div class="r"><b>${k}</b>: ${v}</div>`)
+    .join('')+`</div>`).join('');
+})();
+const tip=document.getElementById('tip');
+function showTip(e,s){
  tip.innerHTML=`<b>step ${s.i} · ${s.verb} ${s.target||''}</b>`+
   `<div class="t">“${s.thought||'(no reasoning text)'}”</div>`+
   `<div class="cs">`+
-  `<div><b>IT</b>: action type “${s.cat}” — one token in the sequence IT scores</div>`+
-  `<div><b>Workload</b>: ${s.wl} chars of reasoning</div>`+
-  `<div><b>Perception</b>: ${pc}</div>`+
-  `<div><b>Error/recovery</b>: ${ec}</div>`+
-  `<div><b>Thought–Action</b>: ${tc}</div></div>`;
+  reads(s).map(([k,v])=>`<div><b>${k}</b>: ${v}</div>`).join('')+
+  `</div>`;
  tip.style.opacity=1;
  const x=Math.min(e.clientX+16,window.innerWidth-356);
  const y=Math.min(e.clientY+16,window.innerHeight-220);
