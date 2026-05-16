@@ -61,24 +61,59 @@ Verdict legend: ✓ likely meets · ~ partial / conditional · ✗ likely fails 
    architecture (symbolization audit, plugin extractors) while the
    external corpus is secured — never as the validation substrate.
 
-## MUST-VERIFY checklist (before any commitment)
+## MUST-VERIFY checklist — RESOLVED 2026-05-15 (web-verified)
 
-These are the gating unknowns. Each is a quick web/dataset check; I can
-run them via WebFetch on request.
+- [x] **Trajectories publicly downloadable + at scale?** YES, large.
+      `nebius/SWE-agent-trajectories` on HuggingFace = **80,036**
+      SWE-agent trajectories (one-line `datasets.load_dataset`,
+      friction-free). `SWE-bench/SWE-smith-trajectories` = 5,017.
+      `SWE-bench/experiments` repo = per-submission `trajs/` folder,
+      one reasoning trace per instance_id, across **many** model
+      submissions on SWE-bench Verified (the repo's entire purpose is
+      aggregating many runs; dir layout `evaluation/verified/
+      <date>_<model>/`). R3 (many configs on identical instances): met.
+- [x] **Schema → ObservableEvent mappable?** PARTIAL — important.
+      Each `.traj` step has `response, thought, action, observation,
+      state, query`. But **`action` is a raw command string** (e.g.
+      `"ls -F\n"`), NOT a structured (tool, args) tuple. Mapping to
+      ObservableEvent therefore requires **parsing command strings** —
+      the *same* class of work `adapters/claude_code.py` + `signals.py`
+      already do for Bash. Bounded (~1 day for `adapters/swe_agent.py`)
+      but it makes the Phase-1 symbolization audit **mandatory and
+      corpus-specific**: the action vocabulary differs from Claude
+      Code's and the tool-API-artifact risk must be re-checked here.
+- [x] **Outcome join 1:1 by instance_id?** YES. `SWE-bench/
+      experiments` provides per-submission `logs/<instance_id>/
+      report.json` with test-based resolved status; trajectory files
+      are named by instance_id. Outcome is test-suite pass/fail —
+      definitionally independent of any behavioral metric (clean R2).
+- [ ] **Licensing — STILL OPEN.** The `SWE-bench/experiments` README
+      does **not** state a license. HF dataset cards
+      (nebius / SWE-smith) have their own terms. Must read each
+      dataset's license before any redistribution or published
+      derivative. Treat as unresolved until checked per source.
+- [x] **Realized scale?** Not a concern. 80k trajectories (nebius)
+      and 500 Verified instances × many submissions far exceed the
+      hundreds needed.
+- [ ] **AWS friction (minor).** `SWE-bench/experiments` trajectories
+      live in an S3 bucket needing an AWS account + CLI. Avoidable:
+      start with the friction-free HF datasets; only touch the S3
+      experiments repo if cross-submission R3 needs its breadth.
 
-- [ ] SWE-agent trajectories: are full `.traj` (thought/action/
-      observation) dumps publicly downloadable for SWE-bench Verified,
-      and for **how many distinct model/config runs**? (R3 hinges on
-      this.)
-- [ ] Trajectory schema: can an action be mapped to our
-      `ObservableEvent` (tool name + target + outcome)? Estimate the
-      adapter cost (target: < ~1 day, like the existing adapters).
-- [ ] Outcome join: is each trajectory keyed to its SWE-bench
-      instance_id so the independent pass/fail label can be joined 1:1?
-- [ ] Licensing: redistribution / derivative-analysis terms compatible
-      with a methods paper.
-- [ ] Scale realized: after filtering to trajectories that actually
-      have both traces AND outcomes, is n still in the hundreds?
+### Verdict: the data blocker is REMOVED
+
+The substrate exists, at scale, with test-based independent outcomes
+and many configs on identical tasks. The program is **not
+data-blocked**. Residual bounded costs: a `swe_agent` adapter
+(command-string parsing), a corpus-specific symbolization audit
+(already Phase 1 regardless), and a per-source license read before
+publication.
+
+**Discipline note:** "the data exists" ≠ "the metrics will validate."
+This unblocks the *ability to run* the population program fairly. It
+does not predict success. The steelmanned negative result for
+per-step single-session detection still stands; the population
+program is a fresh, now-fundable test, not a rescue.
 
 ## Adaptation cost note
 
