@@ -80,6 +80,19 @@ leg-defining H3 ΔAUC ≤ 0.006 with 95% CI spanning 0; each correlates
 0.64–0.75 with IT). n=3 convergent discriminant negatives, including
 both axes pre-judged most distinct (SA, error recovery).
 
+**Generalization G (2026-05-16, outcome granularity):** the
+collapse-into-IT is NOT a binarization artifact. On a graded outcome
+(fraction of tests passing, parseable for 1696/2000), IT predicts it
+(Spearman 0.277 vs null 0.046) and adds beyond trivial baseline
+(ΔSpearman +0.101, CI excludes 0 — relatively larger than the binary
++0.044 AUC); and none of the 4 collapsed constructs re-separate (all
+ΔSpearman ≈0, CIs span 0, none survive Bonferroni). H_artifact
+rejected on this axis. CONDITIONAL on the §1 selection bias
+(over-represents successes; "runs that reached test execution") and
+single corpus/agent. Agent-architecture / corpus generalization
+remains the one untested axis — the honest next decisive test, not a
+current claim. "Agents are universally flat" stays an over-claim.
+
 **Information-theoretic behavioral structure is the load-bearing
 population-level construct for these agent traces.** Sharpened by the
 agent-native TAC pilot (2026-05): thought-action coherence is the

@@ -1,0 +1,84 @@
+{
+  "n_analysis": 1696,
+  "n_total": 2000,
+  "g_mean": 0.8519030631372827,
+  "g_frac_eq_1": 0.5165094339622641,
+  "G_H1": {
+    "obs_spearman": 0.2769546196114995,
+    "null_p95": 0.0462068838539483,
+    "null_mean": -0.007958689272997352,
+    "floor": 0.1,
+    "pass": true
+  },
+  "G_H2": {
+    "spearman_baseline": 0.18187632689000746,
+    "spearman_baseline_IT": 0.28294898435385324,
+    "delta": 0.10107265746384578,
+    "ci95": [
+      0.06486857707014027,
+      0.16592129022782182
+    ],
+    "min": 0.03,
+    "pass": true
+  },
+  "G_H3": {
+    "workload": {
+      "delta_spearman": -0.010724055779732955,
+      "ci95": [
+        -0.01713086014696159,
+        0.022004030752018042
+      ],
+      "ci_bonf_9875": [
+        -0.02472030376870453,
+        0.026987549507627103
+      ],
+      "re_separates": false,
+      "survives_bonferroni": false
+    },
+    "situation_awareness": {
+      "delta_spearman": -0.009087727421703162,
+      "ci95": [
+        -0.01774319716278118,
+        0.0339039285881905
+      ],
+      "ci_bonf_9875": [
+        -0.022427499239176717,
+        0.039255016630617236
+      ],
+      "re_separates": false,
+      "survives_bonferroni": false
+    },
+    "error_recovery": {
+      "delta_spearman": 0.0029574599198903817,
+      "ci95": [
+        -0.008460143070191599,
+        0.031808845643943776
+      ],
+      "ci_bonf_9875": [
+        -0.01381808324161475,
+        0.03725389781703508
+      ],
+      "re_separates": false,
+      "survives_bonferroni": false
+    },
+    "thought_action_coherence": {
+      "delta_spearman": -0.012063456446817222,
+      "ci95": [
+        -0.015336634399364802,
+        0.022528989997671084
+      ],
+      "ci_bonf_9875": [
+        -0.02073694239256952,
+        0.027049845646723393
+      ],
+      "re_separates": false,
+      "survives_bonferroni": false
+    }
+  },
+  "constructs_that_reseparate": [],
+  "decision": {
+    "code": "PARSIMONY_GENERALIZES",
+    "conclusion": "No construct re-separates under a graded outcome. Parsimony generalizes across outcome granularity (H_flat supported over H_artifact, on this corpus/axis).",
+    "action": "Strong corroboration; IT-load-bearing finding stands (conditional on \u00a71 limits)."
+  }
+}
