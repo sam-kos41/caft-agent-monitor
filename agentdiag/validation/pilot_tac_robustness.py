@@ -92,8 +92,7 @@ def run(out_dir: str, model: str = DEFAULT_MODEL,
     base = Path("/tmp/caft_pilot")
     # frozen subsample: first SUBSAMPLE_N instance_ids by sel_key_int
     rows = []
-    with open("/Users/samkoscelny/GazeVLM-local/agentdiag/docs/pilot/"
-              "sample_manifest.csv") as f:
+    with open(base / "manifest.csv") as f:   # frozen-sample manifest
         for r in csv.DictReader(f):
             rows.append((int(r["sel_key_int"]), r["instance_id"]))
     rows.sort()
