@@ -1,0 +1,23 @@
+{
+  "n": 2000,
+  "n_tool_columns": 165,
+  "gate": {
+    "perception.coverage": {
+      "cv_r2": -2.3329750591843026,
+      "fails_gate": false
+    },
+    "projection.verify_before_submit": {
+      "cv_r2": -1.7820739779481989,
+      "fails_gate": false
+    }
+  },
+  "leg3_invalid": false,
+  "all_sa_cv_r2": {
+    "perception.coverage": -2.3329750591843026,
+    "perception.explore_ratio": 0.1211019220479568,
+    "perception.read_before_first_edit": -1.3818963555346913,
+    "perception.blind_edit_rate": 0.3708311486944177,
+    "projection.verify_before_submit": -1.7820739779481989,
+    "projection.verify_rate": 0.07908196714128221
+  }
+}
