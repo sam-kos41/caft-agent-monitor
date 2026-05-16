@@ -1,0 +1,26 @@
+{
+  "n": 2000,
+  "n_tool_columns": 165,
+  "gate": {
+    "reasoning_len.mean": {
+      "cv_r2": -0.25625359856790036,
+      "fails_gate": false
+    },
+    "context_cum.final": {
+      "cv_r2": 0.6606162256878851,
+      "fails_gate": false
+    }
+  },
+  "leg2_invalid": false,
+  "all_workload_cv_r2": {
+    "reasoning_len.mean": -0.25625359856790036,
+    "reasoning_len.max": -0.3338816822962788,
+    "reasoning_len.total": 0.44046108256620453,
+    "reasoning_len.slope": -0.09839574578935206,
+    "context_cum.final": 0.6606162256878851,
+    "context_cum.slope": -0.634849608536905,
+    "reasoning_density.mean": -0.25625359856790036,
+    "error_recovery.n_episodes": 0.6295773611486963,
+    "error_recovery.mean_latency_turns": -0.15852968624134448
+  }
+}
