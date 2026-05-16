@@ -127,7 +127,9 @@ Amendments (dated, with rationale) — none.
 
 ## 10. Review sign-off
 
-[ ] Human review complete — precondition limits acceptable, graded
-outcome valid enough, statistic family + thresholds + decision rule
-acceptable. → then, and only then, build `pilot_generalization.py`
-+ tests, run G, let the locked rule fire.
+[x] Human review complete — 2026-05-16, greenlit. Precondition
+limits (selection bias toward successes; granularity concentrated in
+the unresolved region) accepted; graded outcome judged valid enough
+for a CONDITIONAL test; statistic family + thresholds + decision rule
+accepted. Pre-registration is now FROZEN. → build
+`pilot_generalization.py` + tests, run G, locked rule fires.
