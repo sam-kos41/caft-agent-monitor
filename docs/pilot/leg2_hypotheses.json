@@ -1,0 +1,41 @@
+{
+  "n": 2000,
+  "W_H1": {
+    "obs_auc": 0.70143,
+    "null_p95": 0.5271855,
+    "null_mean": 0.501274515,
+    "floor": 0.55,
+    "n_perm": 1000,
+    "pass": true
+  },
+  "W_H2": {
+    "auc_baseline": 0.723884,
+    "auc_baseline_workload": 0.748046,
+    "delta": 0.024162000000000017,
+    "ci": [
+      0.007989266830354988,
+      0.04127484397715695
+    ],
+    "n_boot": 2000,
+    "min": 0.03,
+    "pass": false
+  },
+  "W_H3": {
+    "auc_baseline_IT": 0.768098,
+    "auc_baseline_IT_workload": 0.7739450000000001,
+    "delta": 0.005847000000000158,
+    "ci": [
+      -0.0033351286353758224,
+      0.015099941259881261
+    ],
+    "n_boot": 2000,
+    "min": 0.02,
+    "pass": false
+  },
+  "discriminant_max_abs_corr_workload_vs_IT": 0.7359214028753525,
+  "decision": {
+    "code": "W_H1_PASS_W_H3_FAIL",
+    "conclusion": "Workload is redundant with Leg-1 IT \u2014 not a distinct construct.",
+    "action": "Fold into Leg 1; proceed to Leg 3."
+  }
+}

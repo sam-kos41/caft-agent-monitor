@@ -47,7 +47,7 @@ leg strengthens the framework paper; it does not weaken it.
 | Leg | Construct family | Status |
 |---|---|---|
 | **1 — Behavioral structure (information theory)** | predictability (MI), redundancy (compression), distributional shift (KL), diversity (entropy), cross-agent MI | **Validated at population level** on SWE-agent/Llama-70b (pilot, 2026-05). Modest robust effect ΔAUC +0.044 (CI excludes 0), non-artifactual. Convergent validity w/ test outcomes shown; construct validity of specific feature→construct mappings still open. |
-| **2 — Cognitive workload analogs** | resource demand (Wickens MRT, Sweller CLT, NASA-TLX) | Pre-registration in progress (`PREREG_LEG2_WORKLOAD.md`). |
+| **2 — Cognitive workload analogs** | resource demand (Wickens MRT, Sweller CLT, NASA-TLX) | **Documented NEGATIVE (2026-05): not a distinct leg.** Locked W-H3 failed (ΔAUC +0.006 over baseline+IT, CI spans 0; max workload↔IT corr 0.74). Workload predicts outcome (W-H1 pass) but the signal is already captured by Leg-1 IT — folds into Leg 1. Corpus-limited (timing/branching excluded by honest-scoping; no timestamps in nebius). Strengthens the framework paper as a discriminant-validity finding. |
 | **3 — Situation awareness analogs** | perception / comprehension / projection (Endsley, SAGAT/SART) | Not started. Hardest to operationalize cleanly; proxies must not confound with task type. |
 | **4 — Error recovery & adaptive behavior** | resilience (Reason; Hollnagel/FRAM; adaptive automation) | Not started; some primitives in `signals.py`. |
 
