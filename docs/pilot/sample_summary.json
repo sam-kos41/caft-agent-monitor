@@ -1,0 +1,15 @@
+{
+  "dataset": "nebius/SWE-agent-trajectories",
+  "seed": 20260515,
+  "streamed_rows": 80036,
+  "selected_true": 1000,
+  "selected_false": 1000,
+  "model_distribution": {
+    "swe-agent-llama-70b": 1839,
+    "swe-agent-llama-8b": 152,
+    "swe-agent-llama-405b": 9
+  },
+  "spec_sample": true,
+  "sample_path": "/tmp/caft_pilot/sample.jsonl",
+  "manifest_path": "/tmp/caft_pilot/manifest.csv"
+}
