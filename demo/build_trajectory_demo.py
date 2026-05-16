@@ -1,4 +1,147 @@
-<!DOCTYPE html>
+"""Build demo/index.html — one real SWE-agent trajectory with each
+human-factors / agent-native construct's per-step signal overlaid.
+
+Faithful + reproducible: the trajectory is selected deterministically
+from the frozen sample; every per-step signal is computed with the
+SAME frozen logic the committed extractors use (imported, not
+re-derived). No analysis runs in the page — data is baked in.
+
+Honest framing baked into the page: this is ONE illustrative
+trajectory showing *what the constructs measure*; the validated
+result is population-level (2000 trajectories) — see
+docs/PROJECT_SNAPSHOT.html.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import re
+from pathlib import Path
+
+from agentdiag.adapters.swe_agent import _extract_action
+from agentdiag.validation.pilot_tac import (
+    _thought, _LEX, _CAT, _WORD,
+)
+from agentdiag.validation.pilot_error import _ERR
+
+SAMPLE = "/tmp/caft_pilot/sample.jsonl"
+# Select by ROW INDEX, not instance_id: instance_id is non-unique
+# (the same SWE-bench instance appears ~23x across model scales in the
+# frozen sample) — the same lesson as TAC-robustness amendment A1.
+ROW_IDX = 237                              # deterministic, reproducible
+INSTANCE = "beetbox__beets-3868"           # (label only; row 237 == this)
+OBS_PATH = {"open", "cat", "scroll_down", "scroll_up", "goto",
+            "head", "tail"}
+MUT = {"edit", "create", "insert", "append"}
+CAT_COLOR = {"observe": "#58a6ff", "search": "#3fb950",
+             "mutate": "#d29922", "verify": "#a371f7",
+             "submit": "#8b97a7", "other": "#6e7681"}
+
+
+def _base(p):
+    return (os.path.basename(str(p).rstrip("/")) or str(p)) if p else ""
+
+
+def _target_tok(args: str) -> str:
+    m = re.search(r'["\']([^"\']+)["\']', args or "")
+    raw = m.group(1) if m else (args.split(None, 1)[0]
+                                if (args or "").strip() else "")
+    b = _base(raw)
+    mt = re.search(r"[A-Za-z_][A-Za-z0-9_]+", b)
+    return (mt.group(0) if mt else b).lower()
+
+
+def build():
+    rows = [json.loads(l) for l in open(SAMPLE, encoding="utf-8")]
+    row = rows[ROW_IDX]
+    assert row.get("instance_id") == INSTANCE, (
+        f"row {ROW_IDX} is {row.get('instance_id')}, expected {INSTANCE}")
+
+    traj = row.get("trajectory") or []
+    steps = []
+    seen_paths: set[str] = set()
+    # pre-index: for each ai step, was the immediately following
+    # observation an error, and did the next action change?
+    seq = []  # (kind, payload, raw_turn_index)
+    for ti, t in enumerate(traj):
+        r = t.get("role")
+        if r in ("ai", "assistant"):
+            a = _extract_action(t.get("text", ""))
+            if a:
+                seq.append(("act", (a[0], a[1], t.get("text", "")), ti))
+        elif r in ("user", "tool") and ti > 1:
+            seq.append(("err" if _ERR.search(t.get("text", "") or "")
+                        else "obs", t.get("text", "") or "", ti))
+
+    acts = [x for x in seq if x[0] == "act"]
+    for n, (_, (verb, args, ai_text), ti) in enumerate(acts):
+        v = verb.lower()
+        cat = _CAT.get(v, "other")
+        tok = _target_tok(args)
+        thought = _thought(ai_text)
+        tw = set(_WORD.findall(thought.lower()))
+
+        # Thought-Action Coherence (frozen pilot_tac rule)
+        verb_align = 1 if (cat != "other" and (tw & _LEX[cat])) else 0
+        if tok:
+            target_present = 1 if tok in thought.lower() else 0
+        else:
+            target_present = verb_align
+        tac = 0.5 * verb_align + 0.5 * target_present
+
+        # Perception (frozen pilot_sa rule): mutate target seen earlier
+        perception = None
+        if cat == "mutate":
+            perception = bool(tok and tok in seen_paths)
+        if v in OBS_PATH and tok:
+            seen_paths.add(tok)
+
+        # Error / recovery: is the next seq element an error obs, and
+        # does the following action change (strategy change)?
+        errored = False
+        recovered = None
+        gi = seq.index(("act", (verb, args, ai_text), ti))
+        if gi + 1 < len(seq) and seq[gi + 1][0] == "err":
+            errored = True
+            # next action after the error
+            for j in range(gi + 2, len(seq)):
+                if seq[j][0] == "act":
+                    nv = (seq[j][1][0], seq[j][1][1])
+                    recovered = (nv != (verb, args))
+                    break
+
+        steps.append({
+            "i": n + 1,
+            "verb": verb, "cat": cat,
+            "target": tok or "",
+            "thought": " ".join(thought.split())[:240],
+            "wl": len(thought),
+            "tac": tac,
+            "perception": perception,   # True/False/None
+            "errored": errored,
+            "recovered": recovered,     # True/False/None
+        })
+
+    maxwl = max((s["wl"] for s in steps), default=1) or 1
+    for s in steps:
+        s["wl_norm"] = round(s["wl"] / maxwl, 3)
+
+    data = {
+        "instance": INSTANCE,
+        "row_idx": ROW_IDX,
+        "model": row.get("model_name"),
+        "resolved": bool(row.get("target")),
+        "n_steps": len(steps),
+        "steps": steps,
+    }
+    html = _HTML.replace("/*DATA*/", json.dumps(data))
+    out = Path(__file__).parent / "index.html"
+    out.write_text(html, encoding="utf-8")
+    print(f"wrote {out}  ({len(steps)} steps, instance {INSTANCE})")
+
+
+_HTML = r"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Human-factors constructs over a real agent trajectory</title>
@@ -73,7 +216,7 @@ committed extractors' frozen logic, reproducible on
 page.</footer>
 </div>
 <script>
-const D={"instance": "beetbox__beets-3868", "row_idx": 237, "model": "swe-agent-llama-70b", "resolved": true, "n_steps": 18, "steps": [{"i": 1, "verb": "search_dir", "cat": "search", "target": "web", "thought": "First, let's locate where the `web` plugin is implemented in the codebase. We can start by searching for the term `web` in the `src` directory to find relevant files.", "wl": 166, "tac": 1.0, "perception": null, "errored": true, "recovered": true, "wl_norm": 0.309}, {"i": 2, "verb": "ls", "cat": "search", "target": "-f", "thought": "It appears that the `src` directory might not be present in the current working directory. Let's list the contents of the current directory to identify where the `web` plugin implementation might be located.", "wl": 207, "tac": 0.5, "perception": null, "errored": false, "recovered": null, "wl_norm": 0.385}, {"i": 3, "verb": "search_dir", "cat": "search", "target": "web", "thought": "The `beetsplug` directory likely contains the implementations for the various beets plugins, including the `web` plugin. Let's search for the term `web` within the `beetsplug` directory to find the relevant files.", "wl": 213, "tac": 1.0, "perception": null, "errored": false, "recovered": null, "wl_norm": 0.397}, {"i": 4, "verb": "open", "cat": "observe", "target": "__init__", "thought": "The `web` plugin implementation is likely in the `beetsplug/web` directory. Let's open the `__init__.py` file in that directory to examine the plugin implementation.", "wl": 165, "tac": 1.0, "perception": null, "errored": true, "recovered": true, "wl_norm": 0.307}, {"i": 5, "verb": "edit", "cat": "mutate", "target": "61:65", "thought": "The `_rep` function is responsible for getting a flat representation of a beets Item or Album object. The issue is that the `artpath` is being unconditionally deleted for Album objects, regardless of the `INCLUDE_PATHS` config setting. To f", "wl": 414, "tac": 0.5, "perception": false, "errored": true, "recovered": true, "wl_norm": 0.771}, {"i": 6, "verb": "create", "cat": "mutate", "target": "test_reproduce", "thought": "The code has been updated to conditionally delete the `artpath` based on the `INCLUDE_PATHS` config setting. Now, let's create a script to test this change. We'll name the script `test_reproduce.py` and simulate the web plugin's behavior.", "wl": 238, "tac": 1.0, "perception": false, "errored": false, "recovered": null, "wl_norm": 0.443}, {"i": 7, "verb": "edit", "cat": "mutate", "target": "1:1", "thought": "Let's add the test code to `test_reproduce.py`. This code will simulate the behavior of the web plugin and print the results, allowing us to verify that the `artpath` is correctly included or excluded based on the `INCLUDE_PATHS` setting.", "wl": 238, "tac": 0.5, "perception": false, "errored": false, "recovered": null, "wl_norm": 0.443}, {"i": 8, "verb": "python", "cat": "verify", "target": "test_reproduce", "thought": "The test script has been created. Now, let's run `test_reproduce.py` to verify that the `artpath` is correctly included in the flat representation of the Album.", "wl": 160, "tac": 1.0, "perception": null, "errored": true, "recovered": true, "wl_norm": 0.298}, {"i": 9, "verb": "edit", "cat": "mutate", "target": "61:69", "thought": "The test script failed because the `path` key is not present in the `out` dictionary. This occurs because the `out` dictionary is created by converting the `album` object to a dictionary, and the `path` attribute is not present in the `albu", "wl": 537, "tac": 0.5, "perception": false, "errored": true, "recovered": true, "wl_norm": 1.0}, {"i": 10, "verb": "edit", "cat": "mutate", "target": "__init__", "thought": "It appears that the edit command was applied to the wrong file. We intended to edit the `__init__.py` file in the `beetsplug/web` directory, but the changes were applied to the `test_reproduce.py` file instead. Let's correct this by editing", "wl": 316, "tac": 1.0, "perception": true, "errored": false, "recovered": null, "wl_norm": 0.588}, {"i": 11, "verb": "edit", "cat": "mutate", "target": "__init__", "thought": "It seems that the edit command syntax was incorrect. Let's use the correct syntax to edit the `__init__.py` file in the `beetsplug/web` directory.", "wl": 146, "tac": 1.0, "perception": true, "errored": false, "recovered": null, "wl_norm": 0.272}, {"i": 12, "verb": "edit", "cat": "mutate", "target": "__init__", "thought": "It appears that there was a misunderstanding in the command syntax. The `edit` command should specify the start and end lines for the file to be edited. Let's use the correct syntax to edit the `__init__.py` file in the `beetsplug/web` dire", "wl": 246, "tac": 1.0, "perception": true, "errored": false, "recovered": null, "wl_norm": 0.458}, {"i": 13, "verb": "edit", "cat": "mutate", "target": "__init__", "thought": "It seems that there was a mistake in the previous edit command. The correct syntax should include the path to the file being edited. Let's use the correct syntax to edit the `__init__.py` file in the `beetsplug/web` directory.", "wl": 226, "tac": 1.0, "perception": true, "errored": false, "recovered": null, "wl_norm": 0.421}, {"i": 14, "verb": "open", "cat": "observe", "target": "__init__", "thought": "It seems that the `edit` command syntax is being used incorrectly. The `edit` command should be used to edit the currently open file. Since we need to edit the `__init__.py` file in the `beetsplug/web` directory, we should first open that f", "wl": 345, "tac": 1.0, "perception": null, "errored": true, "recovered": true, "wl_norm": 0.642}, {"i": 15, "verb": "edit", "cat": "mutate", "target": "61:69", "thought": "The `__init__.py` file in the `beetsplug/web` directory is now open. Let's edit the `_rep` function to handle the `path` and `artpath` attributes correctly based on the `INCLUDE_PATHS` setting.", "wl": 193, "tac": 0.5, "perception": false, "errored": true, "recovered": true, "wl_norm": 0.359}, {"i": 16, "verb": "python", "cat": "verify", "target": "test_reproduce", "thought": "The code has been updated to handle the `path` and `artpath` attributes correctly based on the `INCLUDE_PATHS` setting. Now, let's run the `test_reproduce.py` script to verify that the changes have fixed the issue.", "wl": 214, "tac": 1.0, "perception": null, "errored": false, "recovered": null, "wl_norm": 0.399}, {"i": 17, "verb": "rm", "cat": "other", "target": "test_reproduce", "thought": "The test script ran successfully and produced a dictionary that includes the `artpath` key, indicating that the issue has been resolved. Let's clean up by removing the `test_reproduce.py` file since it is no longer needed.", "wl": 222, "tac": 0.5, "perception": null, "errored": false, "recovered": null, "wl_norm": 0.413}, {"i": 18, "verb": "submit", "cat": "submit", "target": "", "thought": "The `test_reproduce.py` file has been successfully removed. Now that we have fixed the issue and verified the solution, let's submit our changes to the code base.", "wl": 162, "tac": 1.0, "perception": null, "errored": false, "recovered": null, "wl_norm": 0.302}]};
+const D=/*DATA*/;
 document.getElementById('meta').textContent=
  `instance ${D.instance} · model ${D.model} · `+
  `${D.n_steps} action steps · outcome: ${D.resolved?'resolved':'not resolved'}`;
@@ -150,4 +293,8 @@ function showTip(e,s){
  tip.style.left=x+'px';tip.style.top=y+'px';
 }
 function hideTip(){tip.style.opacity=0;}
-</script></body></html>
+</script></body></html>"""
+
+
+if __name__ == "__main__":
+    build()

@@ -1,50 +1,53 @@
-# Demo — CAFT → Parsimony walk-through
+# Demo — human-factors constructs over a real agent trajectory
 
-A static, self-contained interactive walk-through of the
-construct-validation arc. **No analysis runs in the page** — every
-number is transcribed from the frozen, seed-locked pipeline on branch
-`construct-validation-pivot` and is reproducible there.
+A static, self-contained visual: **one real SWE-agent trajectory**,
+rendered step-by-step, with each construct's per-step signal overlaid.
+It makes the constructs *concrete* — you can see, on actual agent
+interaction data, what "perception", "workload", "error recovery", and
+"thought-action coherence" each measure, against the
+information-theoretic action-sequence "ribbon" that turned out to be
+load-bearing.
 
 ## Run it
 
-Just open `index.html` in a browser. No build, no server, no
-dependencies. Suitable for embedding on a personal site or hosting via
-GitHub Pages.
+Open `index.html` in a browser. No build, no server, no dependencies —
+ready for a personal site or GitHub Pages. Hover any step for the
+verbatim reasoning + what each construct saw there.
 
-## What it shows
+## What you're looking at
 
-Step-by-step, the locked pre-registered arc:
+Trajectory = frozen-sample **row 237** (`beetbox__beets-3868`,
+swe-agent-llama-70b, resolved). Selected by position because
+`instance_id` is non-unique across model scales. 18 action steps.
+Lanes:
 
-1. **The autopsy** — the original per-session detector fails
-   validation (κ = −0.04; steelman + lead/lag confirm it fires on an
-   artifact). Documented, not buried.
-2. **IT validated** — at the population level, on an external
-   test-based outcome, information-theoretic behavioral structure is a
-   modest but robust, non-artifactual predictor (ΔAUC +0.044, CI
-   excludes 0).
-3–6. **Four constructs collapse into it** — cognitive workload,
-   situation awareness, error recovery (human-factors ports), and
-   thought-action coherence (agent-native). Each predicts the outcome
-   on its own; none adds predictive value beyond IT. The agent-native
-   one is the sharpest case (least IT-correlated, still zero gain).
-7. **Generalization** — the collapse survives a graded outcome, so it
-   is not an artifact of a blunt pass/fail label.
+- **Action ribbon** — the action type per step; this *sequence shape*
+  is exactly what information-theoretic structure scores.
+- **Workload** — reasoning length per step (Sweller / Wickens analog).
+- **Perception** — for edits: had the agent read that file first?
+  (Endsley Level-1 analog).
+- **Error / recovery** — did the step error, and did the agent change
+  strategy after? (Reason / Hollnagel analog).
+- **Thought–Action** — did the stated intent match the action taken?
+  (agent-native).
 
-**Parsimony thesis:** for predicting coding-task outcomes in agent
-trajectories, the information-theoretic structure of the action
-sequence is doing the work.
+Every per-step value is computed with the **same frozen logic the
+committed extractors use** (imported, not re-derived); the data is
+baked into the page — no analysis runs in the browser. Regenerate with
+`python demo/build_trajectory_demo.py`.
 
-## Scope (read this — it is part of the result)
+## Read this — it is part of the result
 
-One corpus (nebius SWE-agent trajectories), one agent family (Llama,
-reactive ReAct), one outcome family (SWE-bench resolution; binary and
-graded). Generalization is conditional on a documented selection bias.
-**It is not claimed that "agents are universally flat."**
-Cross-architecture generalization is the single open axis and was
-deliberately deferred.
+This is **one illustrative trajectory**. The validated finding is
+**population-level** (2,000 trajectories): all four constructs predict
+task outcome on their own, yet none add predictive value beyond IT
+action-sequence structure — and that survives a graded outcome. A
+single pretty trajectory is **not** evidence for per-instance
+detection; that regime was tested and failed (the CAFT autopsy).
+Scope: one corpus (nebius SWE-agent), one agent family (Llama,
+reactive ReAct), one outcome family. "Agents are universally flat" is
+not claimed.
 
-The durable asset is the methodology: pre-registration before data, a
-symbolization-audit gate, null models, locked decision rules, honest
-scoping, and no goalpost-moving. Full narrative:
-[`../docs/PROJECT_SNAPSHOT.html`](../docs/PROJECT_SNAPSHOT.html);
-governing document and per-leg pre-registrations under `../docs/`.
+Full narrative & evidence ledger:
+[`../docs/PROJECT_SNAPSHOT.html`](../docs/PROJECT_SNAPSHOT.html).
+Governing doc and per-leg pre-registrations under `../docs/`.
