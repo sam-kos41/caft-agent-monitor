@@ -1,0 +1,12 @@
+{
+  "status": "ok",
+  "model": "llama3.2:3b",
+  "subsample_n": 150,
+  "graded": 149,
+  "failed": 1,
+  "pearson_llm_vs_deterministic_tac": -0.04217942830724011,
+  "spearman_llm_vs_deterministic_tac": -0.21398875385452565,
+  "llm_mean": 3.771812080536913,
+  "deterministic_tac_mean": 0.6854541809178699,
+  "note": "DESCRIPTIVE, NON-GATING. Convergent check only: does an independent LLM grader's coherence rating track the deterministic primary measure? Cannot and does not alter the locked \u00a78 decision (TAC reduces to IT)."
+}
