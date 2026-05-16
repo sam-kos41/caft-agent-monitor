@@ -16,6 +16,10 @@ color:var(--ink);font:14px/1.55 -apple-system,system-ui,Segoe UI,sans-serif}
 h1{font-size:23px;margin:0 0 4px;letter-spacing:-.01em;
 color:var(--dusk)}
 .sub{color:var(--dim);font-size:13.5px;margin:0 0 14px}
+.legtitle{font-size:14px;font-weight:700;color:var(--dusk);
+margin:6px 0 3px}
+.legnote{font-size:12px;color:var(--dim);margin:0 0 8px;
+max-width:780px;font-style:italic}
 .legend{display:flex;flex-direction:column;gap:4px;font-size:12px;
 color:var(--dim);margin:2px 0 16px;max-width:780px}
 .legend b{color:var(--dusk)}
@@ -89,6 +93,12 @@ the interesting question is discriminant: does any of them add
 anything <i>beyond the action sequence itself</i>? On 2,000
 trajectories, none do. The table below the trajectory is the finding;
 the trajectory shows what each lens actually measures, step by step.</p>
+<p class="legtitle">How I operationalize the human-factors constructs</p>
+<p class="legnote">These are <b>my</b> operational definitions —
+each classical human-factors construct (and one agent-native one)
+reduced to something computable from an agent trace. The parenthetical
+names are the source theory; the symbols are the concrete trace
+measurement that stands in for it here, not the theory itself.</p>
 <div class="legend">
 <span><b>IT (action sequence)</b> — ● new action type · ↻ repeat
 (redundancy = what compression / MI score)</span>
