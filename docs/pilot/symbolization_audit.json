@@ -1,0 +1,405 @@
+{
+  "n_trajectories": 2000,
+  "n_tool_columns": 165,
+  "tool_columns": [
+    "#",
+    "'",
+    "']",
+    ")",
+    "./configure",
+    "./nikola-venv/bin/python",
+    "./reproduce.sh",
+    "./scripts/qrbill",
+    "/opt/conda/envs/nikola/bin/python",
+    "/opt/conda/envs/wagtail/bin/python",
+    "/sqlglot/sqlglot",
+    "/sqlglot/sqlglot/__main__.py",
+    "7z",
+    "DEPLOY_ENVIRONMENT=common",
+    "apt-get",
+    "arg_choices",
+    "asv",
+    "bash",
+    "beet",
+    "beets",
+    "build",
+    "build_binary",
+    "cat",
+    "cd",
+    "cd..",
+    "cd../..",
+    "charmcraft",
+    "chmod",
+    "clear",
+    "close",
+    "community",
+    "conda",
+    "conda-devenv",
+    "cp",
+    "create",
+    "curl",
+    "cwltool",
+    "diff",
+    "duckdb",
+    "dvc",
+    "echo",
+    "edit",
+    "end_of_edit",
+    "examples/generate_dlf.py",
+    "exp",
+    "export",
+    "find",
+    "find.",
+    "find_file",
+    "flake8",
+    "flask",
+    "fparser2",
+    "from",
+    "gen-python",
+    "generate",
+    "goto",
+    "grep",
+    "gunicorn",
+    "gunzip",
+    "gzip",
+    "hatch",
+    "head",
+    "help",
+    "host",
+    "import",
+    "info",
+    "insert",
+    "ipython",
+    "jar",
+    "jupyter",
+    "jupytext",
+    "len(args)",
+    "ls",
+    "main",
+    "main([\"--file\",",
+    "main(args=[\"--file\",",
+    "make",
+    "man",
+    "mkdir",
+    "mv",
+    "nbconvert",
+    "nikola",
+    "nodejs",
+    "open",
+    "open.dvc/config",
+    "open_browser",
+    "os.makedirs(WATCHED_DIR)",
+    "parse_one",
+    "parse_one('SELECT",
+    "parse_one(query,",
+    "patch",
+    "ping",
+    "pip",
+    "pip3",
+    "preview",
+    "print(\"Correct",
+    "print(Interval.default_parser_mappings())",
+    "print(Interval.default_parser_mappings)",
+    "print(NAME_TO_LEVEL)",
+    "print(default_parser_mappings())",
+    "print(default_parser_mappings(Interval))",
+    "print(default_parser_mappings(sqlglot.Interval))",
+    "print(default_parser_mappings)",
+    "print(sqlglot.Interval.default_parser_mappings())",
+    "print(sqlglot.__version__)",
+    "print(sqlglot.default_parser_mappings())",
+    "print(sqlglot.default_parser_mappings(Interval))",
+    "print(sqlglot.default_parser_mappings)",
+    "print(sqlglot.expressions.Interval.default_parser_mappings())",
+    "print(sqlglot.expressions.default_parser_mappings())",
+    "print(sqlglot.expressions.default_parser_mappings(Interval))",
+    "print(sqlglot.expressions.default_parser_mappings)",
+    "print(stats)",
+    "pwd",
+    "pytest",
+    "python",
+    "python../../reproduce.py",
+    "python../reproduce.py",
+    "python3",
+    "python3.10",
+    "python3.8",
+    "query='SELECT",
+    "render_for_conda_env({'dependencies':",
+    "rm",
+    "rmdir",
+    "runway",
+    "save",
+    "sbatch",
+    "scripts/qrbill",
+    "scroll_down",
+    "scroll_up",
+    "search",
+    "search_dir",
+    "search_file",
+    "search_internet",
+    "search_module",
+    "search_web",
+    "sed",
+    "sh",
+    "shell",
+    "source",
+    "sphinx-build",
+    "sqlfluff",
+    "sqlglot",
+    "sqlglot.__version__",
+    "sqllineage",
+    "submit",
+    "sudo",
+    "tar",
+    "test",
+    "tests/test_cognitive_complexity.py",
+    "touch",
+    "tox",
+    "uname",
+    "unittest",
+    "unittest.main",
+    "unlink",
+    "unzip",
+    "wait",
+    "wget",
+    "whereis",
+    "which",
+    "with",
+    "zip",
+    "zipfile"
+  ],
+  "gate_features": [
+    "action_mi.mean",
+    "compression_ratio.mean"
+  ],
+  "gate_threshold": 0.8,
+  "gate": {
+    "action_mi.mean": {
+      "cv_r2": -0.8815348523114214,
+      "fails_gate": false
+    },
+    "compression_ratio.mean": {
+      "cv_r2": 0.17108792775196874,
+      "fails_gate": false
+    }
+  },
+  "pilot_invalid": false,
+  "all_feature_cv_r2": {
+    "action_mi.mean": -0.8815348523114214,
+    "action_mi.final": -0.6511174464064574,
+    "action_mi.max": -0.4273784374334248,
+    "action_mi.slope": -0.1117613255589724,
+    "action_entropy.mean": -1.2203656779960739,
+    "action_entropy.final": -1.1841175502855958,
+    "action_entropy.max": -1.133943500718076,
+    "action_entropy.slope": -0.15188213711598317,
+    "tool_entropy.mean": -4.917323970570958,
+    "tool_entropy.final": -2.645738462206726,
+    "tool_entropy.max": -3.030310397355271,
+    "tool_entropy.slope": -0.5857369059574895,
+    "compression_ratio.mean": 0.17108792775196874,
+    "compression_ratio.final": 0.17767877942580002,
+    "compression_ratio.max": null,
+    "compression_ratio.slope": -0.06360707133351248,
+    "kl_divergence.mean": 0.20345521347881887,
+    "kl_divergence.final": -0.3667992843616709,
+    "kl_divergence.max": 0.32553849044348604,
+    "kl_divergence.slope": -0.1542397897600069
+  },
+  "detail": {
+    "action_mi.mean": {
+      "cv_r2": -0.8815348523114214,
+      "fold_r2": [
+        -0.6324819244718087,
+        -0.12726703767694048,
+        -1.7045851370878102,
+        0.12528821767687337,
+        -2.0686283799974206
+      ]
+    },
+    "action_mi.final": {
+      "cv_r2": -0.6511174464064574,
+      "fold_r2": [
+        0.14083071772985922,
+        0.05069050710423095,
+        -1.3940953855442109,
+        0.2995239866037801,
+        -2.3525370579259466
+      ]
+    },
+    "action_mi.max": {
+      "cv_r2": -0.4273784374334248,
+      "fold_r2": [
+        -0.27231932044812623,
+        -0.04464354338970633,
+        -0.8477198637889787,
+        0.1426487732544066,
+        -1.1148582327947194
+      ]
+    },
+    "action_mi.slope": {
+      "cv_r2": -0.1117613255589724,
+      "fold_r2": [
+        -0.5608037760629208,
+        0.34334531926700507,
+        -0.3231872574136987,
+        0.4692534963530688,
+        -0.4874144099383164
+      ]
+    },
+    "action_entropy.mean": {
+      "cv_r2": -1.2203656779960739,
+      "fold_r2": [
+        -1.0535072964472993,
+        -0.3075025902100015,
+        -2.1411888356460564,
+        0.08775937852741456,
+        -2.6873890462044265
+      ]
+    },
+    "action_entropy.final": {
+      "cv_r2": -1.1841175502855958,
+      "fold_r2": [
+        -0.02119331587594453,
+        -0.2011988701296532,
+        -2.044907939148041,
+        0.27099187489450693,
+        -3.924279501168847
+      ]
+    },
+    "action_entropy.max": {
+      "cv_r2": -1.133943500718076,
+      "fold_r2": [
+        -0.7252830058579185,
+        -0.31914216640290083,
+        -1.8341118956309894,
+        0.21156812147044435,
+        -3.0027485571690162
+      ]
+    },
+    "action_entropy.slope": {
+      "cv_r2": -0.15188213711598317,
+      "fold_r2": [
+        -0.5236889446966742,
+        0.344963604015728,
+        -0.35351159291234047,
+        0.5131637960594537,
+        -0.740337548046083
+      ]
+    },
+    "tool_entropy.mean": {
+      "cv_r2": -4.917323970570958,
+      "fold_r2": [
+        -12.060000095095706,
+        -0.23247763803772759,
+        -5.924947495117843,
+        -0.44096331677129563,
+        -5.9282313078322195
+      ]
+    },
+    "tool_entropy.final": {
+      "cv_r2": -2.645738462206726,
+      "fold_r2": [
+        -2.6964737844656272,
+        -0.1548904435578775,
+        -6.236923125262761,
+        0.10739507451468522,
+        -4.24780003226205
+      ]
+    },
+    "tool_entropy.max": {
+      "cv_r2": -3.030310397355271,
+      "fold_r2": [
+        -3.9345036700549967,
+        -0.11105902084391861,
+        -6.767976949140091,
+        0.009188010816523984,
+        -4.347200357553872
+      ]
+    },
+    "tool_entropy.slope": {
+      "cv_r2": -0.5857369059574895,
+      "fold_r2": [
+        -0.09050054138716268,
+        0.04916292684324697,
+        -1.8110485041483275,
+        0.2942453477615191,
+        -1.3705437588567233
+      ]
+    },
+    "compression_ratio.mean": {
+      "cv_r2": 0.17108792775196874,
+      "fold_r2": [
+        -0.03865171354916597,
+        0.08702222380447144,
+        -0.1339724417909547,
+        0.5044986685861584,
+        0.4365429017093345
+      ]
+    },
+    "compression_ratio.final": {
+      "cv_r2": 0.17767877942580002,
+      "fold_r2": [
+        -0.03283256302486692,
+        0.14732253590913347,
+        -0.03809713644001045,
+        0.41201604044682194,
+        0.39998502023792204
+      ]
+    },
+    "compression_ratio.max": {
+      "cv_r2": null,
+      "note": "near-constant target"
+    },
+    "compression_ratio.slope": {
+      "cv_r2": -0.06360707133351248,
+      "fold_r2": [
+        -0.30110731249133527,
+        -0.06602681697784929,
+        0.11304070284134404,
+        -0.10195486000357978,
+        0.038012929963857855
+      ]
+    },
+    "kl_divergence.mean": {
+      "cv_r2": 0.20345521347881887,
+      "fold_r2": [
+        0.35833054943195064,
+        0.43499120104514977,
+        -0.0735476836445117,
+        0.5187129546183086,
+        -0.2212109540568028
+      ]
+    },
+    "kl_divergence.final": {
+      "cv_r2": -0.3667992843616709,
+      "fold_r2": [
+        -0.06620461486681717,
+        0.1384183634762962,
+        0.07063923914534098,
+        -1.9082854491302155,
+        -0.06856396043295931
+      ]
+    },
+    "kl_divergence.max": {
+      "cv_r2": 0.32553849044348604,
+      "fold_r2": [
+        0.3086906421390281,
+        0.4495756690794859,
+        0.01662278839707576,
+        0.5755088933058092,
+        0.27729445929603147
+      ]
+    },
+    "kl_divergence.slope": {
+      "cv_r2": -0.1542397897600069,
+      "fold_r2": [
+        0.25499016199084723,
+        0.35138307328261587,
+        -0.32062988420173455,
+        0.3951548679515394,
+        -1.4520971678233026
+      ]
+    }
+  }
+}
