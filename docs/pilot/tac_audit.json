@@ -1,0 +1,23 @@
+{
+  "n": 2000,
+  "n_tool_columns": 165,
+  "gate": {
+    "tac.mean": {
+      "cv_r2": 0.10943107287868399,
+      "fails_gate": false
+    },
+    "tac.target_match_rate": {
+      "cv_r2": -0.18551651219430162,
+      "fails_gate": false
+    }
+  },
+  "tac_invalid": false,
+  "all_tac_cv_r2": {
+    "tac.mean": 0.10943107287868399,
+    "tac.min": -0.6754989423208638,
+    "tac.final": -0.6718884742843543,
+    "tac.slope": -0.3136535211462804,
+    "tac.verb_align_rate": -0.49989686542039885,
+    "tac.target_match_rate": -0.18551651219430162
+  }
+}
