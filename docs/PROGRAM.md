@@ -48,12 +48,30 @@ leg strengthens the framework paper; it does not weaken it.
 |---|---|---|
 | **1 — Behavioral structure (information theory)** | predictability (MI), redundancy (compression), distributional shift (KL), diversity (entropy), cross-agent MI | **Validated at population level** on SWE-agent/Llama-70b (pilot, 2026-05). Modest robust effect ΔAUC +0.044 (CI excludes 0), non-artifactual. Convergent validity w/ test outcomes shown; construct validity of specific feature→construct mappings still open. |
 | **2 — Cognitive workload analogs** | resource demand (Wickens MRT, Sweller CLT, NASA-TLX) | **Documented NEGATIVE (2026-05): not a distinct leg.** Locked W-H3 failed (ΔAUC +0.006 over baseline+IT, CI spans 0; max workload↔IT corr 0.74). Workload predicts outcome (W-H1 pass) but the signal is already captured by Leg-1 IT — folds into Leg 1. Corpus-limited (timing/branching excluded by honest-scoping; no timestamps in nebius). Strengthens the framework paper as a discriminant-validity finding. |
-| **3 — Situation awareness analogs** | perception / comprehension / projection (Endsley, SAGAT/SART) | Not started. Hardest to operationalize cleanly; proxies must not confound with task type. |
+| **3 — Situation awareness analogs** | perception / comprehension / projection (Endsley, SAGAT/SART) | **Documented NEGATIVE (2026-05): not a distinct leg.** Locked SA-H3 failed (ΔAUC +0.003 over baseline+IT, CI spans 0; max SA↔IT corr 0.64). SA-H1 weakly passes (AUC 0.65 — lowest of any leg) but folds into Leg 1. L2 comprehension excluded by honest-scoping. The strongest distinctness candidate collapsed into IT — see meta-thesis note below. |
 | **4 — Error recovery & adaptive behavior** | resilience (Reason; Hollnagel/FRAM; adaptive automation) | Not started; some primitives in `signals.py`. |
 
 Per-leg theoretical roots, candidate constructs, and validation plans
 are specified in each leg's pre-registration, grounded in cited HF
 literature — not invented.
+
+## Meta-thesis status (data-driven; updated 2026-05, not pre-committed)
+
+The four-leg-vs-IT-core question was held open. After two leg-pair
+discriminant tests it has shifted on the evidence: **Leg 2 (workload)
+and Leg 3 (situation awareness) both reduced to Leg 1 IT** — and SA
+was the conceptually strongest distinctness candidate (different axis:
+agent↔environment, not action-sequence shape). n=2 convergent
+discriminant negatives, including the strongest case.
+
+Working thesis (this corpus / these operationalizations, not yet
+universal): **information-theoretic behavioral structure is the
+load-bearing construct for population-level agent measurement; HF
+analogs carry outcome signal but reduce to it.** This is a parsimony
+finding — arguably a stronger contribution than four independent
+legs. Leg 4 (error recovery) is now the test of whether *any* HF
+analog survives distinct from IT, with a strong prior it will not.
+Still data-driven: a distinct Leg 4 would re-open the question.
 
 ## Shared infrastructure (build once, use everywhere)
 

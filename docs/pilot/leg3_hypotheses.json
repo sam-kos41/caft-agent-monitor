@@ -1,0 +1,41 @@
+{
+  "n": 2000,
+  "SA_H1": {
+    "obs_auc": 0.6500299999999999,
+    "null_p95": 0.52654725,
+    "null_mean": 0.5003222125,
+    "floor": 0.55,
+    "n_perm": 1000,
+    "pass": true
+  },
+  "SA_H2": {
+    "auc_baseline": 0.723884,
+    "auc_baseline_SA": 0.7294360000000001,
+    "delta": 0.005552000000000112,
+    "ci": [
+      -0.012960860047204151,
+      0.02447635264031683
+    ],
+    "n_boot": 2000,
+    "min": 0.03,
+    "pass": false
+  },
+  "SA_H3": {
+    "auc_baseline_IT": 0.768098,
+    "auc_baseline_IT_SA": 0.771354,
+    "delta": 0.0032560000000000366,
+    "ci": [
+      -0.0035970550008757956,
+      0.009987010912588714
+    ],
+    "n_boot": 2000,
+    "min": 0.02,
+    "pass": false
+  },
+  "discriminant_max_abs_corr_SA_vs_IT": 0.6375487389345107,
+  "decision": {
+    "code": "SA_H1_PASS_SA_H3_FAIL",
+    "conclusion": "SA redundant with Leg-1 IT \u2014 not distinct. Strong evidence for the 'IT is the load-bearing construct' thesis (SA was the strongest distinctness candidate).",
+    "action": "Documented major finding; proceed to Leg 4."
+  }
+}
