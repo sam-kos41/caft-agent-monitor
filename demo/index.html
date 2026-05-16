@@ -16,16 +16,13 @@ color:var(--ink);font:14px/1.55 -apple-system,system-ui,Segoe UI,sans-serif}
 h1{font-size:23px;margin:0 0 4px;letter-spacing:-.01em;
 color:var(--dusk)}
 .sub{color:var(--dim);font-size:13.5px;margin:0 0 14px}
-.banner{background:var(--card);border:1px solid var(--line);
-border-left:4px solid var(--dusk);border-radius:8px;
-padding:11px 15px;font-size:13px;color:var(--dusk);margin:0 0 20px}
-.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;
-color:var(--dim);margin:0 0 14px}
+.legend{display:flex;flex-direction:column;gap:4px;font-size:12px;
+color:var(--dim);margin:2px 0 16px;max-width:780px}
 .legend b{color:var(--dusk)}
 .scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;
 background:#fff}
 .grid{display:grid;grid-auto-flow:column;min-width:max-content}
-.col{width:54px;border-right:1px solid #f0e6d3;position:relative}
+.col{width:66px;border-right:1px solid #f0e6d3;position:relative}
 .rowlab{position:sticky;left:0;z-index:2;background:var(--card);
 border-right:2px solid var(--dusk);width:118px;min-width:118px}
 .cell{height:46px;border-bottom:1px solid #f0e6d3;display:flex;
@@ -47,16 +44,13 @@ border-right:2px solid var(--dusk)}
 .badge{display:inline-block;font-size:11px;font-weight:700;
 padding:2px 9px;border-radius:999px;background:var(--dusk);
 color:#fff;letter-spacing:.02em;vertical-align:middle}
-.symlegend{display:flex;gap:20px;flex-wrap:wrap;font-size:11.5px;
-color:var(--dim);margin:0 0 16px}
-.symlegend span b{color:var(--dusk);font-weight:700}
 /* IT ribbon is the load-bearing lane — render it dominant. */
 .cell.it{height:62px;border-top:2px solid var(--dusk);
 border-bottom:2px solid var(--dusk);background:#fbf3e6}
 .rowlab .cell.it{color:var(--dusk);font-weight:800;font-size:11px}
 .act{font-size:10px;font-weight:700;border-radius:4px;
-padding:4px 5px;max-width:46px;overflow:hidden;text-overflow:ellipsis;
-white-space:nowrap;box-shadow:0 1px 3px rgba(78,89,140,.18)}
+padding:4px 6px;text-align:center;white-space:nowrap;
+box-shadow:0 1px 3px rgba(78,89,140,.18)}
 .rep{font-size:9px;color:var(--dim);margin-top:2px;font-weight:700}
 .new{font-size:9px;color:var(--pumpkin);margin-top:2px;font-weight:800}
 .find{max-width:760px;margin:26px 0 4px}
@@ -92,33 +86,19 @@ the interesting question is discriminant: does any of them add
 anything <i>beyond the action sequence itself</i>? On 2,000
 trajectories, none do. The table below the trajectory is the finding;
 the trajectory shows what each lens actually measures, step by step.</p>
-<div class="banner">One real SWE-agent trajectory, shown to make the
-constructs concrete. <b>The validated result is population-level</b>
-(2,000 trajectories): all four constructs predict task outcome on
-their own, yet none add predictive value beyond information-theoretic
-<i>action-sequence structure</i> — see
-<a href="../docs/PROJECT_SNAPSHOT.html">the project snapshot</a>.
-A single trajectory illustrates the measurements; it is not evidence
-for per-instance detection (that regime was tested and failed).</div>
 <div class="legend">
-<span><b>Action ribbon</b> = the shape IT structure measures</span>
-<span><b>Workload</b> = reasoning length (Sweller/Wickens)</span>
-<span><b>Perception</b> = read file before editing it?</span>
-<span><b>Error/recovery</b> = errored → strategy change? (Reason)</span>
-<span><b>Thought–Action</b> = stated intent matches action?</span>
-</div>
-<div class="symlegend">
-<span><b>IT ribbon</b> <span class="new">●new</span> first use of an
-action type · <span class="rep">↻rep</span> a repeat (redundancy =
-what compression/MI score)</span>
-<span><b>Thought–Action</b> ● intent matches · ◐ partial · ○ no match</span>
-<span><b>Perception</b> ✓ read file first · ✗ edited unread file</span>
-<span><b>Error</b> ✗ errored · ✗→↻ errored then changed strategy</span>
+<span><b>IT (action sequence)</b> — ● new action type · ↻ repeat
+(redundancy = what compression / MI score)</span>
+<span><b>Workload</b> — character count of reasoning (Sweller / Wickens)</span>
+<span><b>Perception</b> — ✓ read file first · ✗ edited unread file</span>
+<span><b>Error / recovery</b> — ✗ errored · ✗→↻ errored then changed
+strategy (Reason)</span>
+<span><b>Thought–Action</b> — ● intent matches · ◐ partial · ○ no match</span>
 </div>
 <div class="scroll"><div class="grid" id="grid"></div></div>
 
 <div class="focus">
-<h2>Three steps, zoomed — the lenses do vary</h2>
+<h2>Same trajectory, three moments</h2>
 <div class="fcards" id="fcards"></div>
 </div>
 
@@ -155,12 +135,13 @@ binarization artifact. Full arc &amp; evidence ledger:
 <a href="../docs/PROJECT_SNAPSHOT.html">the project snapshot</a>.</p>
 </div>
 
-<footer>Trajectory <code id="inst"></code> = frozen-sample row
+<footer>A single trajectory illustrates the measurements; it is not
+evidence for per-instance detection (that regime was tested and
+failed). Trajectory <code id="inst"></code> = frozen-sample row
 <code id="ridx"></code> (selected by position; instance ids are
 non-unique across model scales). Per-step signals computed with the
 committed extractors' frozen logic, reproducible on
-<code>construct-validation-pivot</code>. No analysis runs in this
-page.</footer>
+<code>construct-validation-pivot</code>.</footer>
 </div>
 <script>
 const D={"instance": "beetbox__beets-3868", "row_idx": 237, "model": "swe-agent-llama-70b", "resolved": true, "n_steps": 18, "steps": [{"i": 1, "verb": "search_dir", "cat": "search", "repeat": false, "target": "web", "thought": "First, let's locate where the `web` plugin is implemented in the codebase. We can start by searching for the term `web` in the `src` directory to find relevant files.", "wl": 166, "tac": 1.0, "perception": null, "errored": true, "recovered": true, "wl_norm": 0.309}, {"i": 2, "verb": "ls", "cat": "search", "repeat": true, "target": "-f", "thought": "It appears that the `src` directory might not be present in the current working directory. Let's list the contents of the current directory to identify where the `web` plugin implementation might be located.", "wl": 207, "tac": 0.5, "perception": null, "errored": false, "recovered": null, "wl_norm": 0.385}, {"i": 3, "verb": "search_dir", "cat": "search", "repeat": true, "target": "web", "thought": "The `beetsplug` directory likely contains the implementations for the various beets plugins, including the `web` plugin. Let's search for the term `web` within the `beetsplug` directory to find the relevant files.", "wl": 213, "tac": 1.0, "perception": null, "errored": false, "recovered": null, "wl_norm": 0.397}, {"i": 4, "verb": "open", "cat": "observe", "repeat": false, "target": "__init__", "thought": "The `web` plugin implementation is likely in the `beetsplug/web` directory. Let's open the `__init__.py` file in that directory to examine the plugin implementation.", "wl": 165, "tac": 1.0, "perception": null, "errored": true, "recovered": true, "wl_norm": 0.307}, {"i": 5, "verb": "edit", "cat": "mutate", "repeat": false, "target": "61:65", "thought": "The `_rep` function is responsible for getting a flat representation of a beets Item or Album object. The issue is that the `artpath` is being unconditionally deleted for Album objects, regardless of the `INCLUDE_PATHS` config setting. To f", "wl": 414, "tac": 0.5, "perception": false, "errored": true, "recovered": true, "wl_norm": 0.771}, {"i": 6, "verb": "create", "cat": "mutate", "repeat": true, "target": "test_reproduce", "thought": "The code has been updated to conditionally delete the `artpath` based on the `INCLUDE_PATHS` config setting. Now, let's create a script to test this change. We'll name the script `test_reproduce.py` and simulate the web plugin's behavior.", "wl": 238, "tac": 1.0, "perception": false, "errored": false, "recovered": null, "wl_norm": 0.443}, {"i": 7, "verb": "edit", "cat": "mutate", "repeat": true, "target": "1:1", "thought": "Let's add the test code to `test_reproduce.py`. This code will simulate the behavior of the web plugin and print the results, allowing us to verify that the `artpath` is correctly included or excluded based on the `INCLUDE_PATHS` setting.", "wl": 238, "tac": 0.5, "perception": false, "errored": false, "recovered": null, "wl_norm": 0.443}, {"i": 8, "verb": "python", "cat": "verify", "repeat": false, "target": "test_reproduce", "thought": "The test script has been created. Now, let's run `test_reproduce.py` to verify that the `artpath` is correctly included in the flat representation of the Album.", "wl": 160, "tac": 1.0, "perception": null, "errored": true, "recovered": true, "wl_norm": 0.298}, {"i": 9, "verb": "edit", "cat": "mutate", "repeat": true, "target": "61:69", "thought": "The test script failed because the `path` key is not present in the `out` dictionary. This occurs because the `out` dictionary is created by converting the `album` object to a dictionary, and the `path` attribute is not present in the `albu", "wl": 537, "tac": 0.5, "perception": false, "errored": true, "recovered": true, "wl_norm": 1.0}, {"i": 10, "verb": "edit", "cat": "mutate", "repeat": true, "target": "__init__", "thought": "It appears that the edit command was applied to the wrong file. We intended to edit the `__init__.py` file in the `beetsplug/web` directory, but the changes were applied to the `test_reproduce.py` file instead. Let's correct this by editing", "wl": 316, "tac": 1.0, "perception": true, "errored": false, "recovered": null, "wl_norm": 0.588}, {"i": 11, "verb": "edit", "cat": "mutate", "repeat": true, "target": "__init__", "thought": "It seems that the edit command syntax was incorrect. Let's use the correct syntax to edit the `__init__.py` file in the `beetsplug/web` directory.", "wl": 146, "tac": 1.0, "perception": true, "errored": false, "recovered": null, "wl_norm": 0.272}, {"i": 12, "verb": "edit", "cat": "mutate", "repeat": true, "target": "__init__", "thought": "It appears that there was a misunderstanding in the command syntax. The `edit` command should specify the start and end lines for the file to be edited. Let's use the correct syntax to edit the `__init__.py` file in the `beetsplug/web` dire", "wl": 246, "tac": 1.0, "perception": true, "errored": false, "recovered": null, "wl_norm": 0.458}, {"i": 13, "verb": "edit", "cat": "mutate", "repeat": true, "target": "__init__", "thought": "It seems that there was a mistake in the previous edit command. The correct syntax should include the path to the file being edited. Let's use the correct syntax to edit the `__init__.py` file in the `beetsplug/web` directory.", "wl": 226, "tac": 1.0, "perception": true, "errored": false, "recovered": null, "wl_norm": 0.421}, {"i": 14, "verb": "open", "cat": "observe", "repeat": true, "target": "__init__", "thought": "It seems that the `edit` command syntax is being used incorrectly. The `edit` command should be used to edit the currently open file. Since we need to edit the `__init__.py` file in the `beetsplug/web` directory, we should first open that f", "wl": 345, "tac": 1.0, "perception": null, "errored": true, "recovered": true, "wl_norm": 0.642}, {"i": 15, "verb": "edit", "cat": "mutate", "repeat": true, "target": "61:69", "thought": "The `__init__.py` file in the `beetsplug/web` directory is now open. Let's edit the `_rep` function to handle the `path` and `artpath` attributes correctly based on the `INCLUDE_PATHS` setting.", "wl": 193, "tac": 0.5, "perception": false, "errored": true, "recovered": true, "wl_norm": 0.359}, {"i": 16, "verb": "python", "cat": "verify", "repeat": true, "target": "test_reproduce", "thought": "The code has been updated to handle the `path` and `artpath` attributes correctly based on the `INCLUDE_PATHS` setting. Now, let's run the `test_reproduce.py` script to verify that the changes have fixed the issue.", "wl": 214, "tac": 1.0, "perception": null, "errored": false, "recovered": null, "wl_norm": 0.399}, {"i": 17, "verb": "rm", "cat": "other", "repeat": false, "target": "test_reproduce", "thought": "The test script ran successfully and produced a dictionary that includes the `artpath` key, indicating that the issue has been resolved. Let's clean up by removing the `test_reproduce.py` file since it is no longer needed.", "wl": 222, "tac": 0.5, "perception": null, "errored": false, "recovered": null, "wl_norm": 0.413}, {"i": 18, "verb": "submit", "cat": "submit", "repeat": false, "target": "", "thought": "The `test_reproduce.py` file has been successfully removed. Now that we have fixed the issue and verified the solution, let's submit our changes to the code base.", "wl": 162, "tac": 1.0, "perception": null, "errored": false, "recovered": null, "wl_norm": 0.302}]};
@@ -199,7 +180,7 @@ D.steps.forEach(s=>{
   else if(r.k==='act'){const a=document.createElement('div');
    a.className='act';a.style.background=CC[s.cat]||CC.other;
    a.style.color=CT[s.cat]||CT.other;
-   a.textContent=s.verb;c.appendChild(a);
+   a.textContent=s.cat;c.appendChild(a);
    const rd=document.createElement('div');
    rd.className=s.repeat?'rep':'new';
    rd.textContent=s.repeat?'↻ rep':'● new';

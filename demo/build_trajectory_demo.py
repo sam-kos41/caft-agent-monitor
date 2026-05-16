@@ -167,16 +167,13 @@ color:var(--ink);font:14px/1.55 -apple-system,system-ui,Segoe UI,sans-serif}
 h1{font-size:23px;margin:0 0 4px;letter-spacing:-.01em;
 color:var(--dusk)}
 .sub{color:var(--dim);font-size:13.5px;margin:0 0 14px}
-.banner{background:var(--card);border:1px solid var(--line);
-border-left:4px solid var(--dusk);border-radius:8px;
-padding:11px 15px;font-size:13px;color:var(--dusk);margin:0 0 20px}
-.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;
-color:var(--dim);margin:0 0 14px}
+.legend{display:flex;flex-direction:column;gap:4px;font-size:12px;
+color:var(--dim);margin:2px 0 16px;max-width:780px}
 .legend b{color:var(--dusk)}
 .scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;
 background:#fff}
 .grid{display:grid;grid-auto-flow:column;min-width:max-content}
-.col{width:54px;border-right:1px solid #f0e6d3;position:relative}
+.col{width:66px;border-right:1px solid #f0e6d3;position:relative}
 .rowlab{position:sticky;left:0;z-index:2;background:var(--card);
 border-right:2px solid var(--dusk);width:118px;min-width:118px}
 .cell{height:46px;border-bottom:1px solid #f0e6d3;display:flex;
@@ -198,16 +195,13 @@ border-right:2px solid var(--dusk)}
 .badge{display:inline-block;font-size:11px;font-weight:700;
 padding:2px 9px;border-radius:999px;background:var(--dusk);
 color:#fff;letter-spacing:.02em;vertical-align:middle}
-.symlegend{display:flex;gap:20px;flex-wrap:wrap;font-size:11.5px;
-color:var(--dim);margin:0 0 16px}
-.symlegend span b{color:var(--dusk);font-weight:700}
 /* IT ribbon is the load-bearing lane — render it dominant. */
 .cell.it{height:62px;border-top:2px solid var(--dusk);
 border-bottom:2px solid var(--dusk);background:#fbf3e6}
 .rowlab .cell.it{color:var(--dusk);font-weight:800;font-size:11px}
 .act{font-size:10px;font-weight:700;border-radius:4px;
-padding:4px 5px;max-width:46px;overflow:hidden;text-overflow:ellipsis;
-white-space:nowrap;box-shadow:0 1px 3px rgba(78,89,140,.18)}
+padding:4px 6px;text-align:center;white-space:nowrap;
+box-shadow:0 1px 3px rgba(78,89,140,.18)}
 .rep{font-size:9px;color:var(--dim);margin-top:2px;font-weight:700}
 .new{font-size:9px;color:var(--pumpkin);margin-top:2px;font-weight:800}
 .find{max-width:760px;margin:26px 0 4px}
@@ -243,33 +237,19 @@ the interesting question is discriminant: does any of them add
 anything <i>beyond the action sequence itself</i>? On 2,000
 trajectories, none do. The table below the trajectory is the finding;
 the trajectory shows what each lens actually measures, step by step.</p>
-<div class="banner">One real SWE-agent trajectory, shown to make the
-constructs concrete. <b>The validated result is population-level</b>
-(2,000 trajectories): all four constructs predict task outcome on
-their own, yet none add predictive value beyond information-theoretic
-<i>action-sequence structure</i> — see
-<a href="../docs/PROJECT_SNAPSHOT.html">the project snapshot</a>.
-A single trajectory illustrates the measurements; it is not evidence
-for per-instance detection (that regime was tested and failed).</div>
 <div class="legend">
-<span><b>Action ribbon</b> = the shape IT structure measures</span>
-<span><b>Workload</b> = reasoning length (Sweller/Wickens)</span>
-<span><b>Perception</b> = read file before editing it?</span>
-<span><b>Error/recovery</b> = errored → strategy change? (Reason)</span>
-<span><b>Thought–Action</b> = stated intent matches action?</span>
-</div>
-<div class="symlegend">
-<span><b>IT ribbon</b> <span class="new">●new</span> first use of an
-action type · <span class="rep">↻rep</span> a repeat (redundancy =
-what compression/MI score)</span>
-<span><b>Thought–Action</b> ● intent matches · ◐ partial · ○ no match</span>
-<span><b>Perception</b> ✓ read file first · ✗ edited unread file</span>
-<span><b>Error</b> ✗ errored · ✗→↻ errored then changed strategy</span>
+<span><b>IT (action sequence)</b> — ● new action type · ↻ repeat
+(redundancy = what compression / MI score)</span>
+<span><b>Workload</b> — character count of reasoning (Sweller / Wickens)</span>
+<span><b>Perception</b> — ✓ read file first · ✗ edited unread file</span>
+<span><b>Error / recovery</b> — ✗ errored · ✗→↻ errored then changed
+strategy (Reason)</span>
+<span><b>Thought–Action</b> — ● intent matches · ◐ partial · ○ no match</span>
 </div>
 <div class="scroll"><div class="grid" id="grid"></div></div>
 
 <div class="focus">
-<h2>Three steps, zoomed — the lenses do vary</h2>
+<h2>Same trajectory, three moments</h2>
 <div class="fcards" id="fcards"></div>
 </div>
 
@@ -306,12 +286,13 @@ binarization artifact. Full arc &amp; evidence ledger:
 <a href="../docs/PROJECT_SNAPSHOT.html">the project snapshot</a>.</p>
 </div>
 
-<footer>Trajectory <code id="inst"></code> = frozen-sample row
+<footer>A single trajectory illustrates the measurements; it is not
+evidence for per-instance detection (that regime was tested and
+failed). Trajectory <code id="inst"></code> = frozen-sample row
 <code id="ridx"></code> (selected by position; instance ids are
 non-unique across model scales). Per-step signals computed with the
 committed extractors' frozen logic, reproducible on
-<code>construct-validation-pivot</code>. No analysis runs in this
-page.</footer>
+<code>construct-validation-pivot</code>.</footer>
 </div>
 <script>
 const D=/*DATA*/;
@@ -350,7 +331,7 @@ D.steps.forEach(s=>{
   else if(r.k==='act'){const a=document.createElement('div');
    a.className='act';a.style.background=CC[s.cat]||CC.other;
    a.style.color=CT[s.cat]||CT.other;
-   a.textContent=s.verb;c.appendChild(a);
+   a.textContent=s.cat;c.appendChild(a);
    const rd=document.createElement('div');
    rd.className=s.repeat?'rep':'new';
    rd.textContent=s.repeat?'↻ rep':'● new';
