@@ -1,0 +1,29 @@
+{
+  "n": 2000,
+  "n_resolved": 1000,
+  "H1": {
+    "observed_cv_auc": 0.7504474999999999,
+    "null_p95": 0.528111375,
+    "null_mean": 0.49922121750000004,
+    "n_perm": 1000,
+    "floor": 0.55,
+    "pass": true
+  },
+  "H2": {
+    "auc_baseline": 0.723884,
+    "auc_baseline_plus_IT": 0.768098,
+    "delta_auc": 0.044213999999999976,
+    "delta_min": 0.03,
+    "ci95": [
+      0.025991180758437392,
+      0.062222176393615804
+    ],
+    "n_boot": 2000,
+    "pass": true
+  },
+  "decision": {
+    "code": "H1_PASS_H2_PASS",
+    "conclusion": "IT adds genuine incremental signal on a clean independent outcome.",
+    "action": "Commit to the fuller four-leg program; operationalize the other legs."
+  }
+}
