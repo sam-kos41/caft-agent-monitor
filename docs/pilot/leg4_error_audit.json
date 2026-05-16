@@ -1,0 +1,23 @@
+{
+  "n": 2000,
+  "n_tool_columns": 165,
+  "gate": {
+    "error.strategy_change_rate": {
+      "cv_r2": -0.100194525717116,
+      "fails_gate": false
+    },
+    "error.recovery_success_rate": {
+      "cv_r2": -0.4816441546641495,
+      "fails_gate": false
+    }
+  },
+  "leg4_invalid": false,
+  "all_error_cv_r2": {
+    "error.n_episodes": 0.6306943383662097,
+    "error.recurrence_rate": 0.2749921164330516,
+    "error.strategy_change_rate": -0.100194525717116,
+    "error.recovery_success_rate": -0.4816441546641495,
+    "error.mean_latency_turns": -0.22487623774835758,
+    "error.terminal_unresolved": 0.21159902819018858
+  }
+}
