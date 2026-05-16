@@ -166,7 +166,9 @@ corpus and these operationalizations* — not a universal proof.
 
 ## 10. Review sign-off
 
-[ ] Human review complete — features defensible, exclusions honest,
-thresholds justified, decision rule acceptable. → then, and only then,
-build `pilot_error.py` + tests, run the gate, stop for the gate
-checkpoint.
+[x] Human review complete — 2026-05-15, greenlit. Features
+defensible, exclusions honest (wall-clock latency + semantic
+ack excluded), thresholds held identical to Legs 2/3 for cross-leg
+comparability, decision rule + endpoint accepted. Pre-registration is
+now FROZEN. → build `pilot_error.py` + tests, run the gate, stop for
+the mandatory human checkpoint.
