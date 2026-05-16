@@ -131,7 +131,26 @@ perms); H2 ΔAUC ≥0.03; H3 ΔAUC ≥0.02; both CIs exclude 0;
 StratifiedKFold(5, random_state=20260515); 2000-boot CI; Robustness-2
 subsample = first 150 by sel_key_int, non-gating.
 
-Amendments (dated, with rationale) — none.
+Amendments (dated, with rationale):
+
+**A1 — 2026-05-16 — Robustness-2 subsample/join made exact.**
+§3 Robustness 2 said "first 150 trajectories by sel_key_int (manifest
+order)". This was under-specified for a corpus where `instance_id` is
+NOT unique (the same SWE-bench instance is run by all 3 Llama scales →
+up to 3 manifest rows per instance_id with different model_name /
+sel_key_int). The first implementation built a *set* of instance_ids
+and joined `sample.jsonl` by instance_id alone; the set collapsed to
+~8 distinct ids and the join was ambiguous → the run graded only 8
+trajectories and its correlations (Pearson −0.196, Spearman −0.381,
+n=8) are **void and not interpreted**. Pinned: the subsample is the
+150 manifest **rows** with the smallest sel_key_int; join is
+**positional by row index** (manifest row i ↔ `sample.jsonl` row i ↔
+`tac.json` row i — all written in the same frozen-sampler order, the
+same alignment the primary pipeline uses). No instance_id lookup.
+Robustness 2 remains NON-GATING and descriptive; the locked §8
+primary decision (TAC-H3 fail) is positional-by-row and was never
+affected. Rationale: faithful, unambiguous subsample on a
+non-unique-id corpus; no analytic degree of freedom added.
 
 ## 10. What a pass/fail does NOT claim
 

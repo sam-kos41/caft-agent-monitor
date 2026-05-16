@@ -90,25 +90,26 @@ def _llm_tac(pairs, model, host) -> int | None:
 def run(out_dir: str, model: str = DEFAULT_MODEL,
         host: str = DEFAULT_HOST) -> dict:
     base = Path("/tmp/caft_pilot")
-    # frozen subsample: first SUBSAMPLE_N instance_ids by sel_key_int
-    rows = []
-    with open(base / "manifest.csv") as f:   # frozen-sample manifest
-        for r in csv.DictReader(f):
-            rows.append((int(r["sel_key_int"]), r["instance_id"]))
-    rows.sort()
-    keep = {iid for _, iid in rows[:SUBSAMPLE_N]}
+    # A1: subsample = the 150 manifest ROWS with smallest sel_key_int;
+    # join POSITIONALLY by row index (manifest row i <-> sample.jsonl
+    # row i <-> tac.json row i — same frozen-sampler write order, the
+    # alignment the primary pipeline uses). No instance_id lookup
+    # (instance_id is non-unique across the 3 model scales).
+    keyed = []
+    with open(base / "manifest.csv") as f:
+        for i, r in enumerate(csv.DictReader(f)):
+            keyed.append((int(r["sel_key_int"]), i))
+    keyed.sort()
+    keep_idx = sorted(i for _, i in keyed[:SUBSAMPLE_N])
 
-    # join trajectories + primary tac.mean by instance_id (sample.jsonl
-    # and tac.json are in the same row order)
-    traj_by_id, tacmean_by_id = {}, {}
     tac = json.loads((base / "tac.json").read_text())
+    sample = []
     with open(base / "sample.jsonl", encoding="utf-8") as f:
-        for i, line in enumerate(f):
-            d = json.loads(line)
-            iid = d.get("instance_id")
-            if iid in keep:
-                traj_by_id[iid] = d.get("trajectory") or []
-                tacmean_by_id[iid] = tac[i]["tac"]["tac.mean"]
+        for line in f:
+            sample.append(json.loads(line))
+    assert len(sample) == len(tac) == len(keyed), "alignment broken"
+    selected = [(idx, sample[idx].get("trajectory") or [],
+                 tac[idx]["tac"]["tac.mean"]) for idx in keep_idx]
 
     if not is_ollama_available(host):
         res = {"status": "ollama_unavailable",
@@ -119,15 +120,13 @@ def run(out_dir: str, model: str = DEFAULT_MODEL,
         return res
 
     llm, det, graded, failed = [], [], 0, 0
-    for iid in sorted(keep):
-        if iid not in traj_by_id:
-            continue
-        r = _llm_tac(_pairs(traj_by_id[iid]), model, host)
+    for idx, traj, tacmean in selected:
+        r = _llm_tac(_pairs(traj), model, host)
         if r is None:
             failed += 1
             continue
         llm.append(r)
-        det.append(tacmean_by_id[iid])
+        det.append(tacmean)
         graded += 1
         if graded % 25 == 0:
             print(f"  ...graded {graded}", flush=True)
