@@ -177,7 +177,6 @@ color:var(--dim);margin:0 0 14px}
 background:#fff}
 .grid{display:grid;grid-auto-flow:column;min-width:max-content}
 .col{width:54px;border-right:1px solid #f0e6d3;position:relative}
-.col:hover{background:#fbf3e6}
 .rowlab{position:sticky;left:0;z-index:2;background:var(--card);
 border-right:2px solid var(--dusk);width:118px;min-width:118px}
 .cell{height:46px;border-bottom:1px solid #f0e6d3;display:flex;
@@ -189,14 +188,6 @@ var(--sandy),var(--apricot));border-radius:2px;align-self:flex-end;
 margin-bottom:5px}
 .mk{font-size:13px;font-weight:700}
 .dotn{color:#cdd0e0}
-.tip{position:fixed;max-width:340px;background:var(--dusk);
-border:1px solid #3a4170;border-radius:8px;padding:11px 13px;
-font-size:12px;color:#fff;pointer-events:none;opacity:0;
-transition:opacity .1s;z-index:10;box-shadow:0 10px 30px rgba(78,89,140,.35)}
-.tip b{color:var(--apricot)}
-.tip .t{color:#dde0f0;font-style:italic}
-.tip .cs{margin-top:7px;border-top:1px solid #6b73a0;padding-top:6px}
-.tip .cs div{margin:3px 0}
 footer{margin-top:26px;color:var(--dim);font-size:12.5px;
 border-top:1px solid var(--line);padding-top:14px}
 a{color:var(--pumpkin)}
@@ -315,7 +306,6 @@ binarization artifact. Full arc &amp; evidence ledger:
 <a href="../docs/PROJECT_SNAPSHOT.html">the project snapshot</a>.</p>
 </div>
 
-<div class="tip" id="tip"></div>
 <footer>Trajectory <code id="inst"></code> = frozen-sample row
 <code id="ridx"></code> (selected by position; instance ids are
 non-unique across model scales). Per-step signals computed with the
@@ -383,8 +373,6 @@ D.steps.forEach(s=>{
    c.innerHTML=`<span class=mk style="color:${col2}">`+
     (v>=1?'●':v>=0.5?'◐':'○')+'</span>';}
   col.appendChild(c);});
- col.addEventListener('mousemove',e=>showTip(e,s));
- col.addEventListener('mouseleave',hideTip);
  g.appendChild(col);
 });
 function reads(s){
@@ -429,19 +417,6 @@ function reads(s){
    reads(s).map(([k,v])=>`<div class="r"><b>${k}</b>: ${v}</div>`)
     .join('')+`</div>`).join('');
 })();
-const tip=document.getElementById('tip');
-function showTip(e,s){
- tip.innerHTML=`<b>step ${s.i} · ${s.verb} ${s.target||''}</b>`+
-  `<div class="t">“${s.thought||'(no reasoning text)'}”</div>`+
-  `<div class="cs">`+
-  reads(s).map(([k,v])=>`<div><b>${k}</b>: ${v}</div>`).join('')+
-  `</div>`;
- tip.style.opacity=1;
- const x=Math.min(e.clientX+16,window.innerWidth-356);
- const y=Math.min(e.clientY+16,window.innerHeight-220);
- tip.style.left=x+'px';tip.style.top=y+'px';
-}
-function hideTip(){tip.style.opacity=0;}
 </script></body></html>"""
 
 

@@ -10,9 +10,9 @@ load-bearing.
 
 ## Run it
 
-Open `index.html` in a browser. No build, no server, no dependencies —
-ready for a personal site or GitHub Pages. Hover any step for the
-verbatim reasoning + what each construct saw there.
+Open `index.html` in a browser. No build, no server, no dependencies,
+no interactivity — a single static view, everything visible at once,
+ready for a personal site or GitHub Pages.
 
 ## What you're looking at
 
