@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAFT parsimony — interactive walk-through</title>
+<style>
+  :root{--bg:#0d1017;--card:#161b25;--line:#272e3b;--ink:#e6edf3;
+        --dim:#8b97a7;--ok:#3fb950;--bad:#f85149;--accent:#58a6ff}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:15px/1.6 -apple-system,system-ui,Segoe UI,Roboto,sans-serif}
+  .wrap{max-width:780px;margin:0 auto;padding:40px 20px 80px}
+  h1{font-size:25px;margin:0 0 4px}
+  .sub{color:var(--dim);margin:0 0 22px;font-size:14px}
+  .progress{display:flex;gap:6px;margin:0 0 22px;flex-wrap:wrap}
+  .dot{flex:1;min-width:46px;height:6px;border-radius:3px;
+       background:#222a36}
+  .dot.done{background:var(--accent)}
+  .card{background:var(--card);border:1px solid var(--line);
+        border-radius:11px;padding:22px 24px;min-height:300px}
+  .step-no{color:var(--accent);font-size:12px;font-weight:700;
+           letter-spacing:.08em;text-transform:uppercase}
+  h2{font-size:20px;margin:6px 0 12px}
+  .q{font-size:15px;color:#cdd6e2;background:#1c2230;border-radius:8px;
+     padding:12px 15px;margin:10px 0}
+  .q b{color:#9cc7ff}
+  .reveal{margin-top:16px}
+  .hidden{display:none}
+  .res{font-size:14px;margin:8px 0}
+  .verdict{font-weight:700;font-size:16px;margin:14px 0 6px}
+  .v-neg{color:var(--bad)} .v-pos{color:var(--ok)}
+  .why{color:var(--dim);font-size:13.5px;border-left:2px solid var(--line);
+       padding-left:12px;margin:10px 0}
+  .nav{display:flex;justify-content:space-between;margin-top:24px;gap:10px}
+  button{background:#21262d;color:var(--ink);border:1px solid #30363d;
+          padding:9px 18px;border-radius:7px;cursor:pointer;font-size:14px}
+  button:hover{background:#2a313c}
+  button.primary{background:#1f6feb;border-color:#1f6feb}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  code{background:#1f2530;padding:1px 5px;border-radius:4px;font-size:12px}
+  .foot{margin-top:26px;color:var(--dim);font-size:12.5px;text-align:center}
+  a{color:var(--accent)}
+</style>
+</head>
+<body><div class="wrap">
+<h1>CAFT → Parsimony</h1>
+<p class="sub">Walk the locked, pre-registered arc. Each step shows the
+question that was frozen <i>before</i> data, then the real result and
+the decision the locked rule produced. No number here was chosen after
+seeing it.</p>
+
+<div class="progress" id="prog"></div>
+<div class="card" id="card"></div>
+<div class="nav">
+  <button id="prev">‹ Back</button>
+  <button id="reveal" class="primary">Reveal result</button>
+  <button id="next">Next ›</button>
+</div>
+<p class="foot">Static, self-contained, no analysis run in-page —
+results transcribed from the frozen pipeline on branch
+<code>construct-validation-pivot</code>. Full arc:
+<a href="../docs/PROJECT_SNAPSHOT.html">PROJECT_SNAPSHOT.html</a></p>
+
+<script>
+const STEPS=[
+ {n:"Step 0 · the autopsy",t:"Does the original detector work?",
+  q:"CAFT claimed per-session 'health' detection. <b>Pre-registered check:</b> does it agree with a domain expert, and does any baseline design fire on session content rather than an artifact?",
+  res:["Agreement <b>κ = −0.04</b> (worse than chance).",
+       "Steelman: 3 independent baselines (self / corpus / change-point) all fire on a calibration / window-fill transient, not content.",
+       "Lead/lag: the 'early warning' is an artifact, not prescience."],
+  vc:"v-neg",v:"NEGATIVE — per-step single-session detection does not work.",
+  why:"Documented, not buried. The construct was retired and the project reframed to population-level validation on an external outcome."},
+ {n:"Step 1 · IT validated",t:"Does behavioral structure predict outcomes at the population level?",
+  q:"Frozen sample N=2000 (1000 resolved / 1000 not), symbolization gate passed. <b>H1:</b> beats a label-shuffle null? <b>H2:</b> beats a trivial baseline?",
+  res:["H1: AUC <b>0.75</b> > permutation-null p95 0.53.",
+       "H2: ΔAUC <b>+0.044</b> over trivial baseline, 95% CI [+0.026, +0.062]."],
+  vc:"v-pos",v:"POSITIVE — modest, robust, non-artifactual, outcome-relevant.",
+  why:"Small but real. This is the one measurement that survived. Everything after asks: does anything add to it?"},
+ {n:"Step 2 · workload",t:"Cognitive workload (Wickens / Sweller / NASA-TLX)",
+  q:"Predicts alone? And — the leg-defining test — does it add anything <b>beyond IT</b> (ΔAUC ≥ 0.02, CI excludes 0)?",
+  res:["Alone: AUC 0.70 (predicts).",
+       "Beyond IT: ΔAUC <b>+0.006</b>, 95% CI spans 0.",
+       "Correlation with IT: 0.74."],
+  vc:"v-neg",v:"REDUCES TO IT — not a distinct construct.",
+  why:"Predicting the outcome is not enough. The locked gate is incremental value beyond IT, and it failed."},
+ {n:"Step 3 · situation awareness",t:"Situation awareness (Endsley)",
+  q:"Same locked structure. SA was pre-judged the strongest distinctness candidate (a different axis: agent↔environment).",
+  res:["Alone: AUC 0.65.",
+       "Beyond IT: ΔAUC <b>+0.003</b>, 95% CI spans 0.",
+       "Correlation with IT: 0.64."],
+  vc:"v-neg",v:"REDUCES TO IT — the strongest candidate collapsed.",
+  why:"The most likely-to-be-distinct construct failed the discriminant gate too."},
+ {n:"Step 4 · error recovery",t:"Error recovery (Reason / Hollnagel)",
+  q:"Final HF leg. Conceptually the most distinct axis: discrete adverse events vs steady-state sequence shape.",
+  res:["Alone: AUC 0.71.",
+       "Beyond IT: ΔAUC <b>+0.004</b>, 95% CI spans 0.",
+       "Correlation with IT: 0.75."],
+  vc:"v-neg",v:"REDUCES TO IT — completes the pattern.",
+  why:"Three HF ports, three collapses, including both axes pre-judged most distinct."},
+ {n:"Step 5 · agent-native",t:"Thought-action coherence (no human analog)",
+  q:"Designed for agents: does stated intent match the action taken? Humans don't externalize a reasoning channel — this is genuinely agent-native.",
+  res:["Alone: AUC 0.67.",
+       "Beyond IT: ΔAUC <b>−0.0002</b>, 95% CI spans 0.",
+       "Correlation with IT: <b>0.43</b> — the LEAST IT-correlated of all."],
+  vc:"v-neg",v:"REDUCES TO IT — and this is the sharpest case.",
+  why:"It is genuinely distinct as a measurement (corr 0.43) yet still adds nothing. The claim hardens: IT already captures whatever predicts the outcome."},
+ {n:"Step 6 · generalization",t:"Is it just an artifact of pass/fail being too blunt?",
+  q:"Re-run the leg-defining tests against a <b>graded</b> outcome (fraction of tests passing) — which adds resolving power exactly where a hidden dimension would appear.",
+  res:["G-H1: IT predicts graded outcome (Spearman <b>0.277</b> vs null 0.046).",
+       "G-H2: ΔSpearman <b>+0.101</b>, CI [+0.065,+0.166] — relatively larger than the binary effect.",
+       "G-H3: <b>no construct re-separates</b> (all ≈0, CIs span 0, none survive Bonferroni)."],
+  vc:"v-pos",v:"PARSIMONY GENERALIZES — not a binarization artifact.",
+  why:"Conditional on a documented selection bias and one corpus/agent family. 'Agents universally flat' is NOT claimed. Cross-architecture generalization is the one open axis — deliberately deferred."},
+ {n:"Conclusion",t:"The parsimony thesis",
+  q:"What the arc establishes.",
+  res:["For predicting coding-task outcomes in agent trajectories, the information-theoretic structure of the action sequence is load-bearing.",
+       "Four constructs (3 human-factors ports + 1 agent-native) each predict the outcome alone; none add value beyond IT structure; this survives a graded outcome.",
+       "The reusable asset is the construct-validation methodology: pre-registration before data, symbolization gates, null models, locked decision rules, honest scoping, no goalpost-moving."],
+  vc:"v-pos",v:"Empirical phase complete · 2026-05-16 · project at rest.",
+  why:"The negatives are the contribution. Every claim is bounded, reproducible, and stated with its scope."}
+];
+let i=0,shown=false;
+const card=document.getElementById('card'),prog=document.getElementById('prog');
+prog.innerHTML=STEPS.map(()=>'<div class="dot"></div>').join('');
+function render(){
+  const s=STEPS[i];
+  document.querySelectorAll('.dot').forEach((d,k)=>d.classList.toggle('done',k<=i));
+  card.innerHTML=`<div class="step-no">${s.n}</div><h2>${s.t}</h2>
+   <div class="q">${s.q}</div>
+   <div class="reveal ${shown?'':'hidden'}" id="rv">
+     ${s.res.map(r=>`<div class="res">• ${r}</div>`).join('')}
+     <div class="verdict ${s.vc}">${s.v}</div>
+     <div class="why">${s.why}</div></div>`;
+  document.getElementById('prev').disabled=i===0;
+  document.getElementById('next').disabled=i===STEPS.length-1||!shown;
+  document.getElementById('reveal').textContent=shown?'Result shown':'Reveal result';
+  document.getElementById('reveal').disabled=shown;
+}
+document.getElementById('reveal').onclick=()=>{shown=true;render()};
+document.getElementById('next').onclick=()=>{if(i<STEPS.length-1){i++;shown=false;render()}};
+document.getElementById('prev').onclick=()=>{if(i>0){i--;shown=true;render()}};
+render();
+</script>
+</body></html>

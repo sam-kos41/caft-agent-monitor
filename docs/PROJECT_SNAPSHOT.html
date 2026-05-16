@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAFT → Parsimony: a construct-validation arc</title>
+<style>
+  :root{--bg:#0d1017;--card:#161b25;--line:#272e3b;--ink:#e6edf3;
+        --dim:#8b97a7;--ok:#3fb950;--bad:#f85149;--accent:#58a6ff;
+        --warn:#d29922;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:15px/1.65 -apple-system,system-ui,Segoe UI,Roboto,sans-serif}
+  .wrap{max-width:860px;margin:0 auto;padding:48px 22px 90px}
+  h1{font-size:30px;margin:0 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--dim);font-size:15px;margin:0 0 28px}
+  h2{font-size:19px;margin:42px 0 10px;border-bottom:1px solid var(--line);
+     padding-bottom:7px;letter-spacing:-.01em}
+  p{margin:10px 0}
+  .lead{font-size:16px}
+  code{background:#1f2530;padding:1px 6px;border-radius:5px;font-size:13px}
+  .step{background:var(--card);border:1px solid var(--line);
+        border-left:3px solid var(--accent);border-radius:9px;
+        padding:15px 18px;margin:13px 0}
+  .step h3{margin:0 0 6px;font-size:15.5px}
+  .tag{display:inline-block;font-size:11px;font-weight:600;
+       padding:2px 9px;border-radius:999px;margin-left:8px;
+       vertical-align:middle}
+  .t-neg{background:#3a1418;color:#ff9b96;border:1px solid #5c1f24}
+  .t-pos{background:#10301b;color:#7ee2a0;border:1px solid #1f5c34}
+  .t-key{background:#11243d;color:#9cc7ff;border:1px solid #1f4870}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+  th{background:#1c2230;color:#cdd6e2}
+  td.n{text-align:right;font-variant-numeric:tabular-nums}
+  .x{color:var(--bad);font-weight:600}.v{color:var(--ok);font-weight:600}
+  .caveat{background:#221a0c;border:1px solid #4a3a14;border-radius:9px;
+          padding:14px 18px;margin:18px 0;color:#e8d9b0;font-size:14px}
+  .thesis{background:#0f2236;border:1px solid #21456e;border-radius:9px;
+          padding:18px 20px;margin:22px 0;font-size:16px}
+  footer{margin-top:54px;color:var(--dim);font-size:13px;
+          border-top:1px solid var(--line);padding-top:16px}
+  a{color:var(--accent)}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>CAFT → Parsimony</h1>
+<p class="sub">A construct-validation arc on AI coding-agent behavior.
+Empirical phase complete 2026-05-16. Every number below is reproducible
+from a frozen, seed-locked pipeline; the negatives are the contribution.</p>
+
+<p class="lead">The project set out to build a multi-construct,
+human-factors-grounded monitor for AI coding agents. Disciplined
+validation killed most of what it set out to build and, in doing so,
+found something sharper and more defensible. This is the honest arc.</p>
+
+<h2>1 · The autopsy <span class="tag t-neg">negative result</span></h2>
+<p>The original detector (CAFT) claimed per-session "health" / anomaly
+detection. Tracing the real pipeline and validating it against a
+domain expert: agreement <b>κ = −0.04</b> (worse than chance). A
+steelman — three independent baseline designs (self-calibrating,
+corpus, change-point) — all failed the same way: they fire on a
+calibration/window-fill transient, not on session content. A lead/lag
+test confirmed the "early warning" was an artifact, not prescience.
+<b>Per-step single-session pathology detection does not work.</b> This
+was documented, not buried, and the construct was retired.</p>
+
+<h2>2 · The reframe</h2>
+<p>What survived: the information-theoretic metrics themselves (mutual
+information, compression, KL, entropy of the action sequence) are real,
+deterministic measurements of <i>behavioral structure</i>. The error
+was the construct on top, not the measurement. The project pivoted
+from per-instance detection to <b>population-level construct
+validation</b> on an external, outcome-labelled corpus
+(SWE-agent trajectories; test-based pass/fail — independent of any
+behavioral metric, so non-circular).</p>
+
+<h2>3 · IT validated <span class="tag t-pos">positive result</span></h2>
+<p>Pre-registered pilot, frozen sample N=2000 (1000 resolved / 1000
+not), symbolization gate passed (IT not a tool-API artifact).</p>
+<div class="step">
+  <h3>Information-theoretic behavioral structure</h3>
+  H1: AUC <b>0.75</b> &gt; permutation-null p95 0.53 &nbsp;·&nbsp;
+  H2: ΔAUC <b>+0.044</b> over a trivial baseline, 95% CI
+  [+0.026,+0.062]. Modest, robust, non-artifactual,
+  outcome-relevant.
+</div>
+
+<h2>4 · Everything else collapses into it
+   <span class="tag t-key">the finding</span></h2>
+<p>Four further constructs were each pre-registered, gated, and tested
+with a locked decision rule. Each predicts the outcome <i>on its
+own</i> — and not one adds predictive value <i>beyond</i> IT
+structure (the leg-defining H3: does it beat baseline + IT?).</p>
+<table>
+<tr><th>Construct</th><th>Source</th><th class="n">Alone (H1 AUC)</th>
+    <th class="n">Beyond IT (ΔAUC)</th><th class="n">corr w/ IT</th>
+    <th>Verdict</th></tr>
+<tr><td>IT behavioral structure</td><td>information theory</td>
+    <td class="n v">0.75</td><td class="n">— (reference)</td>
+    <td class="n">—</td><td class="v">load-bearing</td></tr>
+<tr><td>Cognitive workload</td><td>Wickens / Sweller / NASA-TLX</td>
+    <td class="n">0.70</td><td class="n x">+0.006 (CI∋0)</td>
+    <td class="n">0.74</td><td class="x">reduces to IT</td></tr>
+<tr><td>Situation awareness</td><td>Endsley</td>
+    <td class="n">0.65</td><td class="n x">+0.003 (CI∋0)</td>
+    <td class="n">0.64</td><td class="x">reduces to IT</td></tr>
+<tr><td>Error recovery</td><td>Reason / Hollnagel</td>
+    <td class="n">0.71</td><td class="n x">+0.004 (CI∋0)</td>
+    <td class="n">0.75</td><td class="x">reduces to IT</td></tr>
+<tr><td>Thought-action coherence</td><td>agent-native</td>
+    <td class="n">0.67</td><td class="n x">−0.0002 (CI∋0)</td>
+    <td class="n">0.43</td><td class="x">reduces to IT</td></tr>
+</table>
+<p>The agent-native construct is the sharpest case: it is the
+<i>least</i> correlated with IT (0.43, vs 0.64–0.75 for the ports) —
+genuinely a distinct measurement — yet still adds essentially zero
+predictive value beyond it. The claim is therefore not "everything
+correlates with IT" but the stronger: <b>IT already captures whatever
+predicts this outcome; additional, even genuinely distinct,
+measurements do not improve prediction.</b></p>
+
+<h2>5 · It is not a binarization artifact
+   <span class="tag t-pos">generalization</span></h2>
+<p>Rival explanation: maybe the collapse was just because the outcome
+was blunt pass/fail. Generalization G re-ran the leg-defining tests
+against a <i>graded</i> outcome (fraction of tests passing), which adds
+resolving power exactly where a hidden dimension would most likely
+appear.</p>
+<div class="step">
+  G-H1: IT predicts the graded outcome (Spearman <b>0.277</b> vs null
+  0.046) · G-H2: ΔSpearman <b>+0.101</b>, CI [+0.065,+0.166]
+  (relatively <i>larger</i> than the binary effect) · G-H3:
+  <b>no construct re-separates</b> (all ΔSpearman ≈ 0, CIs span 0,
+  none survive Bonferroni). The binarization-artifact explanation is
+  rejected on this axis.
+</div>
+
+<div class="thesis">
+<b>Parsimony thesis.</b> For predicting coding-task outcomes in agent
+trajectories, the information-theoretic structure of the action
+sequence is doing the work. Human-factors constructs and an
+agent-native one each carry outcome signal but reduce to it — and this
+holds under a graded outcome.
+</div>
+
+<div class="caveat">
+<b>Scope of the claim (the boundary, stated plainly).</b> One corpus
+(nebius SWE-agent trajectories), one agent family (Llama, reactive
+ReAct), one outcome family (SWE-bench resolution). Generalization G is
+conditional on a selection bias — its parseable subset
+over-represents successes and is valid for runs that reached test
+execution. One LLM-graded robustness check was inconclusive (the only
+available grader was too weak). <b>"Agents are universally flat" is
+not claimed.</b> Cross-architecture generalization (a planning agent
+vs the reactive one) is the single open axis and is deliberately
+deferred — it is the expensive one and not pursued.
+</div>
+
+<h2>6 · Why this is credible — the discipline</h2>
+<p>Every result above is load-bearing only because of process, not
+results: pre-registration committed <i>before</i> any data-touching
+code; a symbolization-audit gate + mandatory human checkpoint at every
+leg; label-shuffle null models for every comparison; convergent
+<i>and</i> discriminant validity; locked decision rules that executed
+themselves from the data with no threshold re-weighed post-hoc; honest
+scoping (constructs the corpus could not support — e.g. SA
+comprehension, wall-clock timing — were excluded with documented
+reasons, never faked); dated amendments for every mid-stream
+under-specification; test-first throughout (~1,012 tests; tests caught
+several real bugs before they could corrupt a result). Negatives were
+reported with no spin. <b>The methodology is the reusable asset.</b></p>
+
+<footer>
+Reproducible on branch <code>construct-validation-pivot</code>.
+Interactive walk-through: <a href="../demo/index.html">demo/</a>.
+Governing doc &amp; per-leg pre-registrations under <code>docs/</code>.
+Empirical phase complete 2026-05-16 — project at rest.
+</footer>
+
+</div></body></html>

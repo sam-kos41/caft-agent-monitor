@@ -1,8 +1,40 @@
 # Program: Human-Factors Measurement of AI Agent Behavior
 
-**Status:** active. Governing document. Each leg has its own
-pre-registration; this file is the index + the standing discipline
-every leg inherits.
+**Status: EMPIRICAL PHASE COMPLETE — 2026-05-16. Project at rest.**
+
+> **Closing entry (2026-05-16).** The empirical program is complete.
+> **Finding (parsimony thesis):** for predicting coding-task outcomes
+> in agent trajectories, the information-theoretic structure of the
+> action sequence is the load-bearing construct. Four constructs —
+> cognitive workload, situation awareness, error recovery (HF ports),
+> and thought-action coherence (agent-native) — each predict the
+> outcome on their own, yet none add predictive value beyond IT
+> structure. This survived a graded outcome (Generalization G):
+> it is **not** a binarization artifact.
+>
+> **Documented scope (not hedging — the boundary of the claim):** one
+> corpus (nebius SWE-agent trajectories), one agent family (Llama
+> SWE-agent, reactive ReAct), one outcome family (SWE-bench test
+> resolution, binary and graded); G is conditional on a selection
+> bias (parseable subset over-represents successes; valid for runs
+> that reached test execution). **"Agents are universally flat" is
+> NOT claimed.**
+>
+> **One open axis, deliberately deferred:** cross-architecture
+> generalization (a planning/deliberative agent vs the reactive
+> SWE-agent). It is the expensive axis (new corpus + adapter +
+> symbolization audit) and is **not** being pursued. The methodology
+> paper is **deferred**. Author returning to dissertation work.
+>
+> Durable assets, all reproducible on `construct-validation-pivot`:
+> the construct-validation methodology; the documented per-step
+> negative (CAFT autopsy); the validated modest IT population result;
+> the 5/5 parsimony finding + its outcome-granularity robustness.
+> Visual arc: `PROJECT_SNAPSHOT.html`; interactive demo: `demo/`.
+> **No next steps. The project is paused.**
+
+**Governing document.** Each leg has its own pre-registration; this
+file is the index + the standing discipline every leg inherited.
 
 The through-line: AI agents are observable systems whose behavior can
 be measured, characterized, and validated against external outcomes —
