@@ -108,7 +108,26 @@ action_mi.mean & compression_ratio.mean; H1 floor AUC 0.55 and null
 95th-pct rule with ≥1000 permutations; H2 ΔAUC ≥0.03 with 95% CI
 excluding 0; stratified 5-fold CV.
 
-Amendments (dated, with rationale) — none.
+Amendments (dated, with rationale):
+
+**A1 — 2026-05-15 — sampling mechanism made exact.**
+§2 said the N=2000 sample is "drawn with numpy seed = 20260515,
+stratified". This is under-specified for an 80,036-row *streaming*
+corpus: `np.random` over a stream whose length is not known a priori
+does not define a unique balanced-N sample, and the result would
+depend on shard/iteration order. Replaced with an exact,
+stream-order-independent, O(2000)-memory mechanism, reproducible from
+the seed alone:
+
+  for each row:  sel_key = blake2b(
+      f"{20260515}|{instance_id}|{model_name}".encode()).hexdigest()
+  within each target class (True, False): select the 1000 rows with
+  the lexicographically smallest sel_key.
+
+Seed value (20260515) and the 1000/1000 balance are unchanged. Outcome
+balance, feature lists, audit gate, H1/H2, and the decision rule are
+unchanged. Rationale: determinism and reproducibility independent of
+the HF streaming order; no degrees of freedom added.
 
 ## 10. Effort
 
