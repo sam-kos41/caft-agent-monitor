@@ -55,6 +55,13 @@ Per-leg theoretical roots, candidate constructs, and validation plans
 are specified in each leg's pre-registration, grounded in cited HF
 literature — not invented.
 
+**Agent-native pilot — Thought-Action Coherence (TAC):** documented
+NEGATIVE (2026-05). TAC-H1 passes (AUC 0.667) but leg-defining TAC-H3
+fails (ΔAUC −0.0002 over baseline+IT; CI tight around 0). Notably the
+*least* IT-correlated feature set (0.43) — distinct as a construct,
+still zero incremental predictive value. Deepens the parsimony thesis
+(`PREREG_AGENT_NATIVE_TAC.md`, `docs/pilot/tac_hypotheses.md`).
+
 ## Meta-thesis status (data-driven; updated 2026-05, not pre-committed)
 
 The four-leg-vs-IT-core question was held open. After two leg-pair
@@ -74,12 +81,18 @@ leg-defining H3 ΔAUC ≤ 0.006 with 95% CI spanning 0; each correlates
 both axes pre-judged most distinct (SA, error recovery).
 
 **Information-theoretic behavioral structure is the load-bearing
-population-level construct for these agent traces; the HF analogs
-re-measure it under other names.** A parsimony finding — on this
-corpus (nebius SWE-agent / Llama) and these honest-scoped
-operationalizations; generalization across agents/corpora is the
-stated boundary, not a claim. Empirical phase complete →
-methodology-paper drafting (`PAPER_OUTLINE.md`).
+population-level construct for these agent traces.** Sharpened by the
+agent-native TAC pilot (2026-05): thought-action coherence is the
+*most construct-distinct* feature set tested (max IT corr 0.43, far
+below HF ports' 0.64–0.75) yet still adds **−0.0002** AUC beyond IT
+(TAC-H3 fail). So the precise claim is not "everything correlates with
+IT" but the stronger **"IT already captures whatever predicts this
+outcome; additional measurements — even genuinely distinct,
+agent-native ones — do not improve prediction."** Five-for-five on the
+discriminant gate (workload, SA, error recovery, TAC). On this corpus
+(nebius SWE-agent / Llama) and these honest-scoped operationalizations;
+generalization is the stated boundary, not a claim. Empirical work
+complete; paper deferred at the author's direction.
 
 ## Shared infrastructure (build once, use everywhere)
 

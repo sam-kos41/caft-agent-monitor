@@ -1,0 +1,41 @@
+{
+  "n": 2000,
+  "TAC_H1": {
+    "obs_auc": 0.667075,
+    "null_p95": 0.5273917499999999,
+    "null_mean": 0.500173755,
+    "floor": 0.55,
+    "n_perm": 1000,
+    "pass": true
+  },
+  "TAC_H2": {
+    "auc_baseline": 0.723884,
+    "auc_baseline_TAC": 0.730281,
+    "delta": 0.006396999999999986,
+    "ci": [
+      -0.00948541130520938,
+      0.022940536341514797
+    ],
+    "n_boot": 2000,
+    "min": 0.03,
+    "pass": false
+  },
+  "TAC_H3": {
+    "auc_baseline_IT": 0.768098,
+    "auc_baseline_IT_TAC": 0.767887,
+    "delta": -0.00021099999999996122,
+    "ci": [
+      -0.004174144955990505,
+      0.003981002650126933
+    ],
+    "n_boot": 2000,
+    "min": 0.02,
+    "pass": false
+  },
+  "discriminant_max_abs_corr_TAC_vs_IT": 0.4335020788510248,
+  "decision": {
+    "code": "TAC_H1_PASS_TAC_H3_FAIL",
+    "conclusion": "TAC reduces to IT \u2014 even an agent-native construct (on an axis that ignores the action-sequence shape and uses the thought channel) collapses. DEEPENS the parsimony / IT-load-bearing thesis.",
+    "action": "Document; stop."
+  }
+}
