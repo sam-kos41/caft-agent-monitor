@@ -129,6 +129,21 @@ balance, feature lists, audit gate, H1/H2, and the decision rule are
 unchanged. Rationale: determinism and reproducibility independent of
 the HF streaming order; no degrees of freedom added.
 
+**A2 — 2026-05-15 — symbolization-audit estimator made exact.**
+§5 pins the model class ("an L2 logistic/linear model"), the gate
+threshold (R² < 0.80), and the two gated features (`action_mi.mean`,
+`compression_ratio.mean`), but does NOT specify in-sample vs
+cross-validated R². That choice materially moves the gate: in-sample
+R² over a wide tool-name one-hot basis overfits and would spuriously
+*fail* the reconstructability gate. Pinned: estimator =
+`sklearn.linear_model.Ridge(alpha=1.0)`; design matrix = per-trajectory
+counts of each distinct `tool_name` (one column per tool name observed
+in the sample); R² = mean of per-fold test R² under `KFold(n_splits=5,
+shuffle=True, random_state=20260515)`. The gate uses this CV R².
+Threshold (0.80) and gated features unchanged. Rationale: CV R²
+measures genuine reconstructability of an IT feature from tool-API
+surface; no threshold or decision-rule change.
+
 ## 10. Effort
 
 ~2 weeks, one person: adapter (1–2d) → symbolization audit (1d) →
