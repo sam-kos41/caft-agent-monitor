@@ -45,6 +45,11 @@ a{color:var(--pumpkin)}
 border-right:2px solid var(--dusk)}
 .ctx{font-size:13px;color:var(--ink);margin:0 0 16px;max-width:760px}
 .ctx b{color:var(--dusk)}
+.itdef{background:#fbf3e6;border:1px solid var(--line);
+border-left:4px solid var(--dusk);border-radius:8px;
+padding:12px 15px;margin:0 0 18px;max-width:780px;font-size:13px;
+color:var(--ink)}
+.itdef b{color:var(--dusk)}
 .badge{display:inline-block;font-size:11px;font-weight:700;
 padding:2px 9px;border-radius:999px;background:var(--dusk);
 color:#fff;letter-spacing:.02em;vertical-align:middle}
@@ -93,6 +98,20 @@ the interesting question is discriminant: does any of them add
 anything <i>beyond the action sequence itself</i>? On 2,000
 trajectories, none do. The table below the trajectory is the finding;
 the trajectory shows what each lens actually measures, step by step.</p>
+<div class="itdef"><b>What “IT” means here.</b> IT =
+<b>information-theoretic structure of the action sequence</b>: the
+statistical shape of <i>what the agent did and in what order</i> —
+how predictable each action is given the ones before it (mutual
+information), how repetitive / compressible the sequence is
+(compression ratio), how far its action mix drifts (KL divergence),
+and how varied it is (entropy). It is computed from the <i>sequence
+of action types alone</i> — no reasoning text, no outcome.
+<b>Why so much reduces to it:</b> workload, perception,
+error-recovery and thought–action coherence are each, ultimately,
+patterns <i>in that same action sequence</i>. Once its
+information-theoretic structure is in the model, each added construct
+carries little the sequence had not already encoded — so each
+predicts the outcome alone yet adds ≈0 <i>beyond</i> IT.</div>
 <p class="legtitle">How I operationalize the human-factors constructs</p>
 <p class="legnote">These are <b>my</b> operational definitions —
 each classical human-factors construct (and one agent-native one)
@@ -100,8 +119,9 @@ reduced to something computable from an agent trace. The parenthetical
 names are the source theory; the symbols are the concrete trace
 measurement that stands in for it here, not the theory itself.</p>
 <div class="legend">
-<span><b>IT (action sequence)</b> — ● new action type · ↻ repeat
-(redundancy = what compression / MI score)</span>
+<span><b>IT — information-theoretic action-sequence structure</b>
+(load-bearing) — ● new action type · ↻ repeat (redundancy = what
+compression / MI score)</span>
 <span><b>Workload</b> — character count of reasoning (Sweller / Wickens)</span>
 <span><b>Perception</b> — ✓ read file first · ✗ edited unread file
 (Endsley L1)</span>
