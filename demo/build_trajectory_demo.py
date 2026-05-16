@@ -243,8 +243,14 @@ margin:0 0 8px}
 <h1>Four ways to measure an AI agent — and why each reduces to the
 action sequence</h1>
 <p class="sub" id="meta"></p>
-<p class="ctx">This trajectory <b>succeeded</b>. The four constructs vary
-all the way through it regardless of outcome — which is exactly why
+<p class="ctx">In the dataset, this exact record —
+frozen-sample row <code id="cridx"></code>,
+instance <code id="cinst"></code> — is labelled <b>succeeded</b>:
+its stored <code>target</code> outcome is <i>resolved</i>, i.e. the
+agent's final patch passed that repository's test suite (the
+<b>RESOLVED</b> badge above is that same dataset label). The four
+constructs vary all the way through it regardless of that outcome —
+which is exactly why
 the interesting question is discriminant: does any of them add
 anything <i>beyond the action sequence itself</i>? On 2,000
 trajectories, none do. The table below the trajectory is the finding;
@@ -337,6 +343,8 @@ document.getElementById('meta').innerHTML=
  `<span class="badge">${D.resolved?'RESOLVED':'NOT RESOLVED'}</span>`;
 document.getElementById('inst').textContent=D.instance;
 document.getElementById('ridx').textContent=D.row_idx;
+document.getElementById('cinst').textContent=D.instance;
+document.getElementById('cridx').textContent=D.row_idx;
 const ROWS=[
  {k:'idx',  lab:'step'},
  {k:'act',  lab:'ACTION SEQUENCE ▸ IT (load-bearing)'},
