@@ -1,105 +1,109 @@
 # Measuring AI Coding Agents: a construct-validation study
 
-**One-sentence finding:** for predicting whether an AI coding agent
-resolves its task, the *information-theoretic structure of its action
-sequence* is the load-bearing measurement — four further constructs
-(three human-factors ports and one agent-native) each predict the
-outcome on their own, yet **none add predictive value beyond it**, and
-this holds under a graded outcome.
+**One-sentence finding:** to predict whether an AI coding agent
+finishes its task, the information-theoretic structure of its action
+sequence is the measurement that does the work. Four other constructs
+(three from human factors, one agent-native) each predict the outcome
+on their own, but none of them add anything once you already have it.
+This still holds when the outcome is graded instead of pass/fail.
 
-![Four ways to measure an AI agent — and why each reduces to the action sequence](demo/preview.png)
+![Four ways to measure an AI agent, and why each reduces to the action sequence](demo/preview.png)
 
-*(Interactive/static figure: [`demo/index.html`](demo/index.html);
-the image above is a snapshot of it. Full narrative and evidence
-ledger: [`docs/PROJECT_SNAPSHOT.html`](docs/PROJECT_SNAPSHOT.html).)*
+*(The image above is a snapshot of the figure in
+[`demo/index.html`](demo/index.html). The full story and evidence are
+in [`docs/PROJECT_SNAPSHOT.html`](docs/PROJECT_SNAPSHOT.html).)*
 
 ---
 
 ## What this project is
 
-It began as **CAFT** — a real-time, per-session anomaly detector for
-coding agents (information-theoretic metrics over a sliding window,
-mapped onto Wickens' information-processing stages). Disciplined
-validation **killed the per-session detector** and, in doing so,
-produced a sharper and more defensible result. This repository is the
-honest arc, not a product pitch.
+It started as CAFT, a real-time detector that watched a single agent
+session and tried to flag trouble (information-theoretic metrics over
+a sliding window, mapped onto Wickens' information-processing stages).
+Careful validation showed the per-session detector did not work.
+Killing it led to a clearer and more defensible result. This
+repository is the honest version of that story, not a product pitch.
 
-### The arc
+## The arc
 
-1. **The autopsy (negative result).** Validated against a domain
-   expert, the original detector agreed *worse than chance*
-   (κ = −0.04). Three independent baseline designs all failed the same
-   way — they fired on a calibration/window-fill transient, not on
-   session content. Per-step single-session pathology detection
-   **does not work**; it was documented, not buried, and retired
+1. **The autopsy (a negative result).** Checked against a domain
+   expert, the original detector agreed worse than chance
+   (kappa = -0.04). Three separate baseline designs all failed the
+   same way: they fired on a startup transient while the window filled
+   up, not on anything in the session. Per-step, single-session
+   failure detection does not work. We documented this instead of
+   hiding it and retired the detector
    (`docs/CONSTRUCT_REVISION.md`).
-2. **The reframe.** What survived was the *measurement*, not the
-   construct on top of it: the information-theoretic (IT) metrics
-   (mutual information, compression, KL, entropy of the action
-   sequence) are real, deterministic descriptions of behavioral
-   structure. The project pivoted to **population-level construct
-   validation** against an external, outcome-labelled corpus
-   (SWE-agent trajectories; test-based pass/fail — non-circular).
-3. **IT validated (positive result).** Pre-registered pilot, frozen
-   N = 2,000. IT predicts task outcome (H1 AUC **0.75** vs
-   permutation-null p95 0.53) and adds over a trivial baseline
-   (ΔAUC **+0.044**, 95% CI [+0.026, +0.062]). Modest, robust,
-   non-artifactual.
-4. **Everything else collapses into it (the finding).** Four further
-   constructs — cognitive workload (Wickens/Sweller/NASA-TLX),
-   situation awareness (Endsley), error recovery (Reason/Hollnagel),
-   and an agent-native thought–action coherence — were each
-   pre-registered, gated, and tested with a locked decision rule. Each
-   predicts the outcome alone (AUC 0.65–0.71); **not one adds
-   predictive value beyond IT** (all leg-defining ΔAUC ≤ 0.006, 95% CI
-   spanning 0). The agent-native lens is the sharpest case: least
-   correlated with IT (0.43) yet still ≈0 incremental.
-5. **Not a binarization artifact (generalization).** Re-run against a
-   *graded* outcome (fraction of tests passing): IT still predicts
-   (Spearman 0.277 vs null 0.046; ΔSpearman +0.101, CI excludes 0) and
-   no construct re-separates. The rival explanation is rejected on
-   this axis.
+2. **The reframe.** The measurement survived even though the idea on
+   top of it did not. The information-theoretic (IT) metrics (mutual
+   information, compression, KL, entropy of the action sequence) are
+   real, repeatable descriptions of behavioral structure. The project
+   moved from per-session detection to population-level construct
+   validation, using an outside corpus with real outcome labels
+   (SWE-agent trajectories, scored by whether the repository's tests
+   pass, so the label does not depend on any of our metrics).
+3. **IT validated (a positive result).** Pre-registered pilot, frozen
+   sample of N = 2,000. IT predicts the outcome (H1 AUC 0.75, well
+   above the permutation-null 95th percentile of 0.53) and adds over a
+   trivial baseline (delta AUC +0.044, 95% CI [+0.026, +0.062]). The
+   effect is modest but robust and not an artifact.
+4. **Everything else folds into it (the finding).** Four more
+   constructs (cognitive workload from Wickens, Sweller and NASA-TLX;
+   situation awareness from Endsley; error recovery from Reason and
+   Hollnagel; and an agent-native thought-action coherence) were each
+   pre-registered, gated, and tested with a decision rule fixed in
+   advance. Each one predicts the outcome on its own (AUC 0.65 to
+   0.71). None of them adds anything once IT is in the model (every
+   key delta AUC is at most 0.006, with a 95% CI that includes 0).
+   The agent-native one is the clearest case: it is the least
+   correlated with IT (0.43), so it is genuinely a different
+   measurement, yet it still adds essentially nothing.
+5. **Not just a pass/fail artifact (generalization).** We re-ran the
+   tests on a graded outcome (the fraction of tests that pass). IT
+   still predicts it (Spearman 0.277 vs a null of 0.046; delta
+   Spearman +0.101, with a CI above 0), and no construct comes back.
+   So the result is not an artifact of using a blunt pass/fail label.
 
-### Why this is credible — the discipline
+## Why this is credible
 
-Pre-registration committed *before* any data-touching code; a
-symbolization-audit gate + mandatory human checkpoint per leg;
-label-shuffle null models for every comparison; convergent **and**
-discriminant validity; locked decision rules executed from the data
-with no threshold re-weighed post-hoc; honest scoping (constructs the
-corpus could not support were excluded with documented reasons, never
-faked); dated amendments for every mid-stream under-specification;
-test-first throughout (~1,000 tests; several caught real bugs before
-they could corrupt a result). Negatives reported with no spin.
-**The methodology is the reusable asset.**
+The process is the point, not the results. Pre-registration was
+committed before any code touched the data. Every leg passed a
+symbolization-audit gate and a required human checkpoint. Every
+comparison had a label-shuffle null model. We tested for both
+convergent and discriminant validity. Decision rules were fixed in
+advance and run straight from the data, with no threshold changed
+after the fact. We only measured what the corpus could actually
+support, and documented what we left out instead of faking it. Every
+mid-stream change was a dated amendment. Everything was test-first
+(about 1,000 tests, several of which caught real bugs before they
+could corrupt a result). Negative results are reported plainly. The
+methodology is the reusable asset.
 
-### Scope of the claim (the boundary, stated plainly)
+## Scope of the claim
 
 One corpus (nebius SWE-agent trajectories), one agent family (Llama,
-reactive ReAct), one outcome family (SWE-bench resolution).
-Generalization G is conditional on a selection bias (its parseable
-subset over-represents successes). Cross-architecture generalization
-(a planning agent vs the reactive one) is the single open axis and is
-deliberately deferred. **"Agents are universally flat" is not
-claimed.**
-
----
+reactive ReAct), one outcome family (SWE-bench resolution). The
+generalization result is conditional on a selection bias, because its
+parseable subset over-represents successes. Whether this holds for a
+different agent architecture (a planning agent instead of a reactive
+one) is the one open question, and it is deliberately left for later.
+This project does not claim that all agents are flat.
 
 ## Repository layout
 
 | Path | What it is |
 |------|------------|
-| `demo/` | The figure: `index.html` (self-contained, no deps) + `preview.png` + how it is built (`build_trajectory_demo.py`) |
+| `demo/` | The figure: `index.html` (self-contained, no deps), `preview.png`, and how it is built (`build_trajectory_demo.py`) |
 | `docs/PROJECT_SNAPSHOT.html` | The full arc as a one-page visual |
-| `docs/PROGRAM.md` | Governing document + standing discipline every leg inherited |
+| `docs/PROGRAM.md` | Governing document and the standing discipline every leg inherited |
 | `docs/PREREG_*.md`, `docs/PILOT_PREREGISTRATION.md` | Per-leg pre-registrations (committed before data) |
 | `docs/CONSTRUCT_REVISION.md` | The CAFT autopsy (the documented negative) |
-| `docs/VALIDATION_METHODOLOGY.md`, `docs/CORPUS_SCOPING.md` | Method + honest-scoping decisions |
-| `docs/pilot/` | Result artifacts (AUCs, ΔAUCs, p-values) |
+| `docs/VALIDATION_METHODOLOGY.md`, `docs/CORPUS_SCOPING.md` | Method and honest-scoping decisions |
+| `docs/pilot/` | Result artifacts (AUCs, delta AUCs, p-values) |
 | `agentdiag/validation/` | The validation pipeline (sampling, features, audit, hypotheses, per-leg modules) |
-| `agentdiag/adapters/` | `ObservableEvent` contract + agent adapters (SWE-agent, Claude Code) |
-| `agentdiag/caft/`, `agentdiag/eval/` | The earlier CAFT detector + its eval harness (retired; kept as part of the honest arc) |
-| `tests/` | ~1,000 tests covering the pure machinery |
+| `agentdiag/adapters/` | The `ObservableEvent` contract and agent adapters (SWE-agent, Claude Code) |
+| `agentdiag/caft/`, `agentdiag/eval/` | The earlier CAFT detector and its eval harness (retired, kept as part of the honest arc) |
+| `tests/` | About 1,000 tests covering the pure machinery |
 
 ## Reproduce
 
@@ -109,7 +113,7 @@ python -m pytest tests/ -q                 # the test suite
 python demo/build_trajectory_demo.py        # regenerate demo/index.html
 ```
 
-Every number in the snapshot is reproducible from the frozen,
-seed-locked pipeline on branch `construct-validation-pivot`. Empirical
-phase complete — project at rest by author direction; the methodology
-paper is deferred.
+Every number in the figure can be reproduced from the frozen,
+seed-locked pipeline on branch `construct-validation-pivot` (it is
+also on `main`). The empirical work is complete and the project is at
+rest. The methodology paper is on hold.
