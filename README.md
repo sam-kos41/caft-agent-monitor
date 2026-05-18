@@ -17,7 +17,7 @@ in [`docs/PROJECT_SNAPSHOT.html`](docs/PROJECT_SNAPSHOT.html).)*
 
 ## What this project is
 
-It started as CAFT, a real-time detector that watched a single agent
+It started as a real-time detector that watched a single agent
 session and tried to flag trouble (information-theoretic metrics over
 a sliding window, mapped onto Wickens' information-processing stages).
 Careful validation showed the per-session detector did not work.
@@ -97,12 +97,12 @@ This project does not claim that all agents are flat.
 | `docs/PROJECT_SNAPSHOT.html` | The full arc as a one-page visual |
 | `docs/PROGRAM.md` | Governing document and the standing discipline every leg inherited |
 | `docs/PREREG_*.md`, `docs/PILOT_PREREGISTRATION.md` | Per-leg pre-registrations (committed before data) |
-| `docs/CONSTRUCT_REVISION.md` | The CAFT autopsy (the documented negative) |
+| `docs/CONSTRUCT_REVISION.md` | The autopsy of the original detector (the documented negative) |
 | `docs/VALIDATION_METHODOLOGY.md`, `docs/CORPUS_SCOPING.md` | Method and honest-scoping decisions |
 | `docs/pilot/` | Result artifacts (AUCs, delta AUCs, p-values) |
 | `agentdiag/validation/` | The validation pipeline (sampling, features, audit, hypotheses, per-leg modules) |
 | `agentdiag/adapters/` | The `ObservableEvent` contract and agent adapters (SWE-agent, Claude Code) |
-| `agentdiag/caft/`, `agentdiag/eval/` | The earlier CAFT detector and its eval harness (retired, kept as part of the honest arc) |
+| `agentdiag/eval/` | The earlier per-session detector and its eval harness (retired, kept as part of the honest arc) |
 | `tests/` | About 1,000 tests covering the pure machinery |
 
 ## Reproduce
