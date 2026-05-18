@@ -10,99 +10,91 @@ This still holds when the outcome is graded instead of pass/fail.
 ![Four ways to measure an AI agent, and why each reduces to the action sequence](demo/preview.png)
 
 *(The image above is a snapshot of the figure in
-[`demo/index.html`](demo/index.html). The full story and evidence are
+[`demo/index.html`](demo/index.html). The full detail and evidence are
 in [`docs/PROJECT_SNAPSHOT.html`](docs/PROJECT_SNAPSHOT.html).)*
 
 ---
 
-## What this project is
+## What this is
 
-It started as a real-time detector that watched a single agent
-session and tried to flag trouble (information-theoretic metrics over
-a sliding window, mapped onto Wickens' information-processing stages).
-Careful validation showed the per-session detector did not work.
-Killing it led to a clearer and more defensible result. This
-repository is the honest version of that story, not a product pitch.
+A construct-validation study of AI coding-agent behavior. It tests
+whether a set of behavioral constructs predict whether an agent
+finishes its task, using an external corpus of agent runs with real
+outcome labels (SWE-agent trajectories, scored by whether the
+repository's tests pass, so the label does not depend on any of the
+measurements).
 
-## The arc
+The constructs tested:
 
-1. **The autopsy (a negative result).** Checked against a domain
-   expert, the original detector agreed worse than chance
-   (kappa = -0.04). Three separate baseline designs all failed the
-   same way: they fired on a startup transient while the window filled
-   up, not on anything in the session. Per-step, single-session
-   failure detection does not work. We documented this instead of
-   hiding it and retired the detector
-   (`docs/CONSTRUCT_REVISION.md`).
-2. **The reframe.** The measurement survived even though the idea on
-   top of it did not. The information-theoretic (IT) metrics (mutual
-   information, compression, KL, entropy of the action sequence) are
-   real, repeatable descriptions of behavioral structure. The project
-   moved from per-session detection to population-level construct
-   validation, using an outside corpus with real outcome labels
-   (SWE-agent trajectories, scored by whether the repository's tests
-   pass, so the label does not depend on any of our metrics).
-3. **IT validated (a positive result).** Pre-registered pilot, frozen
-   sample of N = 2,000. IT predicts the outcome (H1 AUC 0.75, well
-   above the permutation-null 95th percentile of 0.53) and adds over a
-   trivial baseline (delta AUC +0.044, 95% CI [+0.026, +0.062]). The
-   effect is modest but robust and not an artifact.
-4. **Everything else folds into it (the finding).** Four more
-   constructs (cognitive workload from Wickens, Sweller and NASA-TLX;
-   situation awareness from Endsley; error recovery from Reason and
-   Hollnagel; and an agent-native thought-action coherence) were each
+- the information-theoretic (IT) structure of the action sequence
+  (mutual information, compression, KL, entropy);
+- cognitive workload (Wickens, Sweller, NASA-TLX);
+- situation awareness (Endsley);
+- error recovery (Reason, Hollnagel);
+- thought-action coherence (agent-native, no human-factors source).
+
+## Findings
+
+1. **Per-session, single-session failure detection does not work.** A
+   detector that watches one session and flags trouble from
+   information-theoretic metrics over a sliding window agreed with a
+   domain expert worse than chance (kappa = -0.04). Three independent
+   baseline designs all fired on a startup transient while the window
+   filled, not on anything in the session.
+2. **At the population level, IT predicts task outcome.**
+   Pre-registered pilot, frozen sample of N = 2,000. H1 AUC 0.75 (the
+   permutation null is 0.53 at the 95th percentile), and IT adds over
+   a trivial baseline (delta AUC +0.044, 95% CI [+0.026, +0.062]).
+   The effect is modest but robust and not an artifact.
+3. **The other four constructs fold into IT.** Each was
    pre-registered, gated, and tested with a decision rule fixed in
-   advance. Each one predicts the outcome on its own (AUC 0.65 to
-   0.71). None of them adds anything once IT is in the model (every
-   key delta AUC is at most 0.006, with a 95% CI that includes 0).
-   The agent-native one is the clearest case: it is the least
-   correlated with IT (0.43), so it is genuinely a different
-   measurement, yet it still adds essentially nothing.
-5. **Not just a pass/fail artifact (generalization).** We re-ran the
-   tests on a graded outcome (the fraction of tests that pass). IT
-   still predicts it (Spearman 0.277 vs a null of 0.046; delta
-   Spearman +0.101, with a CI above 0), and no construct comes back.
-   So the result is not an artifact of using a blunt pass/fail label.
+   advance. Each predicts the outcome on its own (AUC 0.65 to 0.71).
+   None adds anything once IT is in the model (every key delta AUC is
+   at most 0.006, with a 95% CI that includes 0). The agent-native
+   construct is the clearest case: it is the least correlated with IT
+   (0.43), so it is genuinely a different measurement, yet it still
+   adds essentially nothing.
+4. **It is not a pass/fail artifact.** Re-run on a graded outcome (the
+   fraction of tests that pass), IT still predicts it (Spearman 0.277
+   vs a null of 0.046; delta Spearman +0.101, CI above 0), and no
+   construct comes back.
 
-## Why this is credible
+## How it was validated
 
-The process is the point, not the results. Pre-registration was
-committed before any code touched the data. Every leg passed a
-symbolization-audit gate and a required human checkpoint. Every
-comparison had a label-shuffle null model. We tested for both
-convergent and discriminant validity. Decision rules were fixed in
-advance and run straight from the data, with no threshold changed
-after the fact. We only measured what the corpus could actually
-support, and documented what we left out instead of faking it. Every
-mid-stream change was a dated amendment. Everything was test-first
-(about 1,000 tests, several of which caught real bugs before they
-could corrupt a result). Negative results are reported plainly. The
-methodology is the reusable asset.
+Pre-registration was committed before any code touched the data.
+Every leg passed a symbolization-audit gate and a required human
+checkpoint. Every comparison had a label-shuffle null model. The study
+tests for both convergent and discriminant validity. Decision rules
+were fixed in advance and run straight from the data, with no
+threshold changed after the fact. Only constructs the corpus could
+actually support were measured; the rest were left out with documented
+reasons. Everything is test-first (about 1,000 tests, several of which
+caught real bugs before they could corrupt a result).
 
 ## Scope of the claim
 
 One corpus (nebius SWE-agent trajectories), one agent family (Llama,
-reactive ReAct), one outcome family (SWE-bench resolution). The
-generalization result is conditional on a selection bias, because its
+reactive ReAct), one outcome family (SWE-bench resolution). The graded
+outcome result is conditional on a selection bias, because its
 parseable subset over-represents successes. Whether this holds for a
 different agent architecture (a planning agent instead of a reactive
-one) is the one open question, and it is deliberately left for later.
-This project does not claim that all agents are flat.
+one) is the one open question, and it is left for later. This study
+does not claim that all agents are flat.
 
 ## Repository layout
 
 | Path | What it is |
 |------|------------|
 | `demo/` | The figure: `index.html` (self-contained, no deps), `preview.png`, and how it is built (`build_trajectory_demo.py`) |
-| `docs/PROJECT_SNAPSHOT.html` | The full arc as a one-page visual |
+| `docs/PROJECT_SNAPSHOT.html` | The full study as a one-page visual |
 | `docs/PROGRAM.md` | Governing document and the standing discipline every leg inherited |
 | `docs/PREREG_*.md`, `docs/PILOT_PREREGISTRATION.md` | Per-leg pre-registrations (committed before data) |
-| `docs/CONSTRUCT_REVISION.md` | The autopsy of the original detector (the documented negative) |
-| `docs/VALIDATION_METHODOLOGY.md`, `docs/CORPUS_SCOPING.md` | Method and honest-scoping decisions |
+| `docs/CONSTRUCT_REVISION.md` | Why per-session detection was rejected |
+| `docs/VALIDATION_METHODOLOGY.md`, `docs/CORPUS_SCOPING.md` | Method and scoping decisions |
 | `docs/pilot/` | Result artifacts (AUCs, delta AUCs, p-values) |
 | `agentdiag/validation/` | The validation pipeline (sampling, features, audit, hypotheses, per-leg modules) |
 | `agentdiag/adapters/` | The `ObservableEvent` contract and agent adapters (SWE-agent, Claude Code) |
-| `agentdiag/eval/` | The earlier per-session detector and its eval harness (retired, kept as part of the honest arc) |
+| `agentdiag/eval/` | The per-session detector and its eval harness |
 | `tests/` | About 1,000 tests covering the pure machinery |
 
 ## Reproduce
@@ -113,7 +105,6 @@ python -m pytest tests/ -q                 # the test suite
 python demo/build_trajectory_demo.py        # regenerate demo/index.html
 ```
 
-Every number in the figure can be reproduced from the frozen,
+Every number in the figure is reproducible from the frozen,
 seed-locked pipeline on branch `construct-validation-pivot` (it is
-also on `main`). The empirical work is complete and the project is at
-rest. The methodology paper is on hold.
+also on `main`).
